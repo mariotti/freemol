@@ -1,0 +1,3 @@
+   This File is part of the Frimol package
+   (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+   Please read the full copyright statment in the COPYING file
