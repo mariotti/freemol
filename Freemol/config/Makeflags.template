@@ -1,0 +1,68 @@
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+########################################################################
+# Makeflags File for Freemol by F.Mariotti: (c) F.Mariotti 2002
+# $Id: Makeflags.template,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+########################################################################
+#
+#	VARIABLES
+#
+########################################################################
+# Directories
+########################################################################
+#
+FMHOME = /home/fmariot/w.soft/Freemol
+FMPROG = $(FMHOME)/programs/Freemol/Freemol.exe
+FMBIN = $(FMHOME)/bin
+FMLIBDIR = $(FMHOME)/libs
+FMDOCDIR = $(FMHOME)/docs
+FMMODDIR = $(FMHOME)/MODFILES
+FMUTILS = $(FMHOME)/utils
+FMMODULES = $(FMHOME)/modules
+FMMODULEDATA = $(FMHOME)/moduledata
+FMPROGRAMS = $(FMHOME)/programs
+FMHELPDOCS = $(FMHOME)/help
+FMINCLUDES = $(FMHOME)/includes
+ADFLIBS = /usr/home/fmariot/w.soft/ADF99
+#
+# Infos
+#
+FMVERSION = Freemol2000 2000.12.01:2.1.0
+#
+########################################################################
+# Other Local Names
+########################################################################
+#
+FMMAKEFLAGS= $(FMHOME)/Makeflags
+BINDISTDIR = $(FMHOME)/bin_dist
+BINSCRIPTS = $(FMBIN)/FMparser $(FMBIN)/cleanup $(FMBIN)/cleanobjs $(FMBIN)/mkdeveldoc
+BINDISTFIL = $(BINDISTDIR)/FMparser $(BINDISTDIR)/cleanup $(BINDISTDIR)/cleanobjs \
+             $(BINDISTDIR)/mkdeveldoc
+#
+########################################################################
+# Programs
+########################################################################
+#
+FMCLP = $(FMBIN)/cleanup
+FMPARSER = $(FMBIN)/FMparser +m
+FMMKDDOC = $(FMBIN)/mkdeveldoc
+FMMKMAKE = $(FMBIN)/makemake
+FMPRMAKE = $(FMBIN)/makemake.prog
+AR = ar
+ARFLAGS = r
+#
+########################################################################
+# Some .PHONYs
+########################################################################
+#
+.PHONY: all clean cleanall cleanobjs cleanwork cleanmid
+#
+########################################################################
+# Compilers
+########################################################################
+#
+# COMPILER SELECTED FROM ./config/configure
+#
+include $(FMHOME)/config/Make.machine
+#

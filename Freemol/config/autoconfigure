@@ -1,0 +1,166 @@
+#!/bin/sh
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+########################################################################
+# AutoConfigure file for FREEMOL
+# Author: F.Mariotti <fabio.mariotti@unifr.ch>
+# Version: 2001.12.11:0.0.1
+########################################################################
+# $Id: autoconfigure,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+########################################################################
+# 
+# The target of this script is to run ./config/configure with all the
+# parameters, like:
+# 
+# ./config/configure <machine> <target> <FMHOME> <ADFLIBS>
+# 
+# So we should get these parameters.
+# 
+########################################################################
+# We require to run from main directory
+########################################################################
+#
+if (test ! -x ./config/configure)
+then
+    echo "Please run this script from FREEMOLHOME directory"
+    exit 1
+fi;
+#
+########################################################################
+# We built now the machine name
+########################################################################
+#
+a_machine="m_"
+#
+# We should get first the hardware
+#
+a_m_hard_t=`uname -m`
+#
+case $a_m_hard_t in
+     i286|i386|i486|i586|i686|pentium)
+	a_m_hard="generic"
+     ;;
+     alpha)
+        a_m_hard="alpha"
+     ;;
+     *)
+        a_m_hard="generic"
+     ;;
+esac;
+#
+a_machine="${a_machine}${a_m_hard}_"
+#
+# Then we get the OS
+#
+a_m_os_t=`uname -s`
+#
+case $a_m_os_t in
+     Linux|linux|LINUX)
+	a_m_os="linux"
+     ;;
+     dec|osf*|tru*|OSF1)
+        a_m_os="dec"
+     ;;
+     *)
+        a_m_os="generic"
+     ;;
+esac;
+#
+a_machine="${a_machine}${a_m_os}"
+#
+echo "Got machine: " $a_machine
+#
+if (test ! -d ./config/$a_machine)
+then
+    echo "I built up a machine name but the directory is not present!"
+    exit 1
+fi;
+#
+#complist=`find ./config/$a_machine/ -name 'Make.*'`
+complist=`cd config; ./getcompilers $a_machine`
+#
+echo " Available compilers for $a_machine are:"
+echo "( " $complist " )"
+echo "Testing Presence..."
+#
+for lcomp in $complist ;
+do
+  echo "Cheching for: $lcomp"
+  case $lcomp in
+      pgi)
+	  htmp=`which pgf90 2>/dev/null`
+	  if (test -z $htmp)
+	      then
+	      echo "PGI f90 not found on the system"
+	  else
+	      if (test ! -x $htmp) 
+		  then
+		  echo "PGI f90 not found on the system"
+	      else
+		  echo "PGI f90 compiler has been found as: pgf90"
+	      fi;
+	      ecomp=$lcomp
+	  fi;
+	  ;;
+      ifc)
+	  htmp=`which ifc 2>/dev/null`
+	  if (test -z $htmp)
+	      then
+	      echo "Intel ifc not found on the system"
+	  else
+	      if (test ! -x $htmp) 
+		  then
+		  echo "Intel ifc not found on the system"
+	      else
+		  echo "Intel ifc compiler has been found as: ifc"
+	      fi;
+	      ecomp=$lcomp
+	  fi;
+	  ;;
+      absoft)
+	  htmp=`which f90 2>/dev/null`
+	  if (test -z $htmp)
+	      then
+	      echo "Absoft f90 not found on the system";
+	  else
+	      if (test ! -x $htmp) 
+		  then
+		  echo "Absoft f90 not found on the system";
+	      else
+		  echo "Absoft f90 compiler has been found as: f90"
+	      fi;
+	      ecomp=$lcomp
+	  fi;
+	  ;;
+      f90)
+	  htmp=`which f90 2>/dev/null`
+	  if (test -z $htmp)
+	      then
+	      echo "Generic f90 not found on the system";
+	  else
+	      if (test ! -x $htmp) 
+		  then
+		  echo "Generic f90 not found on the system";
+	      else
+		  echo "Generic f90 compiler has been found as: f90"
+	      fi;
+	      ecomp=$lcomp
+	  fi;
+	  ;;
+      *)
+	  echo "WARNING: The autoconfigure script is not updated to local configuration"
+	  ecomp=$lcomp
+	  ;;
+  esac;
+#  
+done
+#
+echo " Using $ecomp as build compiler"
+#
+buildhome=`pwd`
+#
+echo "We should run as:"
+echo "./config/configure $a_machine $ecomp $buildhome"
+#

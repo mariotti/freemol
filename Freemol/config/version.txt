@@ -1,0 +1,70 @@
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+###############################################################################
+# $Id: version.txt,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+###############################################################################
+
+
+	VERSION EXPLANATION
+
+	We would like to set up a new version
+	numbering as well in the mean time to keep
+	the old version stile.
+
+	A common idea about version is that:
+	2.3.5-beta
+	as to be related to:
+	3.1.1
+	Where we will commonly understand that:
+	2. and 3. are main release
+	while .3. and .1. are minor release of the "main"
+	and the last digit are simply changes
+	and the -beta or -alpha or in the case nothing
+	identify a "kind of" stability of the code.
+
+	Time is as well a good friend in order to keep
+	track of our changes.
+	A time based release system will be something like:
+	2000.12.11.03
+
+	Which will mean:
+	A revision (modification) made on: 11 Dec 2000
+	and which is the third one.
+
+	This numbering will be able to keep track of
+	code which is under development but will be
+	obviously meaningless to the user.
+
+	What I propose is a mapping from
+	development versions to users dedicated ones.
+
+	Step back to the user.
+	As a user what I would like to have?
+	I will try to explain what I will expect:
+	Get the three number of the version:
+	X.Y.Z
+	Then:
+	I have the version X.Y.Z than I will expect that
+	the version X.Y.(Z+n) will improve the implement
+	methodologies in a better way. I will
+	expect that my system is exactly the same but
+	just "works better". I will expect as well that
+	a change from .Y. to .(Y+n). will add some tools
+	or enhancement but I can still use my program in the old way.
+	A change on X code: as a user I will expect that is gives me
+	some more opportunities and maybe it will change
+	some current procedure. When the X code will change
+	I will hope that the programmer will keep
+	backward compatibility.
+
+	The main idea is to reduce the versions to a comprehensive
+	number.
+	The main problem is than to keep backward compatibility.
+
+	Than because of this numbering system the backward
+	compatibility has to deal with the first set of digits.
+
+	(To be continued).....

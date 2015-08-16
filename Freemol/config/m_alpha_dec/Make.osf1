@@ -1,0 +1,19 @@
+#
+#----------------------------------------------------------------------
+# Dec_Osf
+#----------------------------------------------------------------------
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+# $id:$
+#
+VARDEBUG = -check arg_temp_created
+LOCDEBUG = -assume gfullpath -g3 -ladebug -check underflow -check overflow \
+           -check output_conversion -check bounds -check format -fpe -std \
+           -warn declarations -warn argument_checking -warn unused
+FFLAGS   = -DDEBUG -DDEC -module $(FMMODDIR) -I$(FMMODDIR) $(MOREFL) $(LOCDEBUG)
+LDFLAGS  = 
+FC       = f90
+FPP      = f90
+CPPFLAGS = -E

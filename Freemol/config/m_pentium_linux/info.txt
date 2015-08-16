@@ -1,0 +1,19 @@
+ Pentium PC running Linux
+
+ $Id: info.txt,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $ 
+ 
+Description:
+ 
+These makefile options should work on generic Pentium/Linux
+machines with these compilers:
+
+PGI   f90 4.1 http://www.pgroup.com/ TESTED
+Intel ifc 7.1 http://www.intel.com/  TESTED
+
+It is in the project list the possibility to include absoft f90
+and eventually the first full working version of any free
+fortran 90/95.
+
+This is actually my test environment.
+
+ 

@@ -1,0 +1,426 @@
+#
+# Local Definitions for pgi compiler
+#
+# This File is part of the Frimol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+# WARNING: This file override Makeflags definitions
+#
+#----------------------------------------------------------------------
+# pgf90 Portland Group Compiler
+#----------------------------------------------------------------------
+# $Id: Make.pgi,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+#----------------------------------------------------------------------
+#
+# Variables We Set Here
+#----------------------------------------------------------------------
+# FFLAGS    => Fortran Flags for compilation
+# LOCDEBUG  => Fortran Flags for Debugging porposes
+# LDFLAGS   => Linker Special Flags (Added to FFLAGS while Linking)
+# FC        => The Fortran Compiler (Here: pgf90)
+# FPP       => The Fortran Preprocessor (Here: pgf90 -E)
+# CPPFLAGS  => The Fortran Preprocessor Flag if sent to the Comp. Driver
+# LOADER    => The default Loader if eeded
+# F77       => The Fortran 77 compiler if needed
+# F77FLAGS  => The Fortran 77 Flags
+# F77LOADER => The Fortran 77 Loader if needed
+# LD77FLAGS => The Fortran 77 Loader Flags if needed
+# PLATFORM  => The Platform label (Here: _linux_pgi)
+#----------------------------------------------------------------------
+#
+# What should be default
+#----------------------------------------------------------------------
+# FFLAGS    = -DPGI -Minform,inform -Kieee \
+#             -module $(FMMODDIR) $(MOREFL) $(LOCDEBUG)
+# LOCDEBUG  = (EMPTY) or (Here: -g -Mbounds -Mdclchk -Mextend -Ktrap=fp \
+#                               -Minfo=all -Mchkfpstk -Mchkptr -Mchkstk \
+#                               -Mchkptr -Mdepchk -Mg
+# LDFLAGS   = -Kieee
+# FC        = pgf90 
+# FPP       = pgf90 -E
+# CPPFLAGS  = -E
+# LOADER    = pgf90
+# F77       = pgf77
+# F77FLAGS  = -Kieee
+# F77LOADER = pgf77
+# LD77FLAGS = -Kieee
+# PLATFORM  = _linux_pgi
+#----------------------------------------------------------------------
+#
+# Compiler Options
+#----------------------------------------------------------------------
+# USED FOR TESTING
+#----------------------------------------------------------------------
+# FFLAGS   = -Minform,inform -Mlist -g -module $(FMMODDIR) $(MOREFL) -Mprof=func,lines
+# FFLAGS   = -Minform,inform -g -module $(FMMODDIR) $(MOREFL)
+# LOCDEBUG = -g -Mbounds -Mdclchk -Mextend -Minfo=all
+# LOCDEBUG = -g -Mbounds -Mdclchk -Mextend -Ktrap=fp -Minfo=all -Mchkfpstk -Mchkptr -Mchkstk -Mchkptr -Mconcur -Mdepchk -Mg -Mlist
+# This up for multiproc ... see -Mconcur
+# LOCDEBUG = -g -Mbounds -Mdclchk -Mextend -Ktrap=fp -Minfo=all -Mchkfpstk -Mchkptr -Mchkstk -Mchkptr -Mdepchk -Mg -Mlist
+# LOCDEBUG = -g -Mbounds -Mdclchk -Mextend -Ktrap=fp -Minfo=all -Mchkfpstk -Mchkptr -Mchkstk -Mchkptr -Mdepchk -Mg
+# FFLAGS   = -DDEBUG -DPGI -Minform,inform -Kieee -module $(FMMODDIR) $(MOREFL) $(LOCDEBUG)
+# LDFLAGS  = -Kieee
+# FC       = pgf90
+# FPP      = pgf90 -E
+# CPPFLAGS = -E
+#
+#
+#
+# Actual arguments
+#----------------------------------------------------------------------
+LOCDEBUG  = -g -Mbounds -Mdclchk -Mextend -Ktrap=fp \
+            -Minfo=all -Mchkfpstk -Mchkptr -Mchkstk \
+            -Mchkptr -Mdepchk 
+FFLAGS    = -DPGI -Minform,inform -Kieee \
+            -module $(FMMODDIR) $(MOREFL) $(LOCDEBUG)
+LDFLAGS   = -Kieee
+FC        = pgf90 
+FPP       = pgf90 -E
+CPPFLAGS  = -E
+LOADER    = pgf90
+LOCF77DEBUG  = -g -Mbounds -Mdclchk -Mextend -Ktrap=fp \
+            -Minfo=all -Mchkfpstk -Mchkstk -Mdepchk 
+F77       = pgf77
+F77FLAGS  = -Kieee $(LOCF77DEBUG)
+F77LOADER = pgf77
+LD77FLAGS = -Kieee
+PLATFORM  = _linux_pgi
+#
+# Partial List of Options for PGI compiler
+#----------------------------------------------------------------------
+#
+#       -Mpgflag  Request  PGI-specific actions from the compiler.  Many of the pgflags option-
+#                 ally begin with no (e.g.  [no]list).  If the default of such an option is the
+#                 no variant, this is indicated by no appearing in bold italics as in [no]list.
+#                 The permitted pgflags are:
+#
+#                 anno      Produce annotated assembly files, where source code  is  intermixed
+#                           with assembly language.  -Mkeepasm or -S must be used as well.
+#
+#                 [no]backslash
+#                           (Don't)  inhibit  the treatment of backslash as an escape character
+#                           in strings.  -Mnobackslash causes the standard C  backslash  escape
+#                           sequences  to  be  recognized in quoted strings; -Mbackslash causes
+#                           the backslash to be treated like any other character.
+#
+#                 [no]bounds
+#                           Enable (disable) array bound checking.
+#
+#                 byteswapio
+#                           Swap bytes from  big-endian  to  little-endian  or  vice  versa  on
+#                           input/output  of  unformatted  FORTRAN  data.   Use  of this option
+#                           enables reading/writing of FORTRAN unformatted data files  compati-
+#                           ble with those produced on Sun or SGI systems.
+#
+#                 chkfpstk  Check  for  internal  consistency of the IA-32 FP stack in the pro-
+#                           logue of a function and after returning from a function or  subrou-
+#                           tine call.
+#
+#                 chkptr    Check for unintended de-referencing of NULL pointers.
+#
+#                 chkstk    Check  the  stack  for available space upon entry to and before the
+#                           start of a parallel region.  Useful when many private variables are
+#                           declared.
+#
+#                 concur[=option[,option,...]]
+#                           Instructs  the  compiler to enable auto-concurrentization of loops.
+#                           If -Mconcur is specified, multiple processors will be used to  exe-
+#                           cute  loops  which  the  compiler  determines to be parallelizable.
+#                           When linking, the -Mconcur switch must be specified  or  unresolved
+#                           references will occur.  The NCPUS environment variable controls how
+#                           many processors will be used to execute  parallelized  loops.   The
+#                           options can be one or more of the following:
+#
+#                           altcode[:n]
+#                                     Instructs  the  parallelizer to generate alternate scalar
+#                                     code for parallelized loops.   If  altcode  is  specified
+#                                     without  arguments, the parallelizer determines an appro-
+#                                     priate cutoff length and generates scalar code to be exe-
+#                                     cuted  whenever  the  loop count is less than or equal to
+#                                     that length.  If altcode:n is specified, the scalar  alt-
+#                                     code  is executed whenever the loop count is less than or
+#                                     equal to n.
+#
+#                           noaltcode If noaltcode is specified, the  parallelized  version  of
+#                                     the loop is always executed regardless of the loop count.
+#
+#                           dist:block
+#                                     Parallelize with block distribution.   Contiguous  blocks
+#                                     of  iterations  of  a parallelizable loop are assigned to
+#                                     the available processors.
+#
+#                           dist:cyclic
+#                                     Parallelize with cyclic distribution.  The outermost par-
+#                                     allelizable  loop in any loop nest is parallelized.  If a
+#                                     parallelized loop is innermost, its iterations are  allo-
+#                                     cated  to  processors  cyclically.  For example, if there
+#                                     are 3 processors executing a loop, processor  0  performs
+#                                     iterations 0, 3, 6, etc;  processor 1 performs iterations
+#                                     1, 4, 7, etc;  and processor 2 performs iterations 2,  5,
+#                                     8, etc.
+#
+#                           cncall    Loops containing calls are safe to parallelize.  Also, no
+#                                     minimum loop count threshold  must  be  satisfied  before
+#                                     parallelization  will  occur,  and last values of scalars
+#                                     are assumed to be safe.
+#
+#                           noassoc   Disables parallelization of loops with reductions.
+#
+#                 cray[=option[,option,...]]
+#                           Force Cray Fortran (CF77 compatibility with respect to  the  listed
+#                           options.  Possible options include:
+#
+#                           pointer   for purposes of optimization, it is assumed that pointer-
+#                                     based variables do not overlay the storage of  any  other
+#                                     variable.
+#
+#                 [no]dalign
+#                           (Don't)  align  doubles  in  structures  or common blocks on 8-byte
+#                           boundaries.  -Mnodalign may lead to data alignment exceptions.
+#
+#                 [no]dclchk
+#                           (Don't) require that all variables be declared.
+#
+#                 [no]defaultunit
+#                           (Don't) treat '*' as stdout/stdin regardless of the status of units
+#                           6/5.  -Mnodefaultunit causes * to be a synonym for 5 on input and 6
+#                           on output; -Mdefaultunit causes * to be  a  synonym  for  stdin  on
+#                           input and stdout on output.
+#
+#                 [no]depchk
+#                           (Don't) assume that potential data dependencies exists.  -Mnodepchk
+#                           may result in incorrect code; the -Msafeptr switch provides a  less
+#                           dangerous way to accomplish the same thing.
+#
+#                 [no]dlines
+#                           (Don't)  treat  lines  beginning  with  D in column 1 as executable
+#                           statements, ignoring the D.
+#
+#                 dollar,char
+#                           Set the character used to replace dollar signs in names to be  char
+#                           .  Default is an underscore (_).
+#
+#                 extend    Allow 132-column source lines.
+#
+#                 extract=[option[,option,...]]
+#                           Pass  options  to  the  function extractor.  The -o filename option
+#                           must be used with this switch to name a library.
+#
+#                           [name:]function
+#                                     A non-numeric option not containing a period  is  assumed
+#                                     to  be a function name.  The named function is extracted.
+#                                     If name: is specified, what follows is always the name of
+#                                     a function.
+#
+#                           [size:]number
+#                                     A numeric option is assumed to be a size.  Functions con-
+#                                     taining number or less statements are extracted.  If both
+#                                     number  and function are specified, then functions match-
+#                                     ing the given name(s) or meeting the  size  requirements,
+#                                     are extracted.
+#
+#                 -M[no]free[form]
+#                           Process  source  using  Fortran  90  freeform  specifications.  The
+#                           -Mnofree option specifies fixed form formatting.  By default  files
+#                           with a .f90 extension use freeform formatting.
+#
+#                 [no]i4    (Don't)  treat INTEGER as INTEGER*4.  -noi4 treats INTEGER as INTE-
+#                           GER*2.
+#
+#                 [no]iomutex
+#                           (Don't) generate critical section calls around Fortran  I/O  state-
+#                           ments.
+#
+#                 info=[option[,option,...]]
+#                           Emit useful information to stderr.  The options are:
+#
+#                           time | stat
+#                                     Emit compilation statistics.
+#
+#                           loop      Emit  information about loops.  This includes information
+#                                     about vectorization.
+#
+#                           inline    Emit information about functions extracted and inlined.
+#
+#                           sym       Emit symbol names as comments in assembly file.
+#
+#                           all       All of the above.
+#
+#                 inform,level
+#                           Specify the minimum level of error severity that the compiler  dis-
+#                           plays during compilation.
+#
+#                           fatal     instructs the compiler to display fatal error messages.
+#
+#                           severe    instructs  the compiler to display severe and fatal error
+#                                     messages.
+#
+#                           warn      instructs the compiler to  display  warning,  severe  and
+#                                     fatal error messages.
+#
+#                           inform    instructs  the  compiler  to  display  all error messages
+#                                     (inform, warn, severe and fatal).
+#
+#                 inline=[option[,option,...]]
+#                           Pass options to the function inliner.  The options are:
+#
+#                                  [lib:]filename.ext
+#                           An option containing a period is assumed to be  an  inline  library
+#                           created  by  a previous -Mextract option.  If lib: is specified, no
+#                           period is necessary.  Functions  from  the  specified  library  are
+#                           inlined.   If no library is specified, functions are extracted from
+#                           a temporary library created during an extract prepass.
+#
+#                                  [name:]function
+#                           A non-numeric option not containing a period is  assumed  to  be  a
+#                           function  name.   If name: is specified, what follows is always the
+#                           name of a function.
+#
+#                                  [size:]number
+#                           A numeric option is assumed to be  a  size.   Functions  containing
+#                           number or less statements are inlined.  If both number and function
+#                           are specified, then functions matching the given name(s) or meeting
+#                           the size requirements, are inlined.
+#
+#                                  levels:number
+#                           number of levels of inlining are performed.  The default is 1.
+#
+#                 keepasm   Keep  the  assembly file for each Fortran source file, but continue
+#                           to assemble and link the program.  This is mainly for use  in  com-
+#                           piler performance analysis and debugging.
+#
+#                 [no]list  (Don't) create a listing file.
+#
+#                 neginfo=option[,option]...
+#                           Instructs  the compiler to produce information on why certain opti-
+#                           mizations are not performed.  Possible  value  for  option  include
+#                           concur and loop.
+#
+#                 noframe   Eliminate  operations  that  set  up a true stack frame pointer for
+#                           functions.
+#
+#                 nomain    When the link step is called, don't include the object  file  which
+#                           calls  the Fortran main program.  Useful for using the pgf90 driver
+#                           to link programs with the main program written in C or C++ and  one
+#                           or more subroutines written in Fortran.
+#
+#                 nostartup Do  not  link  in the usual startup routine.  This routine contains
+#                           the entry point for the program.
+#
+#                 nostddef  Instructs the compiler to not recognize the standard  pre-processor
+#                           macros.
+#
+#                 nostdinc  Instructs  the  compiler  to  not  search the standard location for
+#                           include files.
+#
+#                 nostdlib  Do not link in the standard libraries when linking a program.
+#
+#                 [no]onetrip
+#                           (Don't) force each DO loop to be iterated at least once.
+#
+#                 prof=[option[,option,...]]
+#                           Set profile options.
+#
+#                           func      Perform PGI-style function level profiling.
+#
+#                           lines     Perform PGI-style line level profiling.
+#
+#                 [no]r8    (Don't) treat REAL as DOUBLE PRECISION and real constants as double
+#                           precision constants.
+#
+#                 [no]r8intrinsics
+#                           (Don't) treat the intrinsics CMPLX as DCMPLX and REAL as DBLE.
+#
+#                 [no]recursive
+#                           (Don't) allocate local variables on the stack, thus allowing recur-
+#                           sion.  SAVEd, data-initialized,  or  namelist  members  are  always
+#                           allocated statically, regardless of the setting of this switch.
+#
+#                 [no]reentrant
+#                           (Don't)  enable  optimizations  that may result in code that is not
+#                           reentrant.  Even with -reentrant , the code may still not be  reen-
+#                           trant if it is improperly written (e.g., SAVEd variables).
+#
+#                 [no]ref_externals
+#                           (Don't) force references to names appearing in EXTERNAL statements.
+#
+#                 safe_lastval
+#                           In the case where a scalar is used after a loop, but is not defined
+#                           on  every  iteration  of the loop, the compiler does not by default
+#                           parallelize the loop. However, this option tells the compiler  it's
+#                           safe  to parallelize the loop. For a given loop the last value com-
+#                           puted for all scalars make it safe to parallelize the loop.
+#
+#                 [no]save  (Don't) assume that all local variables are  subject  to  the  SAVE
+#                           statement.  -Msave may allow many older Fortran programs to run but
+#                           can greatly reduce performance.
+#
+#                 [no]second_underscore
+#                           (Don't) Add a second underscore to the name of a Fortran global  if
+#                           its name already contains an underscore.  This option is useful for
+#                           maintaining compatibility with g77, which adds a second  underscore
+#                           to such symbols by default.
+#
+#                 [no]signextend
+#                           (Don't)  sign extend the result of a conversion of a signed integer
+#                           to a smaller signed type.  For example,  when  -Msignextend  is  in
+#                           effect  and an INTEGER*4 containing the value 65535 is converted to
+#                           an INTEGER*2, the value of the INTEGER*2 will be -1.   The  default
+#                           is -Msignextend.
+#
+#                 standard  Flag non-ANSI-Fortran 90 usage.
+#
+#                 [no]stride0
+#                           (Don't)  Generate alternate code for a loop that contains an induc-
+#                           tion variable whose increment may be zero.
+#
+#                 unix      (Windows NT only) Use UNIX argument passing and symbol naming  con-
+#                           ventions.
+#
+#                 [no]unixlogical
+#                           When  -Munixlogical  is  in  effect,  a logical is considered to be
+#                           .TRUE.  if its value is  non-zero  and  .FALSE.   otherwise.   When
+#                           -Mnounixlogical is in effect (the default), a logical considered to
+#                           be .TRUE.  if its value is odd and .FALSE.  if its value is even.
+#
+#                 [no]upcase
+#                           (Don't) preserve case in names.  -Mnoupcase causes all names to  be
+#                           converted  to  lower  case.   Note  that, if -Mupcase is used, then
+#                           variable name 'X' is different than variable name 'x', and keywords
+#                           must be in lower case.
+#
+#                 unroll[=option [,option...]]
+#                           Invokes  the  loop unroller.  This also sets the optimization level
+#                           to 2 if the level is set to less than 2.  The option is one of  the
+#                           following:
+#
+#                           c:m       Instructs  the compiler to completely unroll loops with a
+#                                     constant loop count less than or equal to m,  a  supplied
+#                                     constant.  If this value is not supplied, the m  count is
+#                                     set to 4.
+#
+#                           n:u       instructs the compiler to unroll u times, a loop which is
+#                                     not  completely  unrolled,  or  has  a  non-constant loop
+#                                     count.  If u is not supplied, the unroller  computes  the
+#                                     number of times a candidate loop is unrolled.
+#
+#                 vect[=option[,option,...]]
+#                           Pass  options  to  the  internal  vectorizer.  If no option list is
+#                           specified,  then  the  following  vector  optimizations  are  used:
+#                           assoc,cachesize:262144.  The vect options are:
+#
+#                           assoc     Instructs  the vectorizer to enable certain associativity
+#                                     conversions that can change the results of a  computation
+#                                     due  to  roundoff  error.   A  typical optimization is to
+#                                     change an arithmetic operation to an arithmetic operation
+#                                     that  is  mathematically correct, but can be computation-
+#                                     ally different, due to round-off error.
+#
+#                           noassoc   Instructs the vectorizer to disable associativity conver-
+#                                     sions.
+#
+#                           cachesize[:number]
+#                                     Instructs  the  vectorizer,  when performing cache tiling
+#                                     optimizations, to assume a cache size of number.
+#

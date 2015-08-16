@@ -1,0 +1,256 @@
+#
+# Local Definitions for Intel Fortran Compiler compiler
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+#----------------------------------------------------------------------
+# ifc: Intel Fortran Compiler
+#----------------------------------------------------------------------
+# $Id: Make.ifc,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+#
+#
+# Compiler Options
+#----------------------------------------------------------------------
+#
+#LOCDEBUG = -O0 -g -CB -e90 -u
+LOCDEBUG = -O0 -g -CB -u
+# FFLAGS   = -cl,$(FMMODDIR)/work.pcl -u $(LOCDEBUG)
+FFLAGS   = -DDEBUG -DIFC -module $(FMMODDIR) -I$(FMMODDIR) $(MOREFL) $(LOCDEBUG)
+LDFLAGS  = -Vaxlib
+FC       = ifort
+FPP      = ifort -EP
+CPPFLAGS = -E
+#
+#
+#
+#                       Intel(R) Fortran Compiler Help
+#                       ==============================
+#  
+#  usage: ifc [options] file1 [file2 ...] [linker_options]
+#  
+#    where options represents zero or more compiler options
+#  
+#          fileN is a Fortran source (.f .for .ftn .f90 .fpp), assembly (.s),
+#              object (.o), static library (.a), or other linkable file
+#  
+#          linker_options represents zero or more linker options (compiler option
+#              names take precedence)
+#  
+#    Commonly used options may be placed in the ifc.cfg file.
+#  
+#                         Compiler Option List
+#                         --------------------
+#  Performance
+#  -----------
+#  -O1    enable optimizations (DEFAULT)
+#  -O2    same as -O1
+#  -O3    enable -O2 plus more aggressive optimizations that may not improve
+#         performance for all programs
+#  -O0    disable optimizations
+#  -O     same as -O1
+#  -nolib_inline disable inline expansion of intrinsic functions
+#  -fp           disable using EBP as general purpose register
+#  -mp           maintain floating point precision (disables some optimizations)
+#  -mp1          improve floating-point precision (speed impact is less than -mp)
+#  -prec_div     improve precision of floating-point divides (some speed impact)
+#  -fp_port      round fp results at assignments & casts (some speed impact)
+#  -pc32         set internal FPU precision to 24 bit significand
+#  -pc64         set internal FPU precision to 53 bit significand (DEFAULT)
+#  -pc80         set internal FPU precision to 64 bit significand
+#  -rcd          enable fast float-to-int conversions
+#  -tpp5  optimize for Pentium(R) processor
+#  -tpp6  optimize for Pentium(R) Pro, Pentium(R) II and Pentium(R) III processors
+#  -tpp7  optimize for Pentium(R) 4 processor
+#  -ax<codes> generate code specialized for processor extensions specified by
+#             <codes> while also generating generic IA-32 code.  <codes> includes
+#             one or more of the following characters:
+#      i  Pentium Pro and Pentium II processor instructions
+#      M  MMX(TM) instructions
+#      K  streaming SIMD extensions
+#      W  Pentium(R) 4 New Instructions
+#  -x<codes>  generate specialized code to run exclusively on processors
+#             supporting the extensions indicated by <codes> as described above.
+#  
+#  Advanced Performance
+#  --------------------
+#  Enable and specify the scope of Interprocedural (IP) Optimizations:
+#  -ip     enable single-file IP optimizations (within files)
+#  -ipo    enable multi-file IP optimizations (between files)
+#  -wp_ipo enable multi-file IP optimizations (between files) and make
+#           "whole program" assumption that all variables and functions seen
+#           in the compiled sources are referenced only within those sources;
+#  -ipo_c  generate a multi-file object file (ipo_out.o)
+#  -ipo_S  generate a multi-file assembly file (ipo_out.s)
+#  
+#  Modify the behavior of IP:
+#  -ip_no_inlining    disable full and partial inlining (requires -ip or -ipo)
+#  -ip_no_pinlining   disable partial inlining (requires -ip or -ipo)
+#  -ipo_obj           force generation of real object files (requires -ipo)
+#  
+#  Other Advanced Performance Options:
+#  -pad        enable changing variable and array memory layout
+#  -nopad      disable(DEFAULT) changing variable and array memory layout
+#  -unroll[n]  set maximum number of times to unroll loops.  Omit n to use
+#              default heuristics.  Use n=0 to disable loop unroller.
+#  
+#  -prof_dir <d>   specify directory for profiling output files (*.dyn and *.dpi)
+#  -prof_file <f>  specify file name for profiling summary file
+#  -prof_gen       instrument program for profiling
+#  -prof_use       enable use of profiling information during optimization
+#  -qp, -p         compile and link for function profiling with UNIX prof tool
+#  
+#  -vec[-]         enable(DEFAULT)/disable the vectorizer
+#  -vec_report[n]  control amount of vectorizer diagnostic information:
+#              n=0 no diagnostic information
+#              n=1 indicate vectorized loops (DEFAULT)
+#              n=2 indicate vectorized/non-vectorized loops
+#              n=3 indicate vectorized/non-vectorized loops and prohibiting
+#                  data dependence information
+#              n=4 indicate non-vectorized loops
+#              n=5 indicate non-vectorized loops and prohibiting data
+#                  dependence information
+#  
+#  -openmp               enable the parallelizer to generate multi-threaded
+#                        code based on the OpenMP directives
+#  -openmp_report{0|1|2} control the OpenMP parallelizer diagnostic level
+#  
+#  -prefetch[-]    enable(DEFAULT)/disable prefetch insertion (requires -O3)
+#  -scalar_rep[-]  enable(DEFAULT)/disable scalar replacement (requires -O3)
+#  Output, Debug
+#  -------------
+#  -c         compile to object (.o) only, do not link
+#  -S         compile to assembly (.s) only, do not link (*I)
+#  -use_asm   produce objects through assembler
+#  -use_msasm Support Microsoft style assembly language insertion using MASM
+#             style syntax and, if requested, output assembly in MASM format
+#  -G0        print source listing on stdout
+#  -G1        print source listing on stdout without INCLUDE files expanded
+#  -o<file>   name output file
+#  -g         produce symbolic debug information in object file
+#  -inline_debug_info preserve the source position of inlined code instead
+#             of assigning the call-site source position to inlined code
+#  
+#  Fortran Preprocessor
+#  --------------------
+#  -A-        remove all predefined macros (incompatible with -openmp)
+#  -D<name>[{=|#}<text>]  define macro
+#  -E         preprocess to stdout
+#  -EP        preprocess to stdout omitting #line directives
+#  -P, -F     preprocess to file
+#  -fpp[n]    run Fortran preprocessor on source files prior to compilation
+#       n=0   disable CVF and # directives, equivalent to no fpp
+#       n=1   enable CVF conditional compilation and # directives (DEFAULT)
+#       n=2   enable only # directives
+#       n=3   enable only CVF conditional compilation directives
+#  -cpp[n]    same as -fpp[n]
+#  -I<dir>    add directory to include file search path
+#  -U<name>   remove predefined macro
+#  -X         remove standard directories from include file search path
+#  
+#  FCE/Component Control
+#  ---------------------
+#  -ic      do independent Fortran compilation; FCE is not accessed or updated
+#  -bd,<progname>  invoke binder to generate list of objects to build <progname>
+#  -cl,<file>      specify program unit catalog list
+#  
+#  -Qoption,<str>,<opts>   pass options <opts> to tool specified by <str>
+#  -Qlocation,<str>,<dir>  set <dir> as the location of tool specified by <str>
+#  -Qinstall <dir>         set <dir> as root of compiler installation
+#  
+#  Language
+#  --------
+#  -i2            set default KIND of integer variables is 2
+#  -i4            set default KIND of integer variables is 4
+#  -i8            set default KIND of integer variables is 8
+#  -r8            set default size of REAL to 8 bytes
+#  -r16           set default size of REAL to 16 bytes
+#  -autodouble    same as -r8
+#  -doubletemps   all intermediate results of floating-points values are at
+#                 least double precision.
+#  
+#  -DD            compile debug statements (indicated by D in column 1)
+#  -DX            compile statements that have X in column 1
+#  -DY            compile statements that have Y in column 1
+#  
+#  -FR            specifies source files are in free format
+#  -FI            specifies source files are in fixed format
+#  -72            specify 72 column lines for fixed form sources
+#  -80            specify 80 column lines for fixed form sources
+#  -132           specify 132 column lines for fixed form sources
+#  -extend_source same as -132
+#  -pad_source    make compiler acknowledge blanks at the end of a line
+#  -dps           enable DEC* PARAMETER statement recognition (DEFAULT)
+#  -nodps         disable DEC* PARAMETER statement recognition
+#  
+#  -1, -onetrip      execute any DO loop at least once
+#  -auto             make all local variables AUTOMATIC
+#  -auto_scalar      make scalar local variables AUTOMATIC (DEFAULT)
+#  -save             save all variables (static allocation); opposite of -auto
+#  -u, -implicitnone set IMPLICIT NONE by default
+#  -ansi[-]          enable(DEFAULT)/disable assumption of ANSI conformance
+#  -common_args      assume "by reference" subprogram arguments may alias one
+#                    another
+#  -vms              enable VMS and DEC statement extensions
+#  -zero             implicitly initialize all data to zero
+#  
+#  -C       enable extensive runtime error checking (-CA, -CB, -CS, -CU, -CV)
+#  -CA      runtime checks for nil pointer/allocatable array refs
+#  -CB      runtime checks for out-of-bounds array subscript/substring refs
+#  -CS      runtime checks for consistent shape of intrinsic procedure array args
+#  -CU      runtime checks for uninitialized variables
+#  -CV      runtime checks for formal/actual parameter correspondence
+#  -d<n>    set level of diagnostics
+#  
+#  -Qdyncom"blk1,blk2,..."  make given common blocks dynamically-allocated
+#  -Qloccom"blk1,blk2,..."  make given common blocks locally-allocated
+#  
+#  -nbs          treat backslash as a normal character, not an escape character
+#  -nus          do not append an underscore to external subroutine names
+#  -nus[,<file>] do not append an underscore to subroutine names listed in <file>
+#  -lowercase    change routine names to all lowercase (DEFAULT)
+#  -uppercase    change routine names to all uppercase
+#  -align[-]     analyze and reorder memory layout for variables and arrays
+#  -Zp[n]        specify alignment constraint for structures (n=1,2,4,8,16)
+#  -y, -syntax   perform syntax check only
+#  
+#  Compiler Diagnostics
+#  --------------------
+#  -cerrs[-]  enable/disable(DEFAULT) terse format for diagnostic messages
+#  -cm        suppress all comment messages
+#  -q         suppress printing errors to stderr
+#  -w         disable all warnings
+#  -Wn        disable warnings (n=0) or show warnings (n=1, DEFAULT)
+#  -WB        issue a warning instead of an error for out-of-bounds array
+#             references
+#  -w90, -w95 suppress messages about use of non-standard Fortran
+#  -e90, -e95 issue errors for non-standard Fortran
+#  
+#  Miscellaneous
+#  -------------
+#  -help         print this help message
+#  -V            display compiler version information
+#  -sox[-]       enable(DEFAULT)/disable saving of compiler options and version
+#                in the executable
+#  -dryrun       show driver tool commands but do not execute tools
+#  -v            show driver tool commands and execute tools
+#  -Kpic, -KPIC  generate position independent code
+#  -Tf<file>     compile file as Fortran source
+#  -nobss_init   disable placement of zero-initialized variables in BSS (use DATA)
+#  -fdiv_check   enable the patch for the Pentium FDIV erratum
+#  -0f_check     enable the patch for the Pentium 0f erratum
+#  
+#  Linking/Linker
+#  --------------
+#  -L<dir>    instruct linker to search <dir> for libraries
+#  -i_dynamic link Intel provided libraries dynamically
+#  -C90       link with alternate I/O library for mixed output with C
+#  -ml        compile and link with non-thread-safe Fortran libraries
+#  -posixlib  link with POSIX library
+#  -Vaxlib    link with portability library
+#  
+#  Copyright (C) 1985-2001, Intel Corporation.  All rights reserved.
+#  
+#  * Other brands and names are the property of their respective owners.
+#  

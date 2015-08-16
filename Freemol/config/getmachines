@@ -1,0 +1,20 @@
+#! /bin/sh
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+########################################################################
+# Scan directory tree to find the target machine and compiler
+# Author: F.Mariotti <fabio.mariotti@unifr.ch>
+# Version: 0.1 - Aug 2000
+# Notes: it must run in the config directory.
+#        it expect machines name in the format m_MACHINE.
+#        i.e. each mechine directory needs to be prepended by "m_"
+# Bugs:  We expect that there is not other subdirectory starting by "m_"
+########################################################################
+# $Id: getmachines,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+########################################################################
+#
+dirs=`find ./ -name "m_*" -a -type d -exec basename \{\} \;`
+echo $dirs
+#

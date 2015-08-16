@@ -1,0 +1,23 @@
+#
+# Local Definitions for Generic Machine
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+#----------------------------------------------------------------------
+# FC compatible compiler
+#----------------------------------------------------------------------
+# $Id: Make.fc,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+#
+#
+# Compiler Options
+#----------------------------------------------------------------------
+#
+LOCDEBUG = -g -DDEBUG -DPGI
+FFLAGS   = 
+LDFLAGS  = 
+FC       = fc
+FPP      = 
+CPPFLAGS = 
+

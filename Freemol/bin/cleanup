@@ -1,0 +1,18 @@
+#! /bin/csh -f
+#
+# cleanup [dir ...] - Delete user's files named x.*, a.out, core, ...*, *~ ....
+# If one or more directories are specified, search files starting from them.
+# (c) R.G. Della Valle 1996
+#
+# Adapted for Freemol by Fabio Mariotti 16 Gen. 1999
+#
+#
+# The -xdev flag prevents find from searching filesystems on different devices.
+#
+# The -xdev flag has been removed for compatibility with other
+# find versions. (F.Mariotti). Please consider alternatives
+#
+find $* \( -name "x.*"    -o -name core         -o -name a.out      -o \
+           -name "...*"   -o -name "?*[~#]"     -o -name "*.bak"    \) \
+         -type f -print -exec /bin/rm -f {} \;
+#

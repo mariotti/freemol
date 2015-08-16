@@ -1,0 +1,140 @@
+#! /bin/sh
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+# printversion for Freemol by F.Mariotti: (c) F.Mariotti
+#
+###############################################################################
+# $Id: printversion,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+###############################################################################
+#
+###############################################################################
+#
+# This script produce the version string for Freemol.
+# See version.txt for explanation.
+#
+# This script print out some information about the
+# Freemol Version. These are the option:
+#  long | Long
+#     The complete version string
+#     
+#  author | authors | Author | Authors
+#     The main authors name
+#     
+#  vdate | Vdate | versiondate | Versiondate | VersionDate
+#     The version in date format thought for development
+#     
+#  version | Version | Short | short
+#     The simple distribution version
+#     
+#  Contribution | contribution | Contrib | contrib
+#     List of contributors
+#     
+#  History | history | Hist | hist
+#     The history of the package
+#     
+#  default
+#     same as version
+# 
+#  The two strings vernum and vernumdist
+#  are the version date respectively for the
+#  development package and for the last stable
+#  distribution version.
+#
+###############################################################################
+###############################################################################
+#
+# Initialization
+#
+###############################################################################
+#
+progname="Freemol2000";
+authors="F.Mariotti, C.Daul";
+vernum="2000.12.18.01";
+vernumdist="2000.12.18.01";
+distnum="1.0.1";
+#
+verstring="$progname by $authors - Version: $vernumdist/$distnum";
+#
+###############################################################################
+#
+# The two function to print out the contrib and history lists.
+# Add dataat the end of the list.
+#
+###############################################################################
+#
+prt_hist() {
+    cat <<EOF
+
+ HISTORY 
+ 
+ < 1996  Freemol was a collection of routines.
+ 
+ 1997 01 01 The inclusion of the symmetry package
+            by C.Daul and S.Daul.
+            Ref: CPL ... 
+ 
+ 1998       The project CPRS at CSCS in Manno was
+            dedicated to the port of the code in fortran90.
+            F.Mariotti <fabio.mariotti@unifr.ch>
+ 
+ 1999       The package assume a unique form: F.Mariotti
+ 
+ 2000       ADFrom and adfpsi are included in the package
+            by F.Mariotti. ADFrom is an idea of
+            A.Bencini and developed by F.Mariotti.
+ 
+ 2000       CSM and SQ are included in the package by
+            F.Mariotti, with bug corrections by A.Bencini.
+ 
+EOF
+}
+#
+#
+#
+prt_contrib() {
+    cat <<EOF
+
+ CONTRIBUTIONS: in cronological order
+ 
+ Claude A. Daul <claude@daul@unifr.ch>
+ Stephane Daul <stephane.daul@unifr.ch>
+ Jean-Luc Barras <jeanluc.barras@unifr.ch>
+ Fabio Mariotti <fabio.mariotti@unifr.ch>
+ Alessandro Bencini <sandro@chim1.unifi.it>
+
+EOF
+}
+#
+###############################################################################
+# END OF CONFIGURABLE OPTIONS
+###############################################################################
+#
+case $1 in
+ long|Long)
+    echo $verstring
+    ;;
+ author|authors|Author|Authors)
+    echo $authors
+    ;;
+ vdate|Vdate|versiondate|Versiondate|VersionDate)
+    echo $vernum
+    ;;
+ version|Version|Short|short)
+    echo $distnum
+    ;;
+ Contribution|contribution|Contrib|contrib)
+    prt_contrib
+    ;;
+ History|history|Hist|hist)
+    prt_hist
+    ;;
+ *)
+    echo $distnum
+    ;;
+esac;
+#
+###############################################################################
+#

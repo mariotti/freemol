@@ -1,0 +1,603 @@
+#!/bin/bash
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+########################################################################
+# Configure file for FREEMOL
+# Author: F.Mariotti <fabio.mariotti@unifr.ch>
+# Version: 2000.12.01:2.1.0
+########################################################################
+# $Id: configure,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+########################################################################
+#
+# SECTION: CONFIGURABLE OPTIONS FOR CONFIG
+# if something goes wrong at the configure stage: check this section.
+#
+########################################################################
+#
+# SECTION: Setup some programs
+########################################################################
+#
+# Copy Program: cp
+##################
+# choose one of this option:
+# 1) # prgcp=`which cp` " -f"
+# 2) # prgcp="/bin/cp -f"
+#
+prgcp="/bin/cp -f"
+#
+# Link Program: ln (NOTE: The ln program goes with cp!)
+#######################################################
+# choose one of this option:
+# 1)# prgln=`which ln` " -f"
+# 2)# prgln="/bin/ln -f"
+# 3)# prgln=`which cp` " -f"
+# 4)# prgln=$prgcp" -f"
+# 5)# prgln="/bin/cp -f"
+#
+prgln="/bin/cp -f"
+#
+# sed Program:
+##############
+# choose one of this option:
+# 1) # prgsed=`which sed`
+# 2) # prgsed=`/bin/sed`
+#
+prgsed=`which sed`
+#
+# Program awk:
+##############
+# choose one of this option:
+# 1) # prgawk=`which awk`
+# 2) # prgawk=`/bin/awk`
+# 3) # prgawk=`which gawk`
+# 4) # prgawk=`/bin/gawk`
+#
+prgawk=`which awk`
+#
+# Program perl NOTE: not used in configure but in some scripts
+##############################################################
+#
+prgperl=`which perl`
+#
+########################################################################
+# Are the programs configured?
+########################################################################
+#
+# check cp
+if (test -z \$prgcp)
+    then
+    exit 1
+fi;
+#
+# check ln
+if (test -z \$prgln)
+    then
+    exit 1
+fi;
+#
+# check sed
+if (test -z \$prgsed)
+    then
+    exit 1
+fi;
+#
+# check awk
+if (test -z \$prgawk)
+    then
+    exit 1
+fi;
+#
+# check perl
+if (test -z \$prgperl)
+    then
+    exit 1
+fi;
+#
+########################################################################
+# END SECTION: Setup some programs
+########################################################################
+# END SECTION: CONFIGURABLE OPTIONS FOR CONFIG
+########################################################################
+########################################################################
+# END OF CONFIGURABLE OPTIONS
+########################################################################
+########################################################################
+########################################################################
+#
+#
+########################################################################
+#
+# We require to run from main directory
+#
+########################################################################
+#
+if !(test -x ./config/configure)
+then
+    echo "Please run this script from FREEMOLHOME directory"
+    exit 1
+fi;
+#
+#
+########################################################################
+# Print HELP
+########################################################################
+#
+if test "help" = "$1" -o "HELP" = "$1"
+then
+  echo " "
+  echo " FREEMOL configure script"
+  echo " "
+  echo " Usage:"
+  echo " "
+  echo "        ./config/configure [<machine> <target> [FMHOME]]"
+  echo " "
+  echo " Where:"
+  echo " "
+  echo "        machine is one of the directory in the"
+  echo "        config dir."
+  echo " "
+  echo "        Today valid machines are:"
+  machines=`cd config ; ./getmachines`
+  for mmac in $machines
+  do
+    echo "          " $mmac;
+  done;
+  echo " "
+  echo "        target depend on the environment."
+  echo " "
+  echo "        Today valid target are:"
+  echo " "
+  machines=`cd config; ./getmachines`
+  for mmac in $machines
+  do
+    echo "        for" $mmac;
+    compilers=`cd config; ./getcompilers $mmac`
+    for ccomp in $compilers
+    do
+      echo "           " $ccomp;
+    done;
+  done;
+  echo " "
+  if (test a"$2" == a )
+  then
+    echo "        type:"
+    echo "             $0 help <machine name> for a description";
+  else
+    if (test -f ./config/$2/info.txt )
+    then
+      cat ./config/$2/info.txt;
+    else
+      echo "       Description not available or not valid machine type."
+      echo "      ./config/$2/info.txt"
+    fi;
+  fi;
+  echo " "
+  exit 0
+fi
+#
+########################################################################
+# Check if run from FREEMOL home (now check only if config dir is present
+########################################################################
+#
+if test ! -d config
+then
+    echo " Configure: the configure script must be executed from FREEMOL HOME."
+    exit 1
+fi
+#
+echo " "
+#
+########################################################################
+# Check and Set some programs: set some used tools (cp ln awk sed)
+########################################################################
+#
+# CP
+if test -z "$prgcp"
+then
+    echo " cp program not found."
+    exit 1
+fi;
+#
+# LN
+if test -z "$prgln"
+then
+    echo " ln program not found."
+    exit 1
+fi;
+#
+# SED
+if test -z "$prgsed"
+then
+    echo " sed program not found."
+    exit 1
+fi;
+#
+# AWK
+if test -z "$prgawk"
+then
+    prgawk=`which gawk`
+fi;
+if test -z "$prgawk"
+then
+    if test -z "$1" -o -z "$2"
+    then
+	echo " Configure: ERROR!"
+	echo "    Awk program not present:"
+	echo "    Run configure with machine and compiler options."
+	exit 1
+    fi;
+fi;
+#
+# PERL
+if test -z "$prgperl"
+then
+    prgperl=`which perl`
+fi;
+if test -z "$prgperl"
+then
+  echo " perl program not found."
+  exit 1
+fi;
+#
+#
+########################################################################
+# Set Home dir: Check for environment FMHOME if not set it
+########################################################################
+#
+# is it on command line?
+if test -n "${3}"
+then
+  FMHOME=${3}
+  export FMHOME
+fi
+#
+if test -z "${FMHOME}"
+then
+  echo " Configure: Choose Freemol Home directory."
+  echo "    Environment FMHOME not set:"
+  echo "    Enter HOME directory for FREEMOL:"
+  read ahome
+  if test -n $ahome
+  then
+    FMHOME=$ahome
+    export FMHOME
+  fi
+fi
+#
+if test -z "${FMHOME}"
+then
+  echo " Configure: ERROR!"
+  echo "    Environment FMHOME not set! exit."
+  echo " "
+  exit 1
+fi
+echo " Configure: working on: " $FMHOME
+#
+########################################################################
+# Set the Machine: read the command line or ask for machine type
+########################################################################
+#
+fmmach=${1}
+fmtarget=${2}
+#
+if test -z "$fmmach"
+then
+#
+# Built the machine list
+#
+# echo $targetsline | $prgawk -F "," {print}
+#
+MachineList=`cd config; ./getmachines`
+#
+    echo "Enter Machine Type:"
+    echo "(Choose one of: " $MachineList " )"
+    for mmac in $MachineList
+    do
+    echo -e  $mmac "\n\t\t\t" `head -1 ./config/$mmac/info.txt`;
+    done;
+    echo "Enter name:"
+    read amachine
+    for lmachine in $MachineList ;
+    do
+        if test "$lmachine" = "$amachine"; then
+	    fmmach=$lmachine;
+	fi;
+    done
+fi;
+#
+if test ! -d ${FMHOME}/config/${fmmach} -o -z "$fmmach";
+then
+    echo " Configure: ERROR!"
+    echo "    Machine directory: not found."
+    exit 1;
+fi;
+#
+#
+########################################################################
+# Build the CompilerList
+########################################################################
+#
+if test -z "$fmtarget"
+then
+CompilerList=`cd config; ./getcompilers $fmmach`
+#
+    echo " Which target compiler:"
+    echo " (Choose one of: " $CompilerList " )"
+    read atarget
+    for ltarget in $CompilerList ;
+    do
+        if test "$ltarget" = "$atarget"; then fmtarget=$ltarget; fi;
+    done
+fi
+#
+if test ! -f ${FMHOME}/config/${fmmach}/Make.${fmtarget}
+then
+  echo " "
+  echo " FREEMOL: Unable to find: " ${FMHOME}/config/${fmmach}/Make.${fmtarget}
+  echo "         Check FMHOME Variable."
+  echo " "
+  exit 1
+fi
+fmtarget=Make.$fmtarget
+#
+########################################################################
+# Ask for makemake type AVAILABLE ONLY NOW
+########################################################################
+#
+#
+# Set defaults for makemake
+#
+# Case Yes
+prgmkmake="makemake.ponefile"
+libmkmake="makemake.onefile"
+#
+# Case No
+prgmkmake="makemake.pmorefiles"
+libmkmake="makemake.morefiles"
+#
+# We remove temporarly this make option
+#
+#echo " Configure: makemake option"
+#echo " do you want that makemake create one sorce file[No]? (Yes/No/Std)"
+#read amkmake
+#
+# Default already set
+#
+if test -n "$amkmake"
+then
+case $amkmake in
+    Y|y|yes|YES)
+    prgmkmake="makemake.ponefile"
+    libmkmake="makemake.onefile"
+    ;;
+    N|n|no|NO)
+    prgmkmake="makemake.pmorefiles"
+    libmkmake="makemake.morefiles"
+    ;;
+    Std|std|STD)
+    prgmkmake="makemake.perl"
+    libmkmake="makemake.perl"
+    ;;
+esac;
+fi
+#
+# Create if needed the bin directory
+#
+if !(test -d bin)
+then
+mkdir bin;
+fi;
+#
+# Correct for the perl path in the makemake script and copy
+# it in the bin directory.
+#
+tmpperl=`echo $prgperl | sed "s/\//\\\\\\\\\\//g"`
+cat ./bin_dist/$libmkmake | sed "s/\/usr\/bin\/perl/$tmpperl/" > ./bin/makemake
+chmod 750 ./bin/makemake
+#
+# MakeMake for Programs
+#
+cat ./bin_dist/$prgmkmake | sed "s/\/usr\/bin\/perl/$tmpperl/" > ./bin/makemake.prog
+chmod 750 ./bin/makemake.prog
+#
+########################################################################
+# Modify Makeflags to suport the new FMHOME and ADFHOME
+########################################################################
+#
+echo " Configure: Operate on Makeflags ..."
+#
+# we create a backup of Makeflags and remove it.
+# We need to modify some reference in it.
+#
+if (test -f "config/Makeflags")
+    then
+    $prgcp config/Makeflags config/Makeflags.old
+fi;
+rm -f config/Makeflags
+#
+# We need a modified version of FMHOME in order to parse it.
+#
+afmhome=`sed -e 's/\//\\\\\//g' <<EOF
+${FMHOME}
+EOF`
+sed -e "s/^FMHOME \= .*/FMHOME = ${afmhome}/"  < config/Makeflags.template > config/Makeflags
+#
+# This section is required in order to link the programs
+# with ADF libraries and object files, if you are not
+# going to compile ADF dependent programs remove it.
+#
+# We read it and substitute it in the Makeflags file.
+#
+# We check first if it was the first given argument
+#
+ADFLIBS=${4}
+if test -z ${ADFLIBS}
+then
+    #
+    echo " "
+    echo " Where is your ADFLIB directory? "
+    echo " note that we will not check for it: "
+    echo " ADFlibraries are used only in few programs "
+    echo " "
+    read ADFLIBS
+    if test -n "${ADFLIBS}"
+    then
+	tmplibs=`sed -e 's/\//\\\\\//g' <<EOF
+${ADFLIBS}
+EOF`
+	$prgcp config/Makeflags config/Makeflags.old
+	rm -f config/Makeflags
+	sed -e "s/^ADFLIBS \= .*/ADFLIBS = ${tmplibs}/"  < config/Makeflags.old > config/Makeflags ;
+    fi;
+fi;
+#
+########################################################################
+# Create Links to Files
+########################################################################
+#
+# We duplicate some files in the home directory as well...
+#
+echo " Configure: Create links... "
+#
+# The part of the makefile file machine dependent.
+#
+$prgln ${FMHOME}/config/${fmmach}/${fmtarget} ${FMHOME}/config/Make.machine
+if test ! "$status"="0"
+then
+    echo " Configure: Undefined error!"
+fi;
+$prgln ${FMHOME}/config/${fmmach}/${fmtarget} ${FMHOME}/Make.machine
+if test ! "$status"="0"
+then
+    echo " Configure: Undefined error!"
+fi;
+#
+# The main makefile
+#
+$prgln ${FMHOME}/config/Makefile ${FMHOME}/Makefile
+if test ! "$status"="0"
+then
+    echo " Configure: Undefined error!"
+fi;
+#
+# The Makeflags file
+#
+$prgln ${FMHOME}/config/Makeflags ${FMHOME}/Makeflags
+if test ! "$status"="0"
+then
+    echo " Configure: Undefined error!"
+fi;
+#
+# We check for non standard code in the achine directory
+#
+if test -f ${FMHOME}/config/${fmmach}/mm_nostd.f90
+then
+$prgln ${FMHOME}/config/${fmmach}/mm_nostd.f90 ${FMHOME}/includes/mm_nostd.f90;
+fi;
+#
+########################################################################
+# Create Settings file for sh and tcsh
+########################################################################
+#
+# We create some extra files in the bin directory
+#
+cat <<EOF > ${FMHOME}/bin/setFREEMOLenvironment.sh
+FMHOME=${FMHOME}
+export FMHOME
+EOF
+chmod 750 ${FMHOME}/bin/setFREEMOLenvironment.sh
+#
+cat <<EOF > ${FMHOME}/bin/setFREEMOLenvironment.tcsh
+setenv FMHOME ${FMHOME}
+EOF
+chmod 750 ${FMHOME}/bin/setFREEMOLenvironment.tcsh
+#
+########################################################################
+# Copy Scripts
+########################################################################
+#
+# We copy all the other scripts and we try to take care
+# of mistakes: we chack that CVS does notexist there,
+# and we try to pot the correct index to programs.
+#
+tmpawk=`echo $prgawk | sed "s/\//\\\\\\\\\\//g"`
+for bfile in ./bin_dist/* ;
+do
+  bbfile=`basename $bfile`
+  if test $bbfile != CVS ;
+  then
+    echo File: $bbfile;
+    cat ./bin_dist/$bbfile | sed "s/\/usr\/bin\/perl/$tmpperl/" | \
+        sed "s/\/bin\/awk/$tmpawk/" > ./bin/$bbfile
+        chmod 750 ./bin/$bbfile
+  fi;
+done;
+#
+########################################################################
+# Makefiles
+########################################################################
+#
+# We copy the main Makefile files for modules
+#
+$prgln ./config/Makemodules utils/Makefile
+$prgln ./config/Makemodules includes/Makefile
+$prgln ./config/Makemodules modules/Makefile
+$prgln ./config/Makemodules moduledata/Makefile
+./config/makeprograms programs > programs/Makefile
+#
+########################################################################
+# Correct the Makefile for adfrom if ADF libs are not there. i.e. skip
+########################################################################
+#
+if test -z ${ADFLIBS}
+then
+    adfromdir="programs/adfrom"
+    adfromMfile="$adfromdir/Makefile"
+    echo "TODO: Correct for NO ADFLIBS!"
+    echo "First Try:"
+    if (test -d $adfromdir)
+    then
+	if !(test -f $adfromMfile)
+	then
+	    cat <<EOF > $adfromMfile
+#
+# Dummy Makefile to skip adfrom generation...
+# This file is autogenerated by $0 Do not edit
+#
+    donothing:
+	echo You choosed to skip adfrom compilation.
+#
+EOF
+	fi;
+    fi;
+fi;
+#
+########################################################################
+# Remove and Create back some directories
+########################################################################
+#
+# We update some working directories
+#
+rm -rf ${FMHOME}/MODFILES
+mkdir ${FMHOME}/MODFILES
+touch -r ${FMHOME}/config/configure ${FMHOME}/MODFILES/dummydir
+rm -rf ${FMHOME}/FFILES
+mkdir ${FMHOME}/FFILES
+touch -r ${FMHOME}/config/configure ${FMHOME}/FFILES/dummydir
+#
+# We create if needed the libs directory
+#
+if !(test -d libs)
+then
+mkdir libs;
+fi;
+#
+########################################################################
+# END of Jobs
+########################################################################
+#
+echo " "
+echo " FREEMOL configure NORMAL TERMINATION"
+echo " "

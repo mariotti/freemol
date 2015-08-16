@@ -1,0 +1,82 @@
+  README File for Freemol - F.Mariotti
+
+  This readme file is only a pointer to other documentation.
+  In particular you will be interested in:
+
+  ./help/INSTALL           Intallation and Compilation instruction
+  ./manuals/freemol_man.*   Installation and General Guide for Freemol
+
+  Please read the copyright notice in the COPYING file.
+
+  QUICK COMPILE AND INSTALL
+
+  Untar the package:
+  tar -xzvf freemol.tar.gz
+
+  Change into the main directory:
+  cd Freemol
+
+  Run configure:
+  ./config/configure
+  <answer to questions>
+
+  You are Done!
+  
+  OTHER NOTES
+
+  The directory tructure is as follow:
+
+  ./config
+		Configuration data and scripts
+  ./manuals
+		Manuals for the libraries and tools
+  ./help
+		Other documentation in unsorted order
+  ./docs
+		Generated documentation for routines
+  ./bin_dist
+		Precompiled binaries or scripts that
+		will go into the final ./bin directory
+  ./bin
+		Where all the executables will be stored
+  ./libs
+		Where all the generated libraries will be stored
+  ./tools
+		Some other maybe usefull tools
+  ./data
+		Examples and other data for the tools
+  ./templates
+		Templates for programmers
+  ./others
+		Tools and Libs used by Freemol
+  ./programs
+		The source code of the programs
+
+
+  The libraries and programs have their source code distributed
+  in the following directories:
+
+  ./includes   Used almost by every f90 module (generic)
+  ./utils      Generic Utils Modules
+  ./modules    Complex modules to solve specific tasks
+  ./moduledata modules to handle data within the programs
+
+
+  odds
+
+  COPYING is the copyright notice file.
+
+  ./others at present contains a local copy of the BLAS and LAPACK
+  routines to guarantee portability.
+
+  Machines specific tasks should have been already accouted for in
+  the Make.XXX files in each ./config/m_ARCH_OS directory.
+  These files account for the compilers options and set the relative
+  -DXXX (define) variable for the compilation.
+  At present the only machine dependent code is found in
+  ./includes/pcmdline.F90 which adds command line capabilities
+  to fortran 90 programs. If your machine/compiler combination
+  doesn't support command line capabilities you should modify this
+  file and eventually introduce a wrapper.
+
+

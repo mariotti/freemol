@@ -1,0 +1,21 @@
+
+ Generic Machine
+ ---------------
+
+ Description:
+ 
+ Generic UNIX or make commandline compatible machine.
+ Should run Make with "/" compatible directories names.
+ Should run awk, perl, sed, etc.
+ Should run a fortran compiler as fc.
+
+ WARNING THIS has been thought to be local and manually modified!
+         This should be run with ./config/confifure script
+         just after personal modifications and selecting
+         <machine> m_generic
+         and
+         <target> fc
+
+         Remenber that configuration check for an existing file
+         named mm_nostd.f90 in this directory to be included
+         in the includes directory.
