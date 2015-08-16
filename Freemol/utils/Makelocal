@@ -1,0 +1,17 @@
+#
+# Makelocal for FRIMOL Utilities
+# FRIMOL Utilities by F.Mariotti
+#
+# This File is part of the Frimol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+#
+# Local Names
+#
+HEREF90 = utils.F90
+HEREOBJ = utils.o
+HERELIBS = libutils.a
+#
+USEDLIBS =
+SECFLAGS = 
