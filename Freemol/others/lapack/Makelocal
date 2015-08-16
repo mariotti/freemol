@@ -1,0 +1,21 @@
+#----------------------------------------------------------------------
+# Some definition From make.inc from Blas/Lapack distribution
+# We get the value from Make.machine which is included before.
+#----------------------------------------------------------------------
+#
+SHELL = /bin/sh
+PLAT = $(PLATFORM)
+FORTRAN  = $(F77)
+OPTS     = $(F77FLAGS)
+DRVOPTS  = $(OPTS)
+NOOPT    = 
+LOADER   = $(F77LOADER)
+LOADOPTS = $(LD77FLAGS)
+ARCH     = $(AR)
+ARCHFLAGS= c$(ARFLAGS)
+RANLIB   = echo
+#
+# That is really local
+#
+LAPACKLIB = liblapack.a
+#

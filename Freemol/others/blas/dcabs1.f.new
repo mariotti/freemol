@@ -1,0 +1,6 @@
+      double precision function dcabs1(z)
+      complex(kind(2)) ::  z
+!      dcabs1 = dabs(real(z)) + dabs(imag(z))
+      dcabs1 = abs(z)
+      return
+      end
