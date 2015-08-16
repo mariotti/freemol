@@ -1,0 +1,53 @@
+[title]
+C3v test for CSMG
+should run with: CSMG.exe -i C3.mld -p noshift -p onestep -p useminuit
+parameter 3 (z traslation) is fixed
+[molecule] Nrec=4 format=nscxyz
+O         1   8       0.00000      0.000000     0.00000
+H         2   1       1.00000      0.000000     1.00000
+H         3   1      -0.50000     -0.866025     1.00000
+H         4   1      -0.50000      0.866025     1.00000
+[sto]
+#  atomo kx ky kz kr alpha bnorm from ADF 
+# Not used here ... 
+[x-csmg-cgauss]
+# Atoms G-Exponent      G-Coeff
+1       2.8838          1.5912
+2       3.8384          7.7016
+3       3.8384          7.7016
+4       3.8384          7.7016
+[x-csmg-symop] C3
+ E   1.0000  0.0000  0.0000    0.0  0.0000  0.0000  0.0000  F 
+ C3  0.0000  0.0000  1.0000  120.0  0.0000  0.0000  0.0000  F 
+ C3  0.0000  0.0000  1.0000 -120.0  0.0000  0.0000  0.0000  F 
+ S1  0.86602550  0.49999983  -0.00000000  180  0.0000  0.0000  0.0000  I 
+ S2  0.86602550 -0.49999983  -0.00000000  180  0.0000  0.0000  0.0000  I 
+ S3  0.00000000  1.00000000   0.00000000  180  0.0000  0.0000  0.0000  I 
+[x-minuit]
+set title
+CSMG minuit for C3
+parameters
+1 'x trans' 0.0 0.05
+2 'y trans' 0.0 0.05
+3 'z trans' 0.0 0.05
+4 'x rot  ' 0.0 0.05
+5 'y rot  ' 0.0 0.05
+6 'z rot  ' 0.0 0.05
+
+set print 3
+set eps 1.0E-6
+fix 2
+fix 3
+fix 4
+fix 5
+fix 6
+migrad
+release 2
+migrad
+release 4
+migrad
+release 5
+migrad
+release 6
+migrad
+return

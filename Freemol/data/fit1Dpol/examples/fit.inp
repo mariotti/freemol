@@ -1,0 +1,55 @@
+[comments]
+this is the first and maybe not really complete example. Check the Id
+$Id: fit.inp,v 1.1.1.1 2009/01/12 16:56:17 mariotti Exp $
+[x-name]
+# put a session name if interested in minuit restart
+# avaiable only under interactive session not yet implemented
+test01
+[x-fit1dpol-data] numrec=5 numcol=2
+1.0  1.0
+2.0  4.0
+3.0  9.0
+4.0 16.0
+5.0 25.0
+[x-fit1dpol-pars] numpars=3 funct=polynom eps=1.0D-14
+# The terms below are:
+#
+#        name: symbolic name of the parameter
+#         idx: internal minuit index of the parameter
+# start_value: Initial value of the parameter
+#    init_ste: Initial step size or uncertainty
+#       Fixed: Set that parameter as fixed
+#
+# the required data are only name and start_value
+# otherwise the read input routine will set defaults!
+#
+#name idx start_value init_step  Fixed
+f0    1   0.1         0.01         N
+f1    2   0.0         0.0001       Y
+f2    3   2.2         0.001        N
+[x-2-fit1dpol-pars] numpars=3 funct=polynom eps=1.0D-14
+# The terms below are:
+#
+#        name: symbolic name of the parameter
+#         idx: internal minuit index of the parameter
+# start_value: Initial value of the parameter
+#    init_ste: Initial step size or uncertainty
+#
+# the required data are only name and start_value
+# otherwise the read input routine will set defaults!
+#
+#name idx start_value init_step 
+f0    1   0.0         0.1
+f1    2   1.0         0.0001
+f2    3   2.0         0.01
+[x-bfit1dpol-pars] numpars=3
+# same but with minimal number
+f0 0.0
+f1 1.0
+f2 4.0
+[x-reduced-fit1dpol-pars] numpars=3
+# same but with minimal number
+f0 0.0
+f1 1.0
+f2 4.0
+[END]
