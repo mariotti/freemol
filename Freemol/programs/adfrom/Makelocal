@@ -1,0 +1,18 @@
+#
+# Makelocal for FREEMOL adfrom program
+# FREEMOL programs by F.Mariotti
+#
+# This File is part of the Freemol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+#
+# Local Names
+#
+HEREF90 = adfrom.F90
+HEREOBJ = adfrom.o
+HERELIBS = 
+HEREPROG = adfrom.exe
+#
+USEDLIBS = -lresolv -L$(FMLIBDIR) -lincludes -lutils -L$(ADFLIBS) -ltc
+SECFLAGS = 
