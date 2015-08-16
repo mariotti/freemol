@@ -1,0 +1,26 @@
+#
+# Makelocal for Freemol - ch4sym2cart
+# Freemol Modules by F.Mariotti
+#
+# $Id: Makelocal,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+#
+# This File is part of the Freemol package
+# (C) 2005 Fabio Mariotti, <fabio.mariotti@scriptsforscience.com>
+# Please read the full copyright statment in the COPYING file
+#
+#
+# Local Names
+#
+HERELIBS = 
+#
+# Main program vars
+#
+# A NOTE: libs are removed by the last line but if you use them the order is important
+#         the unused template shows the correct order.
+#
+HEREPROG = ch4sym2cart.exe
+HEREOBJS = ch4sym2cart.o
+#USEDLIBS = -L$(FMLIBDIR) -lmoduledata -lmodules -lfmutils -lincludes -lfmlapack -lfmblas
+USEDLIBS = -L$(FMLIBDIR) -lmoduledata -lmodules -lutils -lincludes -lfmlapack -lfmblas
+#
+

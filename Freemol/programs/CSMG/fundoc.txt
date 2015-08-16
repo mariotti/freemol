@@ -1,0 +1,712 @@
+  
+  -----------------------------------------------------------------------------
+   This File is part of the Frimol package
+   This is a fortran 90 port of the original (1999) F77 minuit downloaded
+   from http://www.cern.ch/. See there the current copyright statment.
+  -----------------------------------------------------------------------------
+   MODULE CSM_MINUIT for Frimol by F.Mariotti: (c) F.Mariotti
+  -----------------------------------------------------------------------------
+   $Id: csm_minuit.F90,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+  -----------------------------------------------------------------------------
+  
+   DESCRIPTION:
+   This is the cern package minuit ported to fortran90 for the Frimol package
+   and it is quite in beta release!!!! Please check for minuit at the
+   CERN web page: http://www.cern.ch/
+  
+   TODO:
+  
+  
+   WARN:
+  
+   HERE SOME LINES FROM THE ORIGINAL VERSION:
+       *
+       * Revision 1.1  2002/07/19 01:44:03  fmariot
+       * Just added minuit files but to be configured
+       *
+       * Revision 1.1.1.1  1996/03/07 14:31:28  mclareni
+       * Minuit
+       *
+       *
+  
+   HERE THE OLD DOCS:
+  
+       CPNAM   Parameter name (10 characters)
+       U       External (visible to user in FCN) value of parameter
+       ALIM, BLIM Lower and upper parameter limits. If both zero, no limi
+       ERP,ERN Positive and negative MINOS errors, if calculated.
+       WERR    External parameter error (standard deviation, defined by U
+       GLOBCC  Global Correlation Coefficient
+       NVARL   =-1 if parameter undefined,      =0 if constant,
+       = 1 if variable without limits,  =4 if variable with limits
+       (Note that if parameter has been fixed, NVARL=1 or =4, and NIOFEX=
+       NIOFEX  Internal parameter number, or zero if not currently variab
+       NEXOFI  External parameter number for currently variable parameter
+       X, XT   Internal parameter values (X are sometimes saved in XT)
+       DIRIN   (Internal) step sizes for current step
+       variables with names ending in ..S are saved values for fixed para
+       VHMAT   (Internal) error matrix stored as Half MATrix, since
+       it is symmetric
+       VTHMAT  VHMAT is sometimes saved in VTHMAT, especially in MNMNOT
+  
+       ISW definitions:
+        ISW(1) =0 normally, =1 means CALL LIMIT EXCEEDED
+        ISW(2) =0 means no error matrix
+               =1 means only approximate error matrix
+               =2 means full error matrix, but forced pos-def.
+               =3 means good normal full error matrix exists
+        ISW(3) =0 if Minuit is calculating the first derivatives
+               =1 if first derivatives calculated inside FCN
+        ISW(4) =-1 if most recent minimization did not converge.
+               = 0 if problem redefined since most recent minimization.
+               =+1 if most recent minimization did converge.
+        ISW(5) is the PRInt level.  See SHO PRIntlevel
+        ISW(6) = 0 for batch mode, =1 for interactive mode
+                        =-1 for originally interactive temporarily batch
+  
+       LWARN is true if warning messges are to be put out (default=true)
+              SET WARN turns it on, set NOWarn turns it off
+       LREPOR is true if exceptional conditions are put out (default=fals
+              SET DEBUG turns it on, SET NODebug turns it off
+       LIMSET is true if a parameter is up against limits (for MINOS)
+       LNOLIM is true if there are no limits on any parameters (not yet u
+       LNEWMN is true if the previous process has unexpectedly improved F
+       LPHEAD is true if a heading should be put out for the next paramet
+          definition, false if a parameter has just been defined
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function minuit_init(ird,iwr,isv)
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the minuit module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   logical function minuit_isinit()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   We merelyreturn the initialization flag.
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function minuit_geterror_i()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   Return the error code of the module.
+  
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   character(FLCHARS) function minuit_geterror_c()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   Return the error code of the module in Object oriented
+   programming style. It is a part of a set of routine to return errors.
+   See the discussion in the interface.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   HERE STARTS THE PORTED CODE!
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   This File is part of the Frimol package
+   (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+   Please read the full copyright statment in the COPYING file
+  -----------------------------------------------------------------------------
+   MODULE csm_minuit_function by F.Mariotti: (c) F.Mariotti
+  -----------------------------------------------------------------------------
+   $Id: csm_minuit_function.F90,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+  -----------------------------------------------------------------------------
+   
+   DESCRIPTION:
+   This is a the function called by minuit in order to minimise the CSM.
+   
+   TODO: 
+   
+   
+   WARN: 
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   
+  
+  -----------------------------------------------------------------------------
+   subroutine minuit_fcn(npar,grad,fval,xval,iflag) 
+  -----------------------------------------------------------------------------
+   
+  
+  -----------------------------------------------------------------------------
+    
+    From the manual of Minuit we read:
+    INPUT parameters:
+    npar	number of currently variable parameters.
+    xval	vector of (constant orvariable) parameters.
+    iflag	indicate what is to be calculated.
+    (futil)	removed in this version.
+    OUTPUT parameters:
+    fval	The calculated function value.
+    grad	The (optional) vector of first derivatives.
+    
+    You should declare the parameters as follow:
+    npar	integer(FINT), intent(in) :: npar
+    xval	real(FREAL), dimension(:), intent(in) ::  xval
+    iflag	integer(FINT), intent(in) :: iflag
+    fval	real(FREAL), intent(out) :: fval
+    grad	real(FREAL), intent(out), optional :: grad
+    
+    
+    
+    
+    
+    
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+   This File is part of the Frimol package
+   (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+   Please read the full copyright statment in the COPYING file
+  -----------------------------------------------------------------------------
+   PROGRAM CSMG  Frimol by F.Mariotti: (c) F.Mariotti
+  -----------------------------------------------------------------------------
+   $Id: CSMG.F90,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+  -----------------------------------------------------------------------------
+   
+   DESCRIPTION:
+   
+   
+   TODO: 
+   
+   
+   WARN: 
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   Function CSMG_init()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the CSMG module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   logical function CSMG_isinit()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   We merely return the initialization flag.
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function CSMG_geterror_i()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   
+   Return the error code of the module.
+   
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   character(FLCHARS) function CSMG_geterror_c()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   
+   Return the error code of the module in Object oriented
+   programming style. It is a part of a set of routine to return errors.
+   See the discussion in the interface.
+   
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   This File is part of the Freemol package
+   (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+   Please read the full copyright statment in the COPYING file
+  -----------------------------------------------------------------------------
+   MODULE csmmod  Freemol by F.Mariotti: (c) F.Mariotti
+  -----------------------------------------------------------------------------
+   $Id: csmmod.F90,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+  -----------------------------------------------------------------------------
+   
+   DESCRIPTION:
+   Name convention used within this module:
+   csmmod_XXX   are Public Procedures/Variables
+   csm_XXX      are Private Procedures/Variables
+  
+   Each public routine should set the module error code to 0.
+   So each routine contains a line as:
+      csm_error = 0
+   
+   PUBLIC PROCEDURES:
+   
+     public csmmod_init
+            This routine initialize the csmmod module.
+            At present sets the initialization and error flags and obtains a coputed value
+            for PI (180 degree).
+  
+            RETURNS[ineger(FINT)]: 0 always.
+  
+            INPUT: NONE
+  
+            OUTPUT: NONE
+   
+     public csmmod_isinit
+            Returns a logical stating true if the module has been initialized.
+  
+            RETURNS[logical]: .true. (for initialised) or .false. (for not initialised).
+  
+            INPUT: NONE
+  
+            OUTPUT: NONE
+   
+     public csmmod_geterror
+            It is an interface and it has this two masks:
+            integer(FINT) function csmmod_geterror_i()
+            character(FLCHARS) function csmmod_geterror_c(icode)
+                    integer(FINT), optional, intent(in) :: icode
+            It is a standard modules routine to report errors.
+            
+   
+     public csmmod_rdinput
+            This routine read input data from a molden/freemol/Frimol file.
+            
+            
+   
+     public csmmod_getnat
+            
+            
+            
+   
+     public csmmod_getnsymop
+            
+            
+            
+   
+     public csmmod_getrho
+            
+            
+            
+   
+     public csmmod_getrrii
+            
+            
+            
+   
+     public csmmod_getrrij
+            
+            
+            
+   
+     public csmmod_getimj
+            
+            
+            
+   
+     public csmmod_euler
+            
+            
+            
+   
+     public csmmod_rotxyz
+            
+            
+            
+   
+   
+   
+   PUBLIC VARIABLES:
+   
+   atg_index      
+     integer(FINT), allocatable, save, public, dimension(:) :: atg_index
+     real(FREAL), allocatable, save, public, dimension(:,:) :: atg_pars
+     ! SymOp Data
+     !
+     logical, save, public :: symopt
+     logical, save, public, allocatable, dimension(:) :: syminv
+     integer(KINT), save, public :: nsymop = DEF_nsymop
+     integer(KINT), save, public :: symident = 0
+     character(LCHARS), save, public,allocatable, dimension(:) :: symopstr
+     real(KREAL), save, public, allocatable, dimension(:) :: symalpha
+     real(KREAL), save, public, allocatable, dimension(:,:) :: symaxe
+     real(KREAL), save, public, allocatable, dimension(:,:) :: symtrans
+     real(KREAL), save, public, allocatable, dimension(:,:,:) :: symrmat
+     real(KREAL), save, public, allocatable, dimension(:,:) :: symeuler
+     real(KREAL), save, public, allocatable, dimension(:) :: symcsmval
+     !
+     ! More options
+     !-------------
+     logical, save, public :: csm_noshift = .false.
+     logical, save, public :: csm_onestep = .false.
+     logical, save, public :: csm_noinertia = .false.
+     logical, save, public :: csm_useminuit = .false.
+     logical, save, public :: csm_readminuit = .false.
+     logical, save, public :: csm_interminuit = .false.
+   
+   TODO: 
+   
+   
+   WARN: 
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function csmmod_init()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the csmmod module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   logical function csmmod_isinit()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   We merelyreturn the initialization flag.
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function csmmod_geterror_i()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   Return the last integer error code of the module.
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   character(FLCHARS) function csmmod_geterror_c(icode)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   
+   Return the latest error message of the module if any or the error string
+   if a code is given as input.
+   
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function csmmod_rdinput&
+                 &(iunin,finput,iunout,foutput,iunlog,filelog,iunerr,fileerr)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine read input data from a molden/freemol/Freemol file.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function csm_rdinput(iunin,iunbin)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine parse input data from a molden/freemol file (Real)
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  ----------------------------------------------------------------------
+   subroutine csmmod_euler(angle,rotax,inv,alpha,beta,gamma,rmat,leps)
+  ----------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   subroutine csmmod_rotxyz(tx,ty,tz,rx,ry,rz,xyz)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   tx,ty,tz is the translation vector
+   rx,ry,rz are the angles defining the amount the object is rotated
+   around x,y,z axes respectevly.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   subroutine csmmod_printhelp(iun,what)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   Print Help on iun. There is an optional 'what'.
+   what at present can have to possibilities: 'S' and 'E' for short and
+   extended help. Possibly in the future there will be an 'M' for manual.
+   It defaults to 'S'
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   This File is part of the Frimol package
+   (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+   Please read the full copyright statment in the COPYING file
+  -----------------------------------------------------------------------------
+   MODULE modcsmmin  Frimol by F.Mariotti: (c) F.Mariotti
+  -----------------------------------------------------------------------------
+   $Id: modcsmmin.F90,v 1.1.1.1 2009/01/12 16:56:08 mariotti Exp $
+  -----------------------------------------------------------------------------
+   
+   DESCRIPTION:
+   
+   
+   TODO: 
+   
+   
+   WARN: 
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function modcsmmin_init(liunout,srr,cn,msymop,lver)
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the modcsmmin module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function modcsmmin_restore()
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the modcsmmin module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function modcsmmin_setcoord()
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This routine initialize the modcsmmin module.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   logical function modcsmmin_isinit()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   We merelyreturn the initialization flag.
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   integer(FINT) function modcsmmin_geterror_i()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   
+   Return the error code of the module.
+   
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+   character(FLCHARS) function modcsmmin_geterror_c()
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   
+   Return the error code of the module in Object oriented
+   programming style. It is a part of a set of routine to return errors.
+   See the discussion in the interface.
+   
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   subroutine modcsm_nmopt(x,xm,ftol,fret,iter)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   This comes from a C.Daul Routine ... hope so.. at least ...
+   Should I do have a look to NR as well??
+   
+   
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   subroutine mcsm_rotxyz(tx,ty,tz,rx,ry,rz)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   tx,ty,tz is the translation vector
+   rx,ry,rz are the angles defining the amount the object is rotated
+   around x,y,z axes respectevly.
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   subroutine funct(n,p,value)
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+  
+   
+   
+   
+  
+  -----------------------------------------------------------------------------
+  
+  
+  -----------------------------------------------------------------------------
+   real(FREAL) function minuit_value(xvals)
+  -----------------------------------------------------------------------------
+  
