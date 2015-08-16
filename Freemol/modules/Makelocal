@@ -1,0 +1,17 @@
+#
+# Makelocal for FRIMOL Modules
+# FRIMOL Modules by F.Mariotti
+#
+# This File is part of the Frimol package
+# (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
+# Please read the full copyright statment in the COPYING file
+#
+#
+# Local Names
+#
+HEREF90 = modules.F90
+HEREOBJ = modules.o
+HERELIBS = libmodules.a
+#
+USEDLIBS =
+SECFLAGS = 
