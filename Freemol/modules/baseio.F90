@@ -1,11 +1,11 @@
 !
 !H
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H-----------------------------------------------------------------------------
-!H MODULE baseio: Frimol by F.Mariotti: (c) F.Mariotti 2002
+!H MODULE baseio: Freemol by F.Mariotti: (c) F.Mariotti 2002
 !H-----------------------------------------------------------------------------
 !H $Id: baseio.F90,v 1.1.1.1 2009/01/12 16:56:17 mariotti Exp $
 !H-----------------------------------------------------------------------------
@@ -99,7 +99,7 @@ module baseio
 !H                              33
 !H                              34
 !H                              These devices must be defined elsewhere!!!
-!H                              Inside the Frimol Package:
+!H                              Inside the Freemol Package:
 !H                              Do we need to extend this??
 !H                              In principle forever in practice we want
 !H                              to keep an easy use!!

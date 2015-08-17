@@ -1,11 +1,11 @@
 !
 !H
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H-----------------------------------------------------------------------------
-!H MODULE osec  Frimol by F.Mariotti: (c) F.Mariotti
+!H MODULE osec  Freemol by F.Mariotti: (c) F.Mariotti
 !H-----------------------------------------------------------------------------
 !H $Id: osec.F90,v 1.1.1.1 2009/01/12 16:56:17 mariotti Exp $
 !H-----------------------------------------------------------------------------
@@ -191,7 +191,7 @@ contains
   integer(FINT) function osec_set(iun,ssec,scpars,ilev)
 !
 !H------------------------------------------------------------------------------
-!H    Frimol Format Set Section
+!H    Freemol Format Set Section
 !H
 !H    Search a section and set current file record to the first
 !H    section line. The file is searched from the current position.
@@ -205,7 +205,7 @@ contains
 !H    outout
 !H          mr_setsec   integer recturn code:
 !H                      -n Undefined error (Not implemented)
-!H                      -3 File is not opened for FrimolFormat
+!H                      -3 File is not opened for FreemolFormat
 !H                      -2 Received a void sec name
 !H                      -1 EOF Error
 !H                       0 Not found

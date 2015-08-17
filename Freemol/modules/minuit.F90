@@ -1,16 +1,16 @@
 !H
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H This is a fortran 90 port of the original (1999) F77 minuit downloaded
 !H from http://www.cern.ch/. See there the current copyright statment.
 !H-----------------------------------------------------------------------------
-!H MODULE MINUIT for Frimol by F.Mariotti
+!H MODULE MINUIT for Freemol by F.Mariotti
 !H-----------------------------------------------------------------------------
 !H $Id: minuit.F90,v 1.1.1.1 2009/01/12 16:56:17 mariotti Exp $
 !H-----------------------------------------------------------------------------
 !H
 !H DESCRIPTION:
-!H This is the cern package minuit ported to fortran90 for the Frimol package
+!H This is the cern package minuit ported to fortran90 for the Freemol package
 !H and it is quite in beta release!!!! Please check for minuit at the
 !H CERN web page: http://www.cern.ch/
 !H

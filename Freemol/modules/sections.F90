@@ -2,9 +2,9 @@
 !H
 !H-----------------------------------------------------------------------------
 !H-----------------------------------------------------------------------------
-!H MODULE sections (Frimol F.Mariotti 03 Gen 2001)
+!H MODULE sections (Freemol F.Mariotti 03 Gen 2001)
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H-----------------------------------------------------------------------------
@@ -269,7 +269,7 @@ contains
 !H   C = COMPRESSED = no two words version: It is the gzip compressed file.
 !H                                          WARNING: it is possible we will
 !H                                          use the bzip format instead!
-!H   T = NATIVE = no two words version: it is the Frimol native file which
+!H   T = NATIVE = no two words version: it is the Freemol native file which
 !H                                      will actually match a known onw
 !H                                      but we leave alive this possiblity!
 !H   X = EXTRA = no two words version: It has to be user/programmer defined

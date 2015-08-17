@@ -4,7 +4,7 @@
 !H  ---------------------------------------------------------------------------
 !H  MODULE vartypes
 !H  ---------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H  ---------------------------------------------------------------------------
@@ -13,7 +13,7 @@
 !H  
 !H  KeyWords: variables kind type character lenght real integer module
 !H  
-!H  These Modules define the variable types used in FRIMOL.
+!H  These Modules define the variable types used in FREEMOL.
 !H  Some of the definitions are equivalent To ADF1999 definitions in order to
 !H  Interface some tools with ADF1999. It is supposed to work as well with
 !H  ADF 2000.XX versions.
@@ -45,19 +45,19 @@ module vartypes
   integer, parameter :: KREAL = kind(1.0d0)
   integer, parameter :: LCHARS = 160
   !
-  ! Frimol Default
+  ! Freemol Default
   !
   integer, parameter :: FINT  = kind(1)
   integer, parameter :: FREAL = kind(1.0d0)
   integer, parameter :: FLCHARS = 860
   !
-  ! Frimol Small: for special use
+  ! Freemol Small: for special use
   !
   integer, parameter :: SINT  = kind(1)
   integer, parameter :: SREAL = kind(1.0d0)
   integer, parameter :: SLCHARS = 10
   !
-  ! Frimol Big: for special use
+  ! Freemol Big: for special use
   !
   integer, parameter :: BINT  = kind(1)
   integer, parameter :: BREAL = kind(1.0d0)

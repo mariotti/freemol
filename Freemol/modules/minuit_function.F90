@@ -1,7 +1,7 @@
 !
 !H
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H-----------------------------------------------------------------------------
@@ -19,7 +19,7 @@
 !H This help in maintaining... hopefully..
 !H By the way .. the example is the real function!! ;-)
 !H
-!H It does not contain any of the standard functions of Frimol
+!H It does not contain any of the standard functions of Freemol
 !H programming environment. So no "minuit_function_init"!!!
 !H
 !H In order to use it remove the dummy_ string from the name of the module.
@@ -37,7 +37,7 @@
 !
 module dummy_minuit_function
   !
-  ! We use default varible types from Frimol Package.
+  ! We use default varible types from Freemol Package.
   !---------------------------------------------------
   use vartypes
   use messages

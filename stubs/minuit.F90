@@ -1,13 +1,13 @@
 !H
 !H-----------------------------------------------------------------------------
 !H-----------------------------------------------------------------------------
-!H MODULE MINUIT for Frimol by F.Mariotti: (c) F.Mariotti
+!H MODULE MINUIT for Freemol by F.Mariotti: (c) F.Mariotti
 !H-----------------------------------------------------------------------------
 !H $Id: minuit.F90,v 1.2 2002/07/21 18:21:47 fmariot Exp $
 !H-----------------------------------------------------------------------------
 !H
 !H DESCRIPTION:
-!H This is the cern package minuit ported to fortran90 for the Frimol package
+!H This is the cern package minuit ported to fortran90 for the Freemol package
 !H and it is quite in beta release!!!! Please check for minuit at the
 !H CERN web page: http://www.cern.ch/
 !H

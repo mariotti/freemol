@@ -1,11 +1,11 @@
 !
 !H
 !H-----------------------------------------------------------------------------
-!H This File is part of the Frimol package
+!H This File is part of the Freemol package
 !H (C) 2003 Fabio Mariotti, <fabio.mariotti@scriptsforscience.org>
 !H Please read the full copyright statment in the COPYING file
 !H-----------------------------------------------------------------------------
-!H MODULE extio: Frimol by F.Mariotti
+!H MODULE extio: Freemol by F.Mariotti
 !H-----------------------------------------------------------------------------
 !H $Id: extio.F90,v 1.1.1.1 2009/01/12 16:56:17 mariotti Exp $
 !H-----------------------------------------------------------------------------
@@ -200,7 +200,7 @@ module extio
      integer(FINT) :: unit
      character(FLCHARS) :: name          ! The local STD Name
      character(FLCHARS) :: url           ! If Available the name as URL
-     logical :: issection                ! Is A Frimol Section File
+     logical :: issection                ! Is A Freemol Section File
      logical :: isurl                    ! Do we have an URL
      logical :: isascii                  ! Is Binary or Ascii
      character(FLCHARS) :: format        ! The STD Fortran format
