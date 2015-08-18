@@ -16,9 +16,13 @@
 !H 
 !H TODO: 
 !H 
+!H The random number part is a bit buggy. I changed the code on diferent runs
+!H please check it.
 !H 
 !H WARN: 
 !H 
+!H The random number part is a bit buggy. I changed the code on diferent runs
+!H please check it.
 !H
 !H-----------------------------------------------------------------------------
 !H-----------------------------------------------------------------------------
@@ -213,15 +217,15 @@ program XY4PolySphere
   ! Random Number information
   !--------------------------
   integer(FINT) :: rssize
-  integer(FINT), dimension(1) :: rsget
-  integer(FINT), dimension(1) :: rsput !=2147483562 !On pgf90 5.0-1
+  integer(FINT), allocatable :: rsget(:)
+  integer(FINT), allocatable :: rsput(:) !=2147483562 !On pgf90 5.0-1
   !
   !
   ! debug and verbose stuff
   !------------------------
   logical, save :: XY4P_debug
   integer(FINT), save :: XY4P_verbose
-  integer(FINT), dimension(1), save :: XY4P_rsset
+  integer(FINT), allocatable, save :: XY4P_rsset(:)
   !
   ! error variables
   !----------------
@@ -610,7 +614,7 @@ program XY4PolySphere
   if(irc.lt.0) then
      call message(MESWARN,"[XY4P] No Random Generation section.")
      call message(MESERRO,"[XY4P] We Use goto now...")
-     !I know I shoudn't use it ut at preset here it is
+     !I know I shoudn't use it but at preset here it is
      goto 555
      stop 1
   end if
@@ -633,14 +637,17 @@ program XY4PolySphere
      ranrange(i,1:2)=ranrange(i,1:2)/180.0_FREAL*LPI
   end do
   !
+  call random_seed(size=rssize)
+  allocate(rsget(rssize))
+  allocate(rsput(rssize))
+  allocate(XY4P_rsset(rssize))
+  !
   if (XY4P_verbose.gt.1) then
-     call random_seed(size=rssize)
      write(iunoutput,'("#[x-xy4-genrandom] INFO(SIZE):",2X,I20)') rssize
      call random_seed(get=rsget)
      write(iunoutput,'("#[x-xy4-genrandom] INFO(GET):",2X,I20)') rsget
   end if
   if (XY4P_verbose.gt.2) then
-     call random_seed(size=rssize)
      write(iunoutput,'("#[x-xy4-genrandom] INFO(SIZE):",2X,I20)') rssize
      call random_seed(get=rsget)
      write(iunoutput,'("#[x-xy4-genrandom] INFO(GET):",2X,I20)') rsget

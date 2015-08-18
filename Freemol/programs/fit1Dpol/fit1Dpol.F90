@@ -432,6 +432,7 @@ contains
           LOCfit1Dpol_isinit = .false.
           fit1Dpol_init = -1
           call message(MESERRO,"[fit1Dpol_init] Cannot Open Input File")
+          call message_value(MESLOG,"[fit1Dpol_init] Input file name: ",finput)
           return
        end if
     end if
@@ -451,6 +452,7 @@ contains
           LOCfit1Dpol_isinit = .false.
           fit1Dpol_init = -1
           call message(MESERRO,"[fit1Dpol_init] Cannot Open Output File")
+          call message_value(MESLOG,"[fit1Dpol_init] Output file name: ",foutput)
           return
        end if
     end if
