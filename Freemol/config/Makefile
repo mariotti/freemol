@@ -56,13 +56,13 @@ include Makeflags
    utilities: includes
 	$(MAKE) -C $(FMUTILS)
 
-   moduledata: includes
+   moduledata: includes utilities
 	$(MAKE) -C $(FMMODULEDATA)
 
    modules: includes moduledata utilities
 	$(MAKE) -C $(FMMODULES)
 
-   programs: includes moduledata modules
+   programs: includes moduledata modules utilities
 	$(MAKE) -C $(FMPROGRAMS)
 
    helpdocs: 
