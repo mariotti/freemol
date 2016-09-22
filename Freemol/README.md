@@ -1,12 +1,14 @@
 # Freemol package
 
-This package is in BETA, very BETA.
+This package is in Alpha stage.
 
-If you try to run it, it will NOT work.
+The code itself has been tested for years, since the '90.
 
-But the code itself has been tested for years, since the '90.
+# Current Status
 
-I will complete the upload of a working version asap.
+ - Testing configuration
+   - ./config/autoconfig and ./config/configure, are working on FEDORA 24 with gfortran
+   - local blas and lapack are compiled into library. see ./lib
 
 # Libs features
 

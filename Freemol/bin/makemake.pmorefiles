@@ -206,7 +206,7 @@ sub MakeDepends {
 	while (<FILE>) {
 	    /$pattern/i && push(@incs, $1);
 	}
-	if (defined @incs) {
+	if (@incs) {
 	    $file =~ s/\.[^.]+$/.o/;
 	    print MAKEFILE "$file: ";
 	    &PrintWords(length($file) + 2, 0, @incs);
@@ -246,7 +246,7 @@ sub MakeDependsf90 {
 	    /^\s*include\s+["\']([^"\']+)["\']/i && push(@incs, $1);
             /^\s*use\s+([^\s,!]+)/i && push(@modules, &toLower($1));
         }
-	if (defined @incs || defined @modules) {
+	if (@incs || @modules) {
 	    ($objfile = $file) =~ s/\.f90$/.o/;
 	    print MAKEFILE "$objfile: ";
 	    undef @dependencies;
@@ -329,7 +329,7 @@ sub MakeDependsFREEMOL {
             /^\s*include\s+["\']([^"\']+)["\']/i && push(@incs, $1);
             /^\s*use\s+([^\s,!]+)/i && push(@modules, &toLower($1));
         }
-        if (defined @incs || defined @modules) {
+        if (@incs || @modules) {
 	    ($objfile = $file) =~ s/\.f90$/.o/;
 	    print MAKEFILE "$objfile: ";
 	    undef @dependencies;
@@ -377,7 +377,7 @@ sub MakeDependsFREEMOL {
             /^\s*include\s+["\']([^"\']+)["\']/i && push(@incs, $1);
             /^\s*use\s+([^\s,!]+)/i && push(@modules, &toLower($1));
         }
-        if (defined @incs || defined @modules) {
+        if (@incs || @modules) {
 	    ($objfile = $file) =~ s/\.F90$/.o/;
 	    print MAKEFILE "$objfile: ";
 	    undef @dependencies;

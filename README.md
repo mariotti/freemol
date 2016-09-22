@@ -16,19 +16,22 @@ The target are molecules, the name actually changed from frimol to freemol. Was 
 
 # Copyright and Free code list
 
+This is one of the original copyright (copyleft?) statment for the freeread routines.
 
-   module linetools
-   !
-   !H
-   !H----------------------------------------------------------------------
-   !H      Some Routine are adapted from FREEREAD package taken from CCL.
-   !H      CCL: Computational Chemistry List http://www.ccl.org/
-   !H      A statment from Jan Labanowski:
-   !H      This software was taken from anon. ftp on rani.chem.yale.edu
-   !H      It is a set of routines which allow format free input in FORTRAN
-   !H
-   !H      Jan Labanowski
-   !H      jkl@osc.edu
-   !H----------------------------------------------------------------------
-   !
-   
+    module linetools
+    !
+    !H
+    !H--------------------------------------------------------------
+    !H      Some Routine are adapted from FREEREAD package taken
+    !H      from CCL.
+    !H      CCL: Computational Chemistry List http://www.ccl.org/
+    !H      A statment from Jan Labanowski:
+    !H      This software was taken from anon. ftp on
+    !H      rani.chem.yale.edu. It is a set of routines which allow 
+    !H      format free input in FORTRAN
+    !H
+    !H      Jan Labanowski
+    !H      jkl@osc.edu
+    !H--------------------------------------------------------------
+    !
+
