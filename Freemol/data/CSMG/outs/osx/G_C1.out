@@ -1,0 +1,125 @@
+# [csmmod_rdinput] messages reinitialized.
+# MESLOG:[csmmod_rdinput] messages reinitialized.
+# Input  file unit is: 5
+# Input  file name is:stdin
+# Output file unit is: 6
+# Output file name is:stdout
+# Error  file unit is: 6
+# Error  file name is:stderr
+# Log    file unit is: 6
+# Log    file name is:stdlog
+# MESLOG:[csm_rdinput] molecule_init called with debug.
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1    0.00000000D+00   0.00000000D+00   0.00000000D+00
+  he               2    2    0.10000000D+01   0.00000000D+00   0.00000000D+00
+  li               3    3    0.00000000D+00   0.10000000D+01   0.00000000D+00
+  be               4    4    0.00000000D+00   0.00000000D+00   0.10000000D+01
+# Molecule moved to the center of mass
+# Shift Vector is:        0.10583541       0.15875312       0.21167082
+# Inertia Tensor: (Before Diagonalization)
+# Up Diagonal Columnwise
+#    0.12601276D+01   0.16801702D+00   0.11201134D+01   0.22402269D+00   0.33603403D+00   0.10361049D+01
+# Inertia Tensor: (Full Matrix)
+# 1,1 - 1,3           0.12601276D+01   0.16801702D+00   0.22402269D+00
+# 2,1 - 2,3           0.16801702D+00   0.11201134D+01   0.33603403D+00
+# 3,1 - 3,3           0.22402269D+00   0.33603403D+00   0.10361049D+01
+# Inertia Tensor
+# Inertia EigenValues:     0.73176594D+00   0.10596310D+01   0.16249491D+01
+# Eigen Vectors:
+# 1,1 - 1,3          -0.13415433D+00  -0.78543181D+00  -0.60423463D+00
+# 2,1 - 2,3          -0.61459495D+00   0.54425733D+00  -0.57101402D+00
+# 3,1 - 3,3           0.77735170D+00   0.29475555D+00  -0.55573690D+00
+# Molecule Rotated to match inertia axes
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.99731327D-01  -0.12409306D+00   0.51444589D+00
+  he               2    2   -0.23388566D+00  -0.90952487D+00  -0.89788740D-01
+  li               3    3   -0.71432628D+00   0.42016427D+00  -0.56568124D-01
+  be               4    4    0.67762037D+00   0.17066250D+00  -0.41291010D-01
+# Initial Integrals follow ...
+# INT: Number of electrons from integrated RHO:      9.99999109496
+# INT: \int \rho \rho dr:       3.96855790188
+# INT: \int \rho \tilde{\rho} dr/ng:       3.96855790188
+# INT: \int \rho \tilde{\rho}m dr/ng:       0.00000000000
+#  DEBUG     \int rr  =      3.96855790188
+#  DEBUG     \int rr~ =      3.96855790188
+#  DEBUG     \int rr~ =      3.96855790188
+#  DEBUG     CSM value =     -0.00000000000
+#  DEBUG     CSM value =      0.00000000000
+# Number of electrons =      9.99999109496
+# Initial rho^2 value =      3.96855790188
+#  Initial rrii value =      2.04513191069
+#  Initial rrij value =      1.92342599119
+#  Initial imj  value =      3.96855790188
+#  Initial impj value =      0.00000000000
+#  Initial CSM  value =      0.00000000000
+#  Initial CSM% value =      0.00000000000
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.99731327D-01  -0.12409306D+00   0.51444589D+00
+  he               2    2   -0.23388566D+00  -0.90952487D+00  -0.89788740D-01
+  li               3    3   -0.71432628D+00   0.42016427D+00  -0.56568124D-01
+  be               4    4    0.67762037D+00   0.17066250D+00  -0.41291010D-01
+# Request Simplex: Run it with internal procedure. NOT IMPLEMENTED!
+# Request for Simplex: Initial Coordinates.
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.99731327D-01  -0.12409306D+00   0.51444589D+00
+  he               2    2   -0.23388566D+00  -0.90952487D+00  -0.89788740D-01
+  li               3    3   -0.71432628D+00   0.42016427D+00  -0.56568124D-01
+  be               4    4    0.67762037D+00   0.17066250D+00  -0.41291010D-01
+# Minimization at step:     0 with Value:     0.0000Tol(Act/Req):0.0000E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# CSM Simplex Values from input minimization.
+# Final Number of Simplex optim. Steps:     0
+# Final CSM Simplex Value is:      0.00000000000
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.11162172D+00  -0.11351659D+00   0.51444589D+00
+  he               2    2   -0.32351818D+00  -0.88163143D+00  -0.89788740D-01
+  li               3    3   -0.66881119D+00   0.48937883D+00  -0.56568124D-01
+  be               4    4    0.69127291D+00   0.10216074D+00  -0.41291010D-01
+# Coordinates rotated along X. New coordinates:
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.99731327D-01   0.51444589D+00   0.12409306D+00
+  he               2    2   -0.23388566D+00  -0.89788740D-01   0.90952487D+00
+  li               3    3   -0.71432628D+00  -0.56568124D-01  -0.42016427D+00
+  be               4    4    0.67762037D+00  -0.41291010D-01  -0.17066250D+00
+# Minimization at step:     0 with Value:     0.0000Tol(Act/Req):0.0000E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# CSM Values after x minimization.
+# Final Number of optim. Steps:     0
+#      Before min is:      0.00000000000
+# Final CSM Value is:      0.00000000000
+# Coordinates rotated along Y.
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.51444589D+00  -0.12409306D+00  -0.99731327D-01
+  he               2    2    0.89788740D-01  -0.90952487D+00  -0.23388566D+00
+  li               3    3    0.56568124D-01   0.42016427D+00  -0.71432628D+00
+  be               4    4    0.41291010D-01   0.17066250D+00   0.67762037D+00
+# Minimization at step:     0 with Value:     0.0000Tol(Act/Req):0.0000E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# CSM Values after y minimization.
+# Final Number of optim. Steps:     0
+#      Before min is:      0.00000000000
+# Final CSM Value is:      0.00000000000
+# Coordinates rotated along Z.
+[molecule] Nrec=   4 Format=nscxyz
+  h                1    1   -0.12409306D+00   0.99731327D-01   0.51444589D+00
+  he               2    2   -0.90952487D+00   0.23388566D+00  -0.89788740D-01
+  li               3    3    0.42016427D+00   0.71432628D+00  -0.56568124D-01
+  be               4    4    0.17066250D+00  -0.67762037D+00  -0.41291010D-01
+# Minimization at step:     0 with Value:     0.0000Tol(Act/Req):0.0000E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# CSM Values after z minimization.
+# Final Number of optim. Steps:     0
+#      Before min is:      0.00000000000
+# Final CSM Simplex Value is:      0.00000000000
+# CSM Summary.
+#    Inizial CSM Value is:      0.00000000000
+#   After optimization is:      0.00000000000
+#          Along x axe is:      0.00000000000
+#          Along y axe is:      0.00000000000
+#          Along z axe is:      0.00000000000
+# The Lowest CSM Value is:      0.00000000000
+#    Obtained CSM in % is:      0.00000000000
