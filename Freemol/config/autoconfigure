@@ -164,6 +164,12 @@ echo " Using $ecomp as build compiler"
 #
 buildhome=`pwd`
 #
-echo "We should run as:"
-echo "./config/configure $a_machine $ecomp $buildhome"
+if [ $1 == "-r" ]
+then
+    echo "running: ./config/configure $a_machine $ecomp $buildhome"
+    ./config/configure $a_machine $ecomp $buildhome
+else
+    echo "We should run as:"
+    echo "./config/configure $a_machine $ecomp $buildhome"
+fi
 #

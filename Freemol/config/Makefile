@@ -68,7 +68,7 @@ include Makeflags
    helpdocs: programs
 	$(MAKE) -C $(FMHELPDOCS)
 
-   cleanall: cleanprog cleanwork cleanobjs cleanlibs cleanmid cleanmod cleandoc
+   cleanall: cleanprog cleanwork cleanobjs cleanlibs cleanmod cleandoc
 
 #
 #   cleanprog:
@@ -88,10 +88,6 @@ include Makeflags
 
    cleanlibs:
 	find $(FMHOME) -name '*.a' -print -exec rm -f \{\} \;
-
-   cleanmid:
-	@echo "CleanMid removed"
-#	find $(FMHOME) -name 'fm*.F90' -print -exec rm -f \{\} \;
 
    cleanmod:
 	find $(FMHOME) -name '*.mod' -print -exec rm -f \{\} \;
@@ -124,6 +120,9 @@ include Makeflags
 	rm -f $(FMHOME)/programs/fit1Dpol/Makefile
 	rm -rf $(FMHOME)/FFILES
 	rm -rf $(FMHOME)/MODFILES
+	rm -f $(FMHOME)/bin/setFREEMOLenvironment.sh
+	rm -f $(FMHOME)/bin/setFREEMOLenvironment.tcsh
+	rm -f $(FMHOME)/config/Makeflags
 #	rm -rf $(FMHOME)/bin
 #
    help:
