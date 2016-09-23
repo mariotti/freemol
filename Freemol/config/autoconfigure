@@ -39,7 +39,7 @@ a_machine="m_"
 a_m_hard_t=`uname -m`
 #
 case $a_m_hard_t in
-     i286|i386|i486|i586|i686|pentium)
+     i286|i386|i486|i586|i686|pentium|x86_64)
 	a_m_hard="generic"
      ;;
      alpha)
@@ -62,6 +62,9 @@ case $a_m_os_t in
      ;;
      dec|osf*|tru*|OSF1)
         a_m_os="dec"
+     ;;
+     Darwin)
+        a_m_os="osx"
      ;;
      *)
         a_m_os="generic"

@@ -9,6 +9,7 @@ The code itself has been tested for years, since the '90.
  - Testing configuration
    - ./config/autoconfig and ./config/configure, are working on FEDORA 24 with gfortran
    - local blas and lapack are compiled into library. see ./lib
+   - On OS X it compiles
 
 # Libs features
 

@@ -10,11 +10,32 @@ and translated into F90. I contacted CERN (current minuit copyright holder) for 
 
 # Intro
 
-I want to revive an old project. It is a fortran framework. It uses very
-standard shell scripts and other tools like perl, awk, sed etc.
-
-The target are molecules, the name actually changed from frimol to freemol.
-Was FRIbourg MOLecules now it is FREE (beer) MOLecules.
-
 The framework is at ./Freemol
 
+# Programs
+
+## adfrom
+   A code to work with ADF (Amsterdam Density Functional)
+   
+## ch4sym2cart
+   Convert coordinates from symmetric to cartesian for CH4 (Methane) like molecules
+
+## CSMG
+   Compute the CSM "Continuous Symmetry Measure" of weighted point objects using gaussians
+   functions as weight and pure spacial overlap/superposition.
+
+## fit1Dpol
+   Fit about anything in 1 dimension. Anything might mean you need to add your functions,
+   but it has a nice polynomial setup.
+   It has nice features to work with multi-columns ASCII files.
+   You can script which data to fit with ranged commands like
+   copy, add, sub, shift, scale etc..
+
+## Freemol
+   Just a placeholder at present
+
+## XY4Coord
+   Coordinates transformation
+
+## XY4PolySphere
+   Coordinates transformation, the polyspherical version

@@ -1,0 +1,8 @@
+Initial configuration for Mac OS X
+
+ $Id:  $ 
+ 
+Description:
+ 
+
+ 
