@@ -85,6 +85,7 @@ include Makeflags
    cleanobjs:
 	find $(FMHOME) \( -name '*.lst' -o -name '*.o' -o -name 'test' \) -print -exec rm -f \{\} \;
 	find $(FMHOME) -name '*timestamp*' -print -exec rm -f \{\} \;
+	find $(FMHOME)/programs -name '*.dSYM' -print -exec rm -rf \{\} \;
 
    cleanlibs:
 	find $(FMHOME) -name '*.a' -print -exec rm -f \{\} \;
