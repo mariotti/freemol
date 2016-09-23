@@ -36,10 +36,10 @@ include Makeflags
 .PHONY: help freemol
 #
    printme:
-	echo " "
-	echo "    Make is running on Freemol"
-	echo "    Version: " `./config/printversion`
-	echo " "
+	@echo " "
+	@echo "    Make is running on Freemol"
+	@echo "    Version: " `./config/printversion`
+	@echo " "
 
    binaries: libraries 
 
@@ -65,7 +65,7 @@ include Makeflags
    programs: includes moduledata modules utilities
 	$(MAKE) -C $(FMPROGRAMS)
 
-   helpdocs: 
+   helpdocs: programs
 	$(MAKE) -C $(FMHELPDOCS)
 
    cleanall: cleanprog cleanwork cleanobjs cleanlibs cleanmid cleanmod cleandoc
@@ -90,7 +90,7 @@ include Makeflags
 	find $(FMHOME) -name '*.a' -print -exec rm -f \{\} \;
 
    cleanmid:
-	echo "CleanMid removed"
+	@echo "CleanMid removed"
 #	find $(FMHOME) -name 'fm*.F90' -print -exec rm -f \{\} \;
 
    cleanmod:
@@ -127,38 +127,38 @@ include Makeflags
 #	rm -rf $(FMHOME)/bin
 #
    help:
-	echo " "
-	echo " Makefile for Freemol by F.Mariotti"
-	echo " "
-	echo " Available targets:"
-	echo " "
-	echo " binaries             Builds binaries and libraries"
-	echo " libraries             \" libraries"
-	echo " includes              \" Only includes library"
-	echo " utilities             \" Only utility library"
-	echo " moduledata            \" Only Data modules library"
-	echo " modules               \" Only modules library"
-	echo " programs              \" Only programs"
-	echo " helpdocs              \" help documents tree"
-	echo " all                  Print this help message"
-	echo " freemol               Make the program!"
-	echo " "
-	echo " Clean targets:"
-	echo " "
-	echo " cleanprog            Cleanup the Freemol executable"
-	echo " cleanwork             \" backup files tmp files etc..."
-	echo " cleanobjs             \" all the object files"
-	echo " cleanlibs             \" all library files"
-	echo " cleanmid              \" mid files fm*.F90"
-	echo " cleanmod              \" all the *.mod files"
-	echo " cleandoc              \" all created documents"
-	echo " cleanall              \" all targets above"
-	echo " cleanconfig           \" all files created by configuration"
-	echo " "
-	echo " help                 This target"
-	echo " "
-	echo " "
-	echo " "
+	@echo " "
+	@echo " Makefile for Freemol by F.Mariotti"
+	@echo " "
+	@echo " Available targets:"
+	@echo " "
+	@echo " binaries             Builds binaries and libraries"
+	@echo " libraries             \" libraries"
+	@echo " includes              \" Only includes library"
+	@echo " utilities             \" Only utility library"
+	@echo " moduledata            \" Only Data modules library"
+	@echo " modules               \" Only modules library"
+	@echo " programs              \" Only programs"
+	@echo " helpdocs              \" help documents tree"
+	@echo " all                  Print this help message"
+	@echo " freemol               Make the program!"
+	@echo " "
+	@echo " Clean targets:"
+	@echo " "
+	@echo " cleanprog            Cleanup the Freemol executable"
+	@echo " cleanwork             \" backup files tmp files etc..."
+	@echo " cleanobjs             \" all the object files"
+	@echo " cleanlibs             \" all library files"
+	@echo " cleanmid              \" mid files fm*.F90"
+	@echo " cleanmod              \" all the *.mod files"
+	@echo " cleandoc              \" all created documents"
+	@echo " cleanall              \" all targets above"
+	@echo " cleanconfig           \" all files created by configuration"
+	@echo " "
+	@echo " help                 This target"
+	@echo " "
+	@echo " "
+	@echo " "
 
 #
   tarit:

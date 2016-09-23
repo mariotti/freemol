@@ -12,7 +12,7 @@
 # Directories
 ########################################################################
 #
-FMHOME = /home/mariotti/SoftProjects/GitHub/freemol/Freemol
+FMHOME = /Users/mariotti/GIT/freemol/Freemol
 FMPROG = $(FMHOME)/programs/Freemol/Freemol.exe
 FMBIN = $(FMHOME)/bin
 FMLIBDIR = $(FMHOME)/libs
