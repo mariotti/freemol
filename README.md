@@ -18,7 +18,7 @@ The framework is at ./Freemol
    A code to work with ADF (Amsterdam Density Functional)
    
 ## ch4sym2cart
-   Convert coordinates from symmetric to cartesian for CH4 (Methane) like molecules
+   Convert coordinates from symmetric to Cartesian for CH4 (Methane) alike molecules
 
 ## CSMG
    Compute the CSM "Continuous Symmetry Measure" of weighted point objects using gaussians
@@ -94,7 +94,7 @@ The framework is at ./Freemol
 
 ### osec, sections: a tool to work with sectioned files like molden format
 
-### minuit: a multidimentional minimization tool
+### minuit: a multidimensional minimization tool
 
 ## Moduledata
 
