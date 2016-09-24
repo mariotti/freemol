@@ -22,7 +22,31 @@ The framework is at ./Freemol
 
 ## CSMG
    Compute the CSM "Continuous Symmetry Measure" of weighted point objects using gaussians
-   functions as weight and pure spacial overlap/superposition.
+   functions. See this paper for details:
+   
+   [https://fabiomariotti.files.wordpress.com/2013/07/csm_paper.pdf](https://fabiomariotti.files.wordpress.com/2013/07/csm_paper.pdf)
+   
+   And eventually this short blog:
+
+   [https://blog.techottis.ch/2016/04/01/continuous-symmetry-measure-an-old-work/](https://blog.techottis.ch/2016/04/01/continuous-symmetry-measure-an-old-work/)
+
+   This is an example of input
+
+    # from symmetry_mod file
+    [molecule] nrec=3 format=nscxyz 
+    o  1 8 1.000000 2.000000 3.000000
+    h  2 1 2.000000 2.000000 3.000000
+    h  3 1 1.000000 3.000000 3.000000
+    [x-csmg-cgauss] 
+    1 2.883843 1.591247
+    2 3.838395 7.701635
+    3 3.838395 7.701635
+    [x-csmg-symop] 
+     E    1.0000  0.0000  0.0000    0.0  0.0000  0.0000  0.0000  F 
+     C2_2   0.707107 0.707107 0.000000 180.000000  0.0000  0.0000  0.0000  F 
+     S1   -0.707107 0.707107 0.000000 180.0000  0.0000  0.0000  0.0000  I 
+     S2   0.000000 0.000000 1.000000 180.0000  0.0000  0.0000  0.0000  I 
+
 
 ## fit1Dpol
    Fit about anything in 1 dimension. Anything might mean you need to add your functions,
@@ -39,3 +63,44 @@ The framework is at ./Freemol
 
 ## XY4PolySphere
    Coordinates transformation, the polyspherical version
+
+# Libraries
+
+## Includes
+
+### linetools: format free input
+
+### messages: a logging facility
+
+### pcmdline: to handle the command line
+
+### strtools: string manipulation routines
+
+### vartypes: standardize variables type within codes
+
+### chemconst: constants defined at different precision
+
+## Utils
+
+### mathtools: few simple and common matrix tools
+
+### qnumbers: a small tool for quantum numbers
+
+## Modules
+
+### baseio: a file manager
+
+### extio: extensions to baseio for easy file manipulation
+
+### osec, sections: a tool to work with sectioned files like molden format
+
+### minuit: a multidimentional minimization tool
+
+## Moduledata
+
+### molecules: a molden based structure and tools to store molecules data and read in "free" format
+
+## Tools
+
+### CSMD supporting tools
+
