@@ -12,6 +12,16 @@ and translated into F90. I contacted CERN (current minuit copyright holder) for 
 
 The framework is at ./Freemol
 
+# Framework
+
+## controlled configure and autoconfigure
+
+## automatic makefile creation
+
+## controlled help comment extraction
+
+## section for manuals
+
 # Programs
 
 ## adfrom
@@ -21,7 +31,7 @@ The framework is at ./Freemol
    Convert coordinates from symmetric to Cartesian for CH4 (Methane) alike molecules
 
 ## CSMG
-   Compute the CSM "Continuous Symmetry Measure" of weighted point objects using gaussians
+   Compute the CSM "Continuous Symmetry Measure" of weighted point objects using Gaussian
    functions. See this paper for details:
    
    [https://fabiomariotti.files.wordpress.com/2013/07/csm_paper.pdf](https://fabiomariotti.files.wordpress.com/2013/07/csm_paper.pdf)
@@ -47,6 +57,14 @@ The framework is at ./Freemol
      S1   -0.707107 0.707107 0.000000 180.0000  0.0000  0.0000  0.0000  I 
      S2   0.000000 0.000000 1.000000 180.0000  0.0000  0.0000  0.0000  I 
 
+### Dependencies
+See _Libraries_
+
+    #
+    USEDLIBS = -L$(FMLIBDIR) -lmodules -lmoduledata -lutils -lincludes \
+               -lfmlapack -lfmblas
+    #
+
 
 ## fit1Dpol
    Fit about anything in 1 dimension. Anything might mean you need to add your functions,
@@ -65,6 +83,9 @@ The framework is at ./Freemol
    Coordinates transformation, the polyspherical version
 
 # Libraries
+  These libraries and tools are used in the programs listed above. For a working example of their
+  usage please check the programs. In order to link to these libraries or tools please check also the
+  generated makefiles.
 
 ## Includes
 
@@ -104,3 +125,6 @@ The framework is at ./Freemol
 
 ### CSMD supporting tools
 
+## others
+
+### local blas and lapack

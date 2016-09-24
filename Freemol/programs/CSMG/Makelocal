@@ -17,9 +17,8 @@ HERELIBS =
 #
 HEREPROG = CSMG.exe
 HEREOBJS = CSMG.o
-USEDLIBS = -L$(FMLIBDIR) -lmodules -lincludes -lmoduledata -lutils -llapack -lblas
-USEDLIBS = -L$(FMLIBDIR) -lmodules -lmoduledata -lutils -lincludes /usr/home/fmariot/w.soft/Frimol2000/libs/liblapack.a /usr/home/fmariot/w.soft/Frimol2000/libs/libblas.a
-#
+# Try system blas and lapack
+#USEDLIBS = -L$(FMLIBDIR) -lmodules -lincludes -lmoduledata -lutils -llapack -lblas
 USEDLIBS = -L$(FMLIBDIR) -lmodules -lmoduledata -lutils -lincludes \
            -lfmlapack -lfmblas
 #
