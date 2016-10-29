@@ -1,14 +1,29 @@
 # freemol
 freemol 2003
 
-# Copyright notice
+# Copyright notice/Licences: Please read this
 Please note that some code lines might be a copy of other sources,
 usually free source code, as this project started many years ago.
 
-Minuit in particular, I started it from an original F77 (free from the 90s) code
-and translated into F90. I contacted CERN (current minuit copyright holder) for a confirmation.
+Minuit in particular: I started it from an original F77 (free from the 90s) code
+and translated into F90. I contacted CERN (current minuit copyright holder) for a confirmation but I could not get a clear answer. I think it is obvious as it is a really old code which was free on the net many years ago.
 
-There is also some free code from CCL (Computational Chemistry List)
+There is also some free code from CCL (Computational Chemistry List), it is mentioned as comment in the code.
+
+If code, packages or else might not fit with this "main" repository licence they are present in the folder "others/". Please read each package or code licence. If a package/code is there, then the redistribution is granted but under the given package licence which you should read.
+
+ ## Why so complicated?
+ 
+ There is a different solution: Get the required packages from other/external sources.
+ 
+ But I want to create a "self-consistend" package which will run without external dependencies. For these reasons:
+ 
+    - It might need to compile for systems without a network connection.
+    - If an hardware system (for example) is not supported by the main distribution we can create patches which apply only to the given distribution.
+    - Security: It is better to: download, check, compile, run, check, put in "others/", check, compile, run, check then a simple download from the net.
+    - Then the obvious: I promote fortran as the most portable source code. I need all code in a unique package.
+    
+Warning: For example blas and lapack are definitly more optimised if you use your system ones.
 
 # News
 
