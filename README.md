@@ -5,8 +5,14 @@ freemol 2003
 Please note that some code lines might be a copy of other sources,
 usually free source code, as this project started many years ago.
 
-Minuit in particular, I started from an original F77 (free) code
+Minuit in particular, I started it from an original F77 (free from the 90s) code
 and translated into F90. I contacted CERN (current minuit copyright holder) for a confirmation.
+
+There is also some free code from CCL (Computational Chemistry List)
+
+# News
+
+Added a branch to add travis CI services, to test.
 
 # Intro
 
