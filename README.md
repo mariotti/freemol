@@ -8,9 +8,94 @@ usually free source code, as this project started many years ago.
 Minuit in particular, I started from an original F77 (free) code
 and translated into F90. I contacted CERN (current minuit copyright holder) for a confirmation.
 
+Also linetools described in the _Libraries_ has this top line:
+
+    !H----------------------------------------------------------------------
+    !H      Some Routine are adapted from FREEREAD package taken from CCL.
+    !H      CCL: Computational Chemistry List http://www.ccl.org/
+    !H      A statment from Jan Labanowski:
+    !H      This software was taken from anon. ftp on rani.chem.yale.edu
+    !H      It is a set of routines which allow format free input in FORTRAN
+    !H
+    !H      Jan Labanowski
+    !H      jkl@osc.edu
+    !H----------------------------------------------------------------------
+
+All the rest should be considered within the latest GPL.
+
 # Intro
 
 The framework is at ./Freemol
+
+For a quick example, You would add a program just by making a directory
+
+    mkdir programs/mycode
+
+and adding .F90 files in there. There a makemake utility in place. You
+might need to add a Makelocal file like this:
+
+    USEDLIBS = -L$(FMLIBDIR) -lmodules -lmoduledata -lutils -lincludes \
+               -lfmlapack -lfmblas
+
+
+You would read the command line like this:
+
+    use pcmdline
+    !
+    ! We read the command line for I/O file names
+    !--------------------------------------------
+    call pcmd_iargc(nargs)
+    allocate(cargs(nargs),STAT=irc)
+    !
+    ! Get the current arguments
+    call pcmd_getarg(nargs,cargs)
+    !
+    ! Check if there is -i or -o for input or output
+    call pcmd_getio(nargs,cargs,finput,foutput)
+    !
+    ! Open the input
+    irc = baseio_open(iunin,finput,stat='OLD')
+    !
+    ! Check a complex flag: -p noshift,onestep
+    irc = pcmd_checkarg(nargs,cargs,'-p',params)
+    irc = index(params,'noshift')
+    if(irc.gt.0) then
+       demo_noshift = .true.
+    endif
+    !
+    irc = pcmd_checkarg(nargs,cargs,'-p',params)
+    irc = index(params,'onestep')
+    if(irc.gt.0) then
+       demo_onestep = .true.
+    end if
+    
+Or an INI file or molden file section like this:
+
+    ! We need the molecule section
+    !-----------------------------
+    rewind(iunin)
+    irc = osec_set(iunin,'molecule',params)
+    if(irc.lt.0) then
+       call message(MESERRO,'[demo_rdinput] No molecule section.')
+       return
+    end if
+    !
+    call message_comment(iunbin,'Got molecule section. With Parameters:')
+    call message_comment(iunbin,adjustl(params))
+    !
+    call message(MESLOG,"[demo_rdinput] molecule_init called.")
+    irc=molecule_init()
+    if(irc.lt.0) then
+       call message(MESERRO,'[demo_rdinput] Cannot Initialize the molecule.')
+       return
+    end if
+    !
+    call molecule_read(iunin,params)
+    call molecule_print(iunbin)
+
+
+
+
 
 # Framework
 
