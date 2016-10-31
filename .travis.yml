@@ -1,0 +1,32 @@
+### This file "initially" "stolen" from: https://github.com/ScottWales/fortran-build-testing/blob/master/.travis.yml
+# Travis doesn't have a fortran build config, so we'll use c as a base and
+# create our own environment
+language: c
+sudo: required
+
+env:
+    global:
+        - FC=gfortran-4.8
+        - OMPI_FC=${FC}
+install:
+    - sudo apt-add-repository --yes ppa:ubuntu-toolchain-r/test
+    - sudo apt-get update
+    - sudo apt-get install gcc gfortran
+
+    - pip install --user codecov
+
+script:
+    - cd Freemol; ./config/configure m_generic_osx gfortran ${PWD}
+    - make
+    - make others
+    - make includes
+    - make utilities
+    - make moduledata
+    - make modules
+    - make programs
+    - ls -al bin
+    
+
+after_success:
+    - codecov --gcov-exec=gcov-4.8
+
