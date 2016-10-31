@@ -28,6 +28,5 @@ script:
     
 
 after_success:
-    - find .
     - codecov --gcov-exec=gcov-4.8
 
