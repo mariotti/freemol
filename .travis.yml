@@ -22,6 +22,9 @@ script:
     - make includes
     - make utilities
     - make moduledata
+    - make modules
+    - make programs
+    - ls -al bin
     
 
 after_success:
