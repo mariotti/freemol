@@ -15,8 +15,12 @@ install:
 
     - pip install --user codecov
 
-script: 
-    - make check PFUNIT=pfunit
+script:
+    - cd Freemol; ./config/configure m_generic_osx gfortran ${PWD}
+    - make
+    - make others
+    - make includes
+    
 
 after_success:
     - find .

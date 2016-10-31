@@ -431,9 +431,11 @@ sed -e "s/^FMHOME \= .*/FMHOME = ${afmhome}/"  < config/Makeflags.template > con
 # We read it and substitute it in the Makeflags file.
 #
 # We check first if it was the first given argument
+### ADF for travins is fully removed ...
 #
 ADFLIBS=${4}
-if test -z ${ADFLIBS}
+#if test -z ${ADFLIBS}
+if 0
 then
     #
     echo " "
