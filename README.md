@@ -44,6 +44,9 @@ All the rest should be considered within the latest GPL.
 # News
 
 Added a branch to add travis CI services, to test.
+We have indeed travisCI working for the compilation step: the code compiles.
+
+[![Build Status](https://travis-ci.org/mariotti/freemol.svg?branch=master)](https://travis-ci.org/mariotti/freemol)
 
 # Intro
 
