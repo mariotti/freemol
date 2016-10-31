@@ -20,6 +20,8 @@ script:
     - make
     - make others
     - make includes
+    - make utilities
+    - make moduledata
     
 
 after_success:
