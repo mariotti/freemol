@@ -12,7 +12,7 @@ There is also some free code from CCL (Computational Chemistry List), it is ment
 
 If code, packages or else might not fit with this "main" repository licence they are present in the folder "others/". Please read each package or code licence. If a package/code is there, then the redistribution is granted but under the given package licence which you should read.
 
- ## Why so complicated?
+## Why so complicated?
  
  There is a different solution: Get the required packages from other/external sources.
  
@@ -25,9 +25,6 @@ If code, packages or else might not fit with this "main" repository licence they
     
 Warning: For example blas and lapack are definitly more optimised if you use your system ones.
 
-# News
-
-Added a branch to add travis CI services, to test.
 
 Also linetools described in the _Libraries_ has this top line:
 
@@ -43,6 +40,10 @@ Also linetools described in the _Libraries_ has this top line:
     !H----------------------------------------------------------------------
 
 All the rest should be considered within the latest GPL.
+
+# News
+
+Added a branch to add travis CI services, to test.
 
 # Intro
 
