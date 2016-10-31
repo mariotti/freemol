@@ -11,7 +11,7 @@ env:
 install:
     - sudo apt-add-repository --yes ppa:ubuntu-toolchain-r/test
     - sudo apt-get update
-    - sudo apt-get install gcc-4.8 gfortran-4.8 libgomp1 openmpi-bin libopenmpi-dev
+    - sudo apt-get install gcc gfortran
 
     - pip install --user codecov
 
