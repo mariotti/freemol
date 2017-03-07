@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/mariotti/freemol.png?label=ready&title=Ready)](https://waffle.io/mariotti/freemol)
 # freemol
 freemol 2003
 
