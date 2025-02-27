@@ -1,6 +1,7 @@
-[![Stories in Ready](https://badge.waffle.io/mariotti/freemol.png?label=ready&title=Ready)](https://waffle.io/mariotti/freemol)
 # freemol
 freemol 2003
+
+This project got compiled on a mac in 20250227
 
 # Copyright notice/Licences: Please read this
 Please note that some code lines might be a copy of other sources,
