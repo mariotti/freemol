@@ -1,0 +1,110 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  linux:
+    name: build linux-x86_64
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gfortran and csh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran-14 csh
+
+      - name: Put plain 'gfortran' on PATH
+        run: |
+          mkdir -p "$HOME/gfortran-bin"
+          ln -s "$(command -v gfortran-14)" "$HOME/gfortran-bin/gfortran"
+          echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: Freemol/tests/build_all.sh
+
+      - name: CSMG regression tests
+        run: Freemol/tests/run_csmg_regression.sh
+
+      - name: Smoke tests
+        run: Freemol/tests/run_smoke.sh
+
+      - name: Package
+        run: |
+          dir="freemol-${GITHUB_REF_NAME}-linux-x86_64"
+          mkdir "$dir"
+          cp Freemol/bin/*.exe "$dir/"
+          cp README.md Freemol/COPYING "$dir/"
+          tar czf "${dir}.tar.gz" "$dir"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-x86_64
+          path: freemol-*-linux-x86_64.tar.gz
+
+  macos:
+    name: build macos-arm64
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gfortran
+        run: brew install gcc
+
+      - name: Put plain 'gfortran' on PATH
+        run: |
+          mkdir -p "$HOME/gfortran-bin"
+          newest="$(ls $(brew --prefix)/bin/gfortran-* | sort -V | tail -1)"
+          ln -sf "$newest" "$HOME/gfortran-bin/gfortran"
+          echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: Freemol/tests/build_all.sh m_generic_osx
+
+      - name: CSMG regression tests
+        run: Freemol/tests/run_csmg_regression.sh
+
+      - name: Smoke tests
+        run: Freemol/tests/run_smoke.sh
+
+      - name: Package
+        run: |
+          dir="freemol-${GITHUB_REF_NAME}-macos-arm64"
+          mkdir "$dir"
+          cp Freemol/bin/*.exe "$dir/"
+          cp README.md Freemol/COPYING "$dir/"
+          tar czf "${dir}.tar.gz" "$dir"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos-arm64
+          path: freemol-*-macos-arm64.tar.gz
+
+  release:
+    name: publish GitHub release
+    needs: [linux, macos]
+    runs-on: ubuntu-24.04
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            dist/linux-x86_64/*.tar.gz \
+            dist/macos-arm64/*.tar.gz \
+            --title "freemol ${GITHUB_REF_NAME}" \
+            --generate-notes
