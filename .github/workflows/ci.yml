@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    name: linux (gfortran ${{ matrix.gfortran }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        gfortran: [12, 13, 14]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gfortran and csh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran-${{ matrix.gfortran }} csh
+
+      - name: Put plain 'gfortran' on PATH
+        run: |
+          mkdir -p "$HOME/gfortran-bin"
+          ln -s "$(command -v gfortran-${{ matrix.gfortran }})" "$HOME/gfortran-bin/gfortran"
+          echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: Freemol/tests/build_all.sh
+
+      - name: CSMG regression tests
+        run: Freemol/tests/run_csmg_regression.sh
+
+      - name: Smoke tests
+        run: Freemol/tests/run_smoke.sh
+
+      - name: Dev workflow test
+        run: Freemol/tests/run_devflow.sh
+
+      - name: Check working tree is clean after cleanup
+        run: Freemol/tests/check_clean.sh
+
+  macos:
+    name: macos
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gfortran
+        run: brew install gcc
+
+      - name: Put plain 'gfortran' on PATH
+        run: |
+          mkdir -p "$HOME/gfortran-bin"
+          newest="$(ls $(brew --prefix)/bin/gfortran-* | sort -V | tail -1)"
+          ln -sf "$newest" "$HOME/gfortran-bin/gfortran"
+          echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: Freemol/tests/build_all.sh m_generic_osx
+
+      - name: CSMG regression tests
+        run: Freemol/tests/run_csmg_regression.sh
+
+      - name: Smoke tests
+        run: Freemol/tests/run_smoke.sh
+
+  octave:
+    name: octave CSMD tools
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install octave
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends octave
+
+      - name: Check CSMD tools
+        run: Freemol/tests/check_csmd_tools.sh

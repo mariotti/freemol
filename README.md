@@ -1,6 +1,8 @@
 # freemol
 freemol 2003
 
+[![CI](https://github.com/mariotti/freemol/actions/workflows/ci.yml/badge.svg)](https://github.com/mariotti/freemol/actions/workflows/ci.yml)
+
 This project got compiled on a mac in 20250227
 
 # Copyright notice/Licences: Please read this
@@ -49,6 +51,45 @@ Added a branch to add travis CI services, to test.
 We have indeed travisCI working for the compilation step: the code compiles.
 
 [![Build Status](https://travis-ci.org/mariotti/freemol.svg?branch=master)](https://travis-ci.org/mariotti/freemol)
+
+# Build and test
+
+## Requirements
+- gfortran
+- perl (used by `bin/makemake*`)
+- csh (used by `bin/cleanup`, i.e. `make cleanall`)
+- python3 (used by the test scripts)
+- octave, for `tools/CSMD` (not needed to build or run anything else)
+
+## Build
+    cd Freemol
+    ./config/configure m_generic_linux gfortran $PWD   # macOS: m_generic_osx
+    make others includes utilities moduledata modules programs
+
+`make freemol` (the top-level target) currently fails at its last step,
+building helpdocs: `Freemol/help` has no Makefile. The command above builds
+everything that step depends on, i.e. all the libraries and programs.
+
+`adfrom` is skipped by design: it needs the commercial ADF libraries, which
+aren't part of this repository.
+
+## Test scripts
+All in `Freemol/tests/`, runnable after a build (see `.github/workflows/ci.yml`
+for how CI wires them together):
+- `build_all.sh [machine]` -- configure + build (default machine:
+  `m_generic_linux`).
+- `run_csmg_regression.sh` -- replays every `data/CSMG/tests/*.mld` that has a
+  reference output under `data/CSMG/outs/osx/` through `bin/CSMG.exe`, and
+  compares CSM values (not optimizer intermediates, which are allowed to
+  differ across compilers) via `numdiff.py`.
+- `run_smoke.sh` -- checks `fit1Dpol`, `ch4sym2cart` and `Frimol` against
+  fixtures that have no reference output to regress against.
+- `run_devflow.sh` -- proves the "add a program" workflow in this README
+  still works end to end, then cleans up after itself.
+- `check_clean.sh` -- after a build, `make cleanall`/`make cleanconfig` (and
+  `.gitignore`) must leave `git status` clean.
+- `check_csmd_tools.sh` -- checks `tools/CSMD` (Octave) against the values
+  used in the CSMG example below.
 
 # Intro
 
