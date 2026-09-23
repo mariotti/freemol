@@ -91,6 +91,20 @@ for how CI wires them together):
 - `check_csmd_tools.sh` -- checks `tools/CSMD` (Octave) against the values
   used in the CSMG example below.
 
+## Releases
+
+Versions follow [semver](https://semver.org/) (`vMAJOR.MINOR.PATCH`) as git
+tags, starting at `v1.0.0`. Pushing a tag matching `v*.*.*` (or a manual
+`workflow_dispatch`) runs `.github/workflows/release.yml`, which builds and
+tests the Linux (x86_64) and macOS (arm64) binaries, then -- for an actual
+tag push -- publishes a GitHub Release with a `freemol-<tag>-<platform>.tar.gz`
+per platform (the built `.exe` programs plus `README.md` and `COPYING`).
+`adfrom` is never included: it isn't built without the commercial ADF
+libraries. There is no Windows build: no `m_generic_*` config exists for it.
+
+When cutting a release, update `distnum` (and `vernum`/`vernumdist`) in
+`Freemol/config/printversion` to match the new tag first.
+
 # Intro
 
 The framework is at ./Freemol
