@@ -1,0 +1,48 @@
+name: build-and-test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        gfortran: [12, 13, 14]
+    name: ubuntu / gfortran-${{ matrix.gfortran }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install gfortran-${{ matrix.gfortran }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran-${{ matrix.gfortran }}
+          # the build system calls plain "gfortran"
+          mkdir -p "$HOME/fcbin"
+          ln -sf "$(command -v gfortran-${{ matrix.gfortran }})" "$HOME/fcbin/gfortran"
+          echo "$HOME/fcbin" >> "$GITHUB_PATH"
+      - run: gfortran --version
+      - name: Build
+        run: Freemol/tests/build_all.sh m_generic_linux
+      - name: CSMG regression
+        run: Freemol/tests/run_csmg_regression.sh
+
+  macos:
+    runs-on: macos-latest
+    name: macos / gfortran (Homebrew)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Put Homebrew gfortran on PATH
+        run: |
+          brew list gcc >/dev/null 2>&1 || brew install gcc
+          fc=$(ls "$(brew --prefix gcc)"/bin/gfortran-[0-9]* | sort -V | tail -1)
+          mkdir -p "$HOME/fcbin"
+          ln -sf "$fc" "$HOME/fcbin/gfortran"
+          echo "$HOME/fcbin" >> "$GITHUB_PATH"
+      - run: gfortran --version
+      - name: Build
+        run: Freemol/tests/build_all.sh m_generic_osx
+      - name: CSMG regression
+        run: Freemol/tests/run_csmg_regression.sh

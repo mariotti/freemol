@@ -1,7 +1,28 @@
 # freemol
-freemol 2003
 
-This project got compiled on a mac in 20250227
+[![build-and-test](https://github.com/mariotti/freemol/actions/workflows/ci.yml/badge.svg)](https://github.com/mariotti/freemol/actions/workflows/ci.yml)
+
+freemol 2003: a Fortran 90 framework and a set of small tools for chemistry.
+
+The code dates from 2003 (in CVS from 2009, on GitHub since 2015).
+The state before the 2026 refresh is kept in the tag
+[`Legacy-2016`](https://github.com/mariotti/freemol/tree/Legacy-2016).
+
+# Build and test
+
+Requires gfortran and a POSIX shell (Python 3 only for the tests).
+
+    Freemol/tests/build_all.sh                  # Linux
+    Freemol/tests/build_all.sh m_generic_osx    # macOS
+    Freemol/tests/run_csmg_regression.sh
+
+Executables end up in `Freemol/bin/`. `adfrom` is not built by default
+(it needs the ADF libraries).
+
+The regression test runs CSMG on the inputs in `Freemol/data/CSMG/tests`
+and compares the CSM value trace and results against the reference outputs
+in `Freemol/data/CSMG/outs/osx`, produced on macOS in 2016. CI runs it on
+Ubuntu with gfortran 12, 13 and 14, and on macOS.
 
 # Copyright notice/Licences: Please read this
 Please note that some code lines might be a copy of other sources,
@@ -12,20 +33,20 @@ and translated into F90. I contacted CERN (current minuit copyright holder) for 
 
 There is also some free code from CCL (Computational Chemistry List), it is mentioned as comment in the code.
 
-If code, packages or else might not fit with this "main" repository licence they are present in the folder "others/". Please read each package or code licence. If a package/code is there, then the redistribution is granted but under the given package licence which you should read.
+If code, packages or else might not fit with this "main" repository licence they are present in the folder "Freemol/others/". Please read each package or code licence. If a package/code is there, then the redistribution is granted but under the given package licence which you should read.
 
 ## Why so complicated?
  
  There is a different solution: Get the required packages from other/external sources.
  
- But I want to create a "self-consistend" package which will run without external dependencies. For these reasons:
+ But I want to create a "self-consistent" package which will run without external dependencies. For these reasons:
  
     - It might need to compile for systems without a network connection.
     - If an hardware system (for example) is not supported by the main distribution we can create patches which apply only to the given distribution.
-    - Security: It is better to: download, check, compile, run, check, put in "others/", check, compile, run, check then a simple download from the net.
+    - Security: It is better to: download, check, compile, run, check, put in "others/", check, compile, run, check than a simple download from the net.
     - Then the obvious: I promote fortran as the most portable source code. I need all code in a unique package.
     
-Warning: For example blas and lapack are definitly more optimised if you use your system ones.
+Warning: For example blas and lapack are definitely more optimised if you use your system ones.
 
 
 Also linetools described in the _Libraries_ has this top line:
@@ -41,14 +62,7 @@ Also linetools described in the _Libraries_ has this top line:
     !H      jkl@osc.edu
     !H----------------------------------------------------------------------
 
-All the rest should be considered within the latest GPL.
-
-# News
-
-Added a branch to add travis CI services, to test.
-We have indeed travisCI working for the compilation step: the code compiles.
-
-[![Build Status](https://travis-ci.org/mariotti/freemol.svg?branch=master)](https://travis-ci.org/mariotti/freemol)
+All the rest is licensed under the GNU GPL, version 2 or (at your option) any later version: see [LICENSE](LICENSE) and `Freemol/COPYING`.
 
 # Intro
 
@@ -58,7 +72,7 @@ For a quick example, You would add a program just by making a directory
 
     mkdir programs/mycode
 
-and adding .F90 files in there. There a makemake utility in place. You
+and adding .F90 files in there. There is a makemake utility in place. You
 might need to add a Makelocal file like this:
 
     USEDLIBS = -L$(FMLIBDIR) -lmodules -lmoduledata -lutils -lincludes \
@@ -128,11 +142,22 @@ Or an INI file or molden file section like this:
 
 ## controlled configure and autoconfigure
 
+`config/configure <machine> <compiler> <path>` picks the compiler flags from
+`config/<machine>/Make.<compiler>` (e.g. `m_generic_linux/Make.gfortran`).
+
 ## automatic makefile creation
+
+`bin/makemake` generates the Makefile of each library and program directory
+from its sources and its `Makelocal`.
 
 ## controlled help comment extraction
 
+Header comments marked `!H` are extracted at build time into `fundoc.txt`
+in each directory and into `docs/`.
+
 ## section for manuals
+
+See `manuals/` and `Freemol/manuals/`.
 
 # Programs
 
