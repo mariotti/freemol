@@ -1,0 +1,58 @@
+# freemol-mcp
+
+MCP tools wrapping freemol's coordinate-transformation programs. Every
+tool response includes a `citation` field: the exact Fortran routine
+(file + line range), freemol's own version, and a GitHub permalink
+pinned to the commit the server is running from.
+
+Currently wraps `XY4PolySphere` (`poly2cart`), `XY4Coord` and
+`ch4sym2cart` -- see the root [README.md](../README.md)'s Programs
+section for what each one does. `fit1Dpol` and `CSMG` aren't wrapped
+yet.
+
+This is a thin subprocess wrapper: it does not reimplement any of the
+numerics in Python. It calls the same built binaries
+(`Freemol/bin/*.exe`) that `Freemol/tests/run_smoke.sh` regression-tests
+in CI.
+
+## Build freemol first
+
+These tools need `Freemol/bin/{XY4PolySphere,XY4Coord,ch4sym2cart}.exe`
+to already exist. See the root README's
+["Build and test"](../README.md#build-and-test) section:
+
+    cd Freemol
+    ./config/configure m_generic_linux gfortran $PWD   # macOS: m_generic_osx
+    make freemol
+
+## Install and run
+
+    cd mcp
+    python3 -m venv .venv && source .venv/bin/activate
+    pip install -e .
+    freemol-mcp                # runs the server over stdio
+
+## Add to an MCP client
+
+Point the client at the `freemol-mcp` command (after `pip install -e .`
+in an active virtualenv), or run it directly:
+
+```json
+{
+  "mcpServers": {
+    "freemol": {
+      "command": "/absolute/path/to/freemol/mcp/.venv/bin/freemol-mcp"
+    }
+  }
+}
+```
+
+## Tests
+
+    pip install -e ".[dev]"
+    pytest
+
+Each test checks a tool against the exact numeric values already
+validated in `Freemol/data/*/tests/*.inp` and `Freemol/tests/run_smoke.sh`
+(e.g. `xy4polysphere_to_cartesian` with the tetrahedral-CH4 input must
+return bonds=1.1000, angles=109.4712).

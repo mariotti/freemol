@@ -162,6 +162,19 @@ libraries. There is no Windows build: no `m_generic_*` config exists for it.
 When cutting a release, update `distnum` (and `vernum`/`vernumdist`) in
 `Freemol/config/printversion` to match the new tag first.
 
+## MCP tools
+
+`mcp/` is a Python [MCP](https://modelcontextprotocol.io/) server exposing
+the coordinate-transformation programs as tools for LLM clients: a thin
+subprocess wrapper around the same built binaries CI already regression-
+tests, not a reimplementation. Every response includes a citation (exact
+routine, file:lines, freemol version, and a GitHub permalink pinned to the
+commit that ran) so results trace back to the original Fortran. Currently
+wraps `XY4PolySphere` (polyspherical -> Cartesian), `XY4Coord` and
+`ch4sym2cart` (symmetric displacement -> Cartesian); `fit1Dpol` and `CSMG`
+aren't wrapped yet. See [`mcp/README.md`](mcp/README.md) to build and run
+it.
+
 ## Adding a program
 
 The framework lives under `./Freemol`. To add a program, make a directory:
