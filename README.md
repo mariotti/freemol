@@ -175,6 +175,40 @@ wraps `XY4PolySphere` (polyspherical -> Cartesian), `XY4Coord` and
 aren't wrapped yet. See [`mcp/README.md`](mcp/README.md) to build and run
 it.
 
+### Example prompts
+
+Once the server is connected to an MCP client (Claude Desktop, Claude
+Code, ...), these are the kind of plain-language requests that route to
+the tools above -- each one verified against the real tools, not just
+written down:
+
+- *"Using freemol, convert a methane-like XY4 molecule with all four
+  bonds at 1.10, polar angles 109.4712 degrees, and both azimuthal angles
+  at 60 degrees into Cartesian coordinates. Where in the code did that
+  computation actually happen?"*
+  Calls `xy4polysphere_to_cartesian`; returns 4x1.1000 bonds, 6x109.4712
+  degree angles, Metpot4=107.6015 (vs. 9.5797 at the equilibrium
+  reference), full XYZ coordinates, and a citation linking straight to
+  `poly2cart` in `XY4PolySphere.F90`.
+
+- *"Apply a symmetric stretch of S1=0.08 to methane's reference geometry
+  with ch4sym2cart and show me the new hydrogen positions."*
+  Calls `ch4sym2cart_apply_displacement`; returns H1=(1.1000, 0, 0) and
+  the other three hydrogens at the same 1.1000 distance from the origin,
+  tetrahedral angles preserved.
+
+- *"Do that same symmetric stretch with XY4Coord instead, and check the
+  two tools agree."*
+  Calls `xy4coord_apply_displacement`; the bonds/angles it reports
+  (1.1000 / 109.4712, same as above) match `ch4sym2cart`'s result -- a
+  useful sanity check across two independently-implemented programs.
+
+- *"Now try a pure angle displacement, S2a=0.03, on XY4Coord instead of a
+  bond stretch -- does that work?"*
+  Calls `xy4coord_apply_displacement` again; this is the documented Known
+  Issue above, and the tool returns a clear error explaining the
+  self-check failed, rather than silently returning wrong coordinates.
+
 ## Adding a program
 
 The framework lives under `./Freemol`. To add a program, make a directory:
