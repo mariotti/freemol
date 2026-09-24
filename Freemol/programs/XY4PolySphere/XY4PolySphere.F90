@@ -640,7 +640,7 @@ program XY4PolySphere
   call random_seed(size=rssize)
   allocate(rsget(rssize))
   allocate(rsput(rssize))
-  allocate(XY4P_rsset(rssize))
+  if (.not.allocated(XY4P_rsset)) allocate(XY4P_rsset(rssize))
   !
   if (XY4P_verbose.gt.1) then
      write(iunoutput,'("#[x-xy4-genrandom] INFO(SIZE):",2X,I20)') rssize
@@ -2021,6 +2021,13 @@ contains
           stop 1
        end if
     end if
+
+    ! XY4P_rsset is otherwise only allocated later, in the x-xy4-genrandom
+    ! section handler -- allocate it here too so -R works without that
+    ! section.
+    call random_seed(size=rssize)
+    if (.not.allocated(XY4P_rsset)) allocate(XY4P_rsset(rssize))
+    XY4P_rsset(:) = 0
 
     ! Random Seed
     !------------

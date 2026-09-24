@@ -114,6 +114,80 @@ EOF
 }
 check ch4sym2cart_geometry
 
+# --- XY4PolySphere ----------------------------------------------------
+# ch4_poly.inp: tetrahedral CH4 at r=1.10 (bonds all +0.01 from the r=1.09
+# reference geometry) -- must produce 4x1.1000 bonds and 6x109.4712 angles,
+# and the Metpot4 value at r=1.10 must be larger than at the r=1.09
+# reference (both are printed by a single run).
+xy4polysphere_geometry() {
+    local workdir out
+    workdir="$(mktemp -d)"
+    out="$workdir/out"
+    "$BIN/XY4PolySphere.exe" -i "$DATA/XY4PolySphere/tests/ch4_poly.inp" -o "$out" > "$workdir/stdout" 2>&1
+    local rc=$?
+    if [[ $rc -ne 0 ]]; then
+        echo "  exit $rc"
+        cat "$workdir/stdout"
+        rm -rf "$workdir"
+        return 1
+    fi
+    python3 - "$out" <<'EOF'
+import re
+import sys
+
+text = open(sys.argv[1]).read()
+
+def row_after(marker):
+    idx = text.index(marker)
+    rest = text[idx + len(marker):]
+    m = re.search(r"((?:\s+-?\d+\.\d+){11})", rest)
+    return [float(x) for x in m.group(1).split()]
+
+ref = row_after("[x-out-result] Bonds, Angles DEGREE and Metpot4 data:")
+new = row_after("[x-out-result] Bonds and Angles DEGREE")
+
+bonds, angles, metpot_new, metpot_ref = new[0:4], new[4:10], new[10], ref[10]
+
+ok = True
+for b in bonds:
+    if abs(b - 1.1000) > 1e-3:
+        print(f"  bond {b} != 1.1000")
+        ok = False
+for a in angles:
+    if abs(a - 109.4712) > 1e-3:
+        print(f"  angle {a} != 109.4712")
+        ok = False
+if not (metpot_new > metpot_ref):
+    print(f"  Metpot4 at r=1.10 ({metpot_new}) not > r=1.09 ({metpot_ref})")
+    ok = False
+
+sys.exit(0 if ok else 1)
+EOF
+    local rc2=$?
+    rm -rf "$workdir"
+    return $rc2
+}
+check xy4polysphere_geometry
+
+# -R <seed> must be reproducible: same seed, same -r results file, twice.
+xy4polysphere_random_reproducible() {
+    local workdir
+    workdir="$(mktemp -d)"
+    "$BIN/XY4PolySphere.exe" -i "$DATA/XY4PolySphere/tests/ch4_poly_random.inp" \
+        -o "$workdir/out1" -R 12345 -r "$workdir/res1" > /dev/null 2>&1
+    "$BIN/XY4PolySphere.exe" -i "$DATA/XY4PolySphere/tests/ch4_poly_random.inp" \
+        -o "$workdir/out2" -R 12345 -r "$workdir/res2" > /dev/null 2>&1
+    if diff -q "$workdir/res1" "$workdir/res2" > /dev/null 2>&1; then
+        rm -rf "$workdir"
+        return 0
+    else
+        diff "$workdir/res1" "$workdir/res2"
+        rm -rf "$workdir"
+        return 1
+    fi
+}
+check xy4polysphere_random_reproducible
+
 # --- Frimol -----------------------------------------------------------
 check "$BIN/Frimol.exe"
 
