@@ -34,8 +34,11 @@ rebuild from scratch rather than debugging further.
 
 ## Programs and test data
 (paths below are relative to Freemol/)
-- CSMG: data/CSMG/tests/*.mld, reference outputs data/CSMG/outs/osx/*.out
-  (macOS 2016, produced reading stdin).
+- CSMG: data/CSMG/tests/*.mld (59 cases, reads stdin). Reference outputs:
+  data/CSMG/outs/osx/*.out (8, macOS 2016 -- independent cross-decade
+  validation) and data/CSMG/outs/generated/*.out (the other 51 -- a
+  self-generated baseline, only proves reproducibility going forward,
+  see run_csmg_regression.sh's header comment).
 - fit1Dpol: data/fit1Dpol/examples/*.inp
 - ch4sym2cart: data/ch4sym2cart/tests/ch4_s1.inp
 - XY4Coord: data/XY4Coord/tests/ch4_s1.inp, equilibrium.inp
