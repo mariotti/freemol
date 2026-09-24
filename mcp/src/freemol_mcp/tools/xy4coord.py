@@ -86,7 +86,8 @@ def xy4coord_apply_displacement(
     symm_line = f"{s1} {s2x} {s2y} {s2z} {s2a} {s2b} {s4x} {s4y} {s4z} {sr}"
     input_text = f"{molecule_section}\n[x-xy4-symmcoord]\n{symm_line}\n"
 
-    result = binary.run("XY4Coord", input_text)
+    result = binary.run("XY4coord", input_text)  # note lowercase "c": the
+    # program directory is XY4Coord but the built binary is XY4coord.exe.
     if result.returncode != 0:
         return {
             "error": "XY4Coord.exe exited non-zero",

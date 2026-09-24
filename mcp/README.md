@@ -17,8 +17,10 @@ in CI.
 
 ## Build freemol first
 
-These tools need `Freemol/bin/{XY4PolySphere,XY4Coord,ch4sym2cart}.exe`
-to already exist. See the root README's
+These tools need `Freemol/bin/{XY4PolySphere,XY4coord,ch4sym2cart}.exe`
+to already exist (note the lowercase "c" in `XY4coord.exe` -- the program
+directory is `XY4Coord`, but the built binary isn't). See the root
+README's
 ["Build and test"](../README.md#build-and-test) section:
 
     cd Freemol
