@@ -114,6 +114,85 @@ EOF
 }
 check ch4sym2cart_geometry
 
+# Individual symmetry-displacement dimensions beyond S1. ch4sym2cart's
+# vzmatcrd formulas (ch4sym2cart.F90:200-236) show r1-r4 (bond lengths)
+# depend only on S1/S2z/S2a/S2b, and a12-a34 (angles) only on
+# S2x/S2y/S4x/S4y/S4z/Sr -- a DIFFERENT grouping than XY4Coord's below,
+# despite the identical field names/order (confirmed empirically before
+# writing this: the two programs do not share a coordinate convention).
+# Verified: each "radial" dimension changes bond lengths unevenly while
+# leaving all angles at the tetrahedral 109.4712; each "angular" dimension
+# leaves all bonds at the reference 1.0900 while perturbing angles.
+ch4sym2cart_displacement() {
+    local name="$1" group="$2"  # group: radial | angular
+    local workdir stdout
+    workdir="$(mktemp -d)"
+    stdout="$workdir/stdout"
+    "$BIN/ch4sym2cart.exe" -i "$DATA/ch4sym2cart/tests/${name}.inp" -o "$workdir/echo" > "$stdout" 2>&1
+    local rc=$?
+    if [[ $rc -ne 0 ]]; then
+        echo "  exit $rc"
+        cat "$stdout"
+        rm -rf "$workdir"
+        return 1
+    fi
+    python3 - "$stdout" "$group" <<'EOF'
+import re
+import sys
+import math
+import itertools
+
+text = open(sys.argv[1]).read()
+group = sys.argv[2]
+coords = {}
+for m in re.finditer(r"NEW Coordinates H(\d)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)", text):
+    coords[int(m.group(1))] = tuple(float(m.group(i)) for i in (2, 3, 4))
+if len(coords) != 4:
+    print(f"  expected 4 NEW Coordinates lines, found {len(coords)}")
+    sys.exit(1)
+
+dists = {i: math.sqrt(sum(c * c for c in coords[i])) for i in coords}
+angles = {}
+for i, j in itertools.combinations(range(1, 5), 2):
+    a, b = coords[i], coords[j]
+    cosv = sum(x * y for x, y in zip(a, b)) / (dists[i] * dists[j])
+    angles[(i, j)] = math.degrees(math.acos(max(-1.0, min(1.0, cosv))))
+
+bonds_changed = any(abs(d - 1.09) > 1e-3 for d in dists.values())
+angles_changed = any(abs(a - 109.4712) > 1e-2 for a in angles.values())
+
+ok = True
+if group == "radial":
+    if not bonds_changed:
+        print("  expected bond lengths to change, none did")
+        ok = False
+    if angles_changed:
+        print(f"  expected all angles ~109.4712, got {angles}")
+        ok = False
+else:
+    if bonds_changed:
+        print(f"  expected all bonds ~1.0900, got {dists}")
+        ok = False
+    if not angles_changed:
+        print("  expected some angle to change, none did")
+        ok = False
+
+sys.exit(0 if ok else 1)
+EOF
+    local rc2=$?
+    rm -rf "$workdir"
+    return $rc2
+}
+check ch4sym2cart_displacement s2x_only angular
+check ch4sym2cart_displacement s2y_only angular
+check ch4sym2cart_displacement s2z_only radial
+check ch4sym2cart_displacement s2a_only radial
+check ch4sym2cart_displacement s2b_only radial
+check ch4sym2cart_displacement s4x_only angular
+check ch4sym2cart_displacement s4y_only angular
+check ch4sym2cart_displacement s4z_only angular
+check ch4sym2cart_displacement sr_only angular
+
 # --- XY4PolySphere ----------------------------------------------------
 # ch4_poly.inp: tetrahedral CH4 at r=1.10 (bonds all +0.01 from the r=1.09
 # reference geometry) -- must produce 4x1.1000 bonds and 6x109.4712 angles,
@@ -211,6 +290,40 @@ xy4coord_selfcheck() {
 }
 check xy4coord_selfcheck "$DATA/XY4Coord/tests/ch4_s1.inp"
 check xy4coord_selfcheck "$DATA/XY4Coord/tests/equilibrium.inp"
+
+# Individual symmetry-displacement dimensions beyond S1. Confirmed
+# empirically that XY4Coord's Sdr group (S1, S2x, S2y, S2z) all pass the
+# self-check (bonds change unevenly, angles stay at 109.4712), while every
+# dimension in the Sda group (S2a, S2b, S4x, S4y, S4z, Sr) currently fails
+# -- via one of two distinct paths. NOT the same grouping as ch4sym2cart's
+# above, despite the identical field names/order.
+check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2x_only.inp"
+check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2y_only.inp"
+check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2z_only.inp"
+
+# Known issue (see README): every Sda-group (angular) displacement fails
+# one of get_cart's Cartesian self-check ("Error in Cartesian routine",
+# S2a/S2b) or the earlier do_checks() Gamma Sum validation ("Check not
+# Passed at Sr input value", S4x/S4y/S4z/Sr) -- confirmed for all 6, not
+# just S2a as originally documented. These tests pin down that documented
+# behavior so a change (fix or regression) gets noticed, rather than
+# asserting nothing ever changes.
+xy4coord_known_issue() {
+    local fixture="$1" expect="$2"
+    local workdir prefix
+    workdir="$(mktemp -d)"
+    "$BIN/XY4coord.exe" -i "$fixture" -o "$workdir/out" > "$workdir/stdout" 2>&1
+    prefix="$(sed '/Generate Redundancies/q' "$workdir/stdout")"
+    rm -rf "$workdir"
+    if ! grep -q "$expect" <<< "$prefix"; then
+        echo "  expected '$expect' before Generate Redundancies, didn't find it"
+        return 1
+    fi
+    return 0
+}
+check xy4coord_known_issue "$DATA/XY4Coord/tests/s2a_only.inp" "Error in Cartesian routine"
+check xy4coord_known_issue "$DATA/XY4Coord/tests/s2b_only.inp" "Error in Cartesian routine"
+check xy4coord_known_issue "$DATA/XY4Coord/tests/s4x_only.inp" "Check not Passed at Sr input value"
 
 # --- Frimol -----------------------------------------------------------
 check "$BIN/Frimol.exe"
