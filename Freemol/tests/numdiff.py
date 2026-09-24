@@ -11,14 +11,26 @@ full-text diff is not usable. The CSM value itself, however, must match
 regardless of compiler: it is what regression testing CSMG actually cares
 about.
 
-Each matched line is compared token by token: numeric tokens (including
-Fortran D-exponent notation like 0.123D+01) are parsed as floats and compared
-within atol/rtol; everything else is compared as exact text.
+'Minimization at step' lines are truncated at 'Tol(' before comparison: the
+achieved-tolerance value printed there (Fortran glues it directly onto the
+previous number with no whitespace, e.g. '0.0000Tol(Act/Req):0.6835E-05/...')
+is noisy optimizer-internal state that can legitimately differ in its last
+couple of digits across compilers -- confirmed empirically (step counts and
+the Value: field match exactly; only this glued, unparseable-as-a-number
+suffix differs, and since it's not whitespace-separated it was falling
+through to exact string comparison rather than being tolerance-compared at
+all). The step count and Value: field are still compared.
+
+Each remaining matched-and-truncated line is compared token by token: numeric
+tokens (including Fortran D-exponent notation like 0.123D+01) are parsed as
+floats and compared within atol/rtol; everything else is compared as exact
+text.
 """
 import re
 import sys
 
 LINE_RE = re.compile(r"CSM|Minimization at step")
+TOL_SUFFIX_RE = re.compile(r"Tol\(.*$")
 NUMBER_RE = re.compile(
     r"^[+-]?(\d+\.\d*|\.\d+|\d+)([DdEe][+-]?\d+)?$"
 )
@@ -35,7 +47,8 @@ def parse_float(token):
 
 def matched_lines(path):
     with open(path) as f:
-        return [line.rstrip("\n") for line in f if LINE_RE.search(line)]
+        lines = [line.rstrip("\n") for line in f if LINE_RE.search(line)]
+    return [TOL_SUFFIX_RE.sub("", line) for line in lines]
 
 
 def close_enough(a, b, atol, rtol):
