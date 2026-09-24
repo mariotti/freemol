@@ -113,7 +113,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install freemol-mcp
-        run: pip install "./mcp[dev]"
+        run: pip install -e "./mcp[dev]"
 
       - name: Run mcp tests
         run: pytest mcp/tests

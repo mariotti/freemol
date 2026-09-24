@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -13,7 +14,16 @@ class BinaryNotBuiltError(RuntimeError):
 
 
 def repo_root() -> Path:
-    """The freemol git repo root (mcp/ is a direct child of it)."""
+    """The freemol git repo root (mcp/ is normally a direct child of it).
+
+    Set FREEMOL_ROOT to override -- needed if freemol-mcp was installed
+    non-editably (e.g. `pip install ./mcp` rather than `pip install -e
+    ./mcp`), since then this file no longer lives inside the checkout it
+    needs to find binaries in.
+    """
+    override = os.environ.get("FREEMOL_ROOT")
+    if override:
+        return Path(override).resolve()
     return Path(__file__).resolve().parents[3]
 
 
