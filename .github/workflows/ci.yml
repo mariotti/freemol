@@ -27,6 +27,9 @@ jobs:
           ln -s "$(command -v gfortran-${{ matrix.gfortran }})" "$HOME/gfortran-bin/gfortran"
           echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
 
+      - name: autoconfigure -r regression test
+        run: Freemol/tests/check_autoconfigure.sh
+
       - name: Build
         run: Freemol/tests/build_all.sh
 

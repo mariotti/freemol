@@ -64,11 +64,7 @@ We have indeed travisCI working for the compilation step: the code compiles.
 ## Build
     cd Freemol
     ./config/configure m_generic_linux gfortran $PWD   # macOS: m_generic_osx
-    make others includes utilities moduledata modules programs
-
-`make freemol` (the top-level target) currently fails at its last step,
-building helpdocs: `Freemol/help` has no Makefile. The command above builds
-everything that step depends on, i.e. all the libraries and programs.
+    make freemol
 
 `adfrom` is skipped by design: it needs the commercial ADF libraries, which
 aren't part of this repository.
@@ -90,6 +86,35 @@ for how CI wires them together):
   `.gitignore`) must leave `git status` clean.
 - `check_csmd_tools.sh` -- checks `tools/CSMD` (Octave) against the values
   used in the CSMG example below.
+
+## Known issues
+
+- **XY4Coord: pure angle displacement fails its own Cartesian self-check.**
+  With only `S2a` set (e.g. `0.0 0.0 0.0 0.0 0.03 0.0 0.0 0.0 0.0 0.0` in
+  `[x-xy4-symmcoord]`, no bond-length change), the self-check at
+  `XY4coord.F90:756-763` still reports "Error in Cartesian routine" even
+  after the `xy`/`rxy` fix above. The evidence points at one specific
+  angle: of the 6 computed angles, 5 match the expected value exactly, and
+  only `ryxy(6)` (the angle between H3 and H4, i.e. atoms `mxyz(:,4)` and
+  `mxyz(:,5)`) is off (~112.5 deg computed vs ~110.5 deg expected). H4's
+  angles to H1 and H2 are both correct, which points specifically at the
+  ad-hoc sign disambiguation for H4's position (`XY4coord.F90:697-736`,
+  the block that ends with the code's own `"Assumed signed 'sin'. It can
+  be inconsistent with input sym data."` warning at line 747) rather than
+  a wholesale failure of the angle path. Not fixed here: the root cause is
+  plausible but not proven, and the ~25-year-old trigonometric derivation
+  in that block would need a real re-derivation to fix with confidence
+  rather than a guess.
+
+- **ch4sym2cart: the "Unchenged Coordina..." diagnostic lines for H3/H4
+  are geometrically wrong** (H2-C-H3 comes out around 33 degrees instead
+  of the tetrahedral 109.47 degrees). `ch4sym2cart.F90` lines ~303-304 and
+  ~330-331 pass a literal `120.0_FREAL` straight into `cos()`/`sin()` as
+  if it were already radians; everywhere else in the file (e.g. `fa109` at
+  line 239) converts degrees via `/180.0*LPI` first. This block is a
+  diagnostic-only reconstruction of the reference geometry (it doesn't
+  affect `ch4sym2cart`'s actual `NEW Coordinates` output), so it hasn't
+  been touched.
 
 ## Releases
 

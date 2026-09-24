@@ -7,6 +7,7 @@ Freemol/Make.machine
 Freemol/Makeflags
 Freemol/config/Make.machine
 Freemol/config/Makeflags
+Freemol/config/Makeflags.old
 
 # Generated Makefiles (some program dirs keep a hand-maintained,
 # tracked Makefile instead -- see CLAUDE.md / Freemol/tests/check_clean.sh)
