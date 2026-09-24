@@ -188,6 +188,30 @@ xy4polysphere_random_reproducible() {
 }
 check xy4polysphere_random_reproducible
 
+# --- XY4Coord -----------------------------------------------------------
+# Self-check: output up to "Generate Redundancies" must show "Check OK at
+# Sr input value" and must NOT show "Error in Cartesian routine" (errors
+# *after* that point are expected -- unphysical Sr branches get rejected).
+xy4coord_selfcheck() {
+    local fixture="$1"
+    local workdir prefix
+    workdir="$(mktemp -d)"
+    "$BIN/XY4coord.exe" -i "$fixture" -o "$workdir/out" > "$workdir/stdout" 2>&1
+    prefix="$(sed '/Generate Redundancies/q' "$workdir/stdout")"
+    rm -rf "$workdir"
+    if ! grep -q "Check OK at Sr input value" <<< "$prefix"; then
+        echo "  no 'Check OK at Sr input value' before Generate Redundancies"
+        return 1
+    fi
+    if grep -q "Error in Cartesian routine" <<< "$prefix"; then
+        echo "  unexpected 'Error in Cartesian routine' before Generate Redundancies"
+        return 1
+    fi
+    return 0
+}
+check xy4coord_selfcheck "$DATA/XY4Coord/tests/ch4_s1.inp"
+check xy4coord_selfcheck "$DATA/XY4Coord/tests/equilibrium.inp"
+
 # --- Frimol -----------------------------------------------------------
 check "$BIN/Frimol.exe"
 

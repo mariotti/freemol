@@ -753,12 +753,12 @@ contains
     rxy(2)=sqrt(sum(mxyz(1:3,3)*mxyz(1:3,3)))
     rxy(3)=sqrt(sum(mxyz(1:3,4)*mxyz(1:3,4)))
     rxy(4)=sqrt(sum(mxyz(1:3,5)*mxyz(1:3,5)))
-    ryxy(1)=acos(sum(mxyz(1:3,2)*mxyz(1:3,3))/(xy(1)*xy(2)))
-    ryxy(2)=acos(sum(mxyz(1:3,2)*mxyz(1:3,4))/(xy(1)*xy(3)))
-    ryxy(3)=acos(sum(mxyz(1:3,2)*mxyz(1:3,5))/(xy(1)*xy(4)))
-    ryxy(4)=acos(sum(mxyz(1:3,3)*mxyz(1:3,4))/(xy(2)*xy(3)))
-    ryxy(5)=acos(sum(mxyz(1:3,3)*mxyz(1:3,5))/(xy(2)*xy(4)))
-    ryxy(6)=acos(sum(mxyz(1:3,4)*mxyz(1:3,5))/(xy(3)*xy(4)))
+    ryxy(1)=acos(sum(mxyz(1:3,2)*mxyz(1:3,3))/(rxy(1)*rxy(2)))
+    ryxy(2)=acos(sum(mxyz(1:3,2)*mxyz(1:3,4))/(rxy(1)*rxy(3)))
+    ryxy(3)=acos(sum(mxyz(1:3,2)*mxyz(1:3,5))/(rxy(1)*rxy(4)))
+    ryxy(4)=acos(sum(mxyz(1:3,3)*mxyz(1:3,4))/(rxy(2)*rxy(3)))
+    ryxy(5)=acos(sum(mxyz(1:3,3)*mxyz(1:3,5))/(rxy(2)*rxy(4)))
+    ryxy(6)=acos(sum(mxyz(1:3,4)*mxyz(1:3,5))/(rxy(3)*rxy(4)))
     !
     if (sum(abs(ryxy(1:6)-va(1:6))).gt.XY4LEPS) then
        call message(MESERRO,"Evaluation of Angles from cartesian doesn't match Alphas.")
