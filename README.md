@@ -182,6 +182,17 @@ Code, ...), these are the kind of plain-language requests that route to
 the tools above -- each one verified against the real tools, not just
 written down:
 
+- *"I just want to build an ideal methane molecule -- one carbon atom in
+  the middle, four hydrogen atoms spaced out evenly around it like the
+  corners of a tiny pyramid, all the same distance away. Can you give me
+  the actual 3D coordinates?"*
+  No chemistry or coding background needed for this one. Behind the
+  scenes it's the same computation as the next example below --
+  `xy4polysphere_to_cartesian` with the bond length and the angles that
+  make a perfect tetrahedron (109.4712 and 60 degrees) -- but the person
+  asking never has to know those numbers or their names; the AI works
+  them out from "evenly spaced, same distance away."
+
 - *"Using freemol, convert a methane-like XY4 molecule with all four
   bonds at 1.10, polar angles 109.4712 degrees, and both azimuthal angles
   at 60 degrees into Cartesian coordinates. Where in the code did that
