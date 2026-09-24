@@ -12,6 +12,12 @@ cd "$FREEMOL_DIR"
 make cleanall
 make cleanconfig
 
+# cleanconfig doesn't remove this: configure only ever creates it (backing up
+# an existing config/Makeflags before regenerating it), which happens when
+# configure runs more than once in the same checkout -- e.g. once via
+# check_autoconfigure.sh and again via build_all.sh.
+rm -f config/Makeflags.old
+
 cd "$REPO_DIR"
 leftovers="$(git status --porcelain --ignored)"
 if [[ -n "$leftovers" ]]; then
