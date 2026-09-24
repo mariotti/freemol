@@ -50,6 +50,14 @@ rebuild from scratch rather than debugging further.
   geometrically wrong (missing a degrees->radians conversion);
   diagnostic-only output, not fixed.
 
+## mcp/ (Python MCP server, not Fortran)
+Wraps XY4PolySphere/XY4Coord/ch4sym2cart's built binaries as MCP tools
+(subprocess + parse output; no numerics reimplemented). The "don't change
+Fortran except to fix a bug" rule above doesn't apply here -- it's a
+separate Python package. Has its own tests (`mcp/tests/`, pytest) run in
+CI as the `mcp` job; needs `Freemol/bin/*.exe` built first. See
+`mcp/README.md`.
+
 ## Versioning and releases
 Semver via git tags (`v1.0.0` is current). `Freemol/config/printversion`'s
 `distnum` (and `vernum`/`vernumdist`) should be bumped to match before

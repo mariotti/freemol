@@ -87,3 +87,33 @@ jobs:
 
       - name: Check CSMD tools
         run: Freemol/tests/check_csmd_tools.sh
+
+  mcp:
+    name: mcp server tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install gfortran and csh
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gfortran-14 csh
+
+      - name: Put plain 'gfortran' on PATH
+        run: |
+          mkdir -p "$HOME/gfortran-bin"
+          ln -s "$(command -v gfortran-14)" "$HOME/gfortran-bin/gfortran"
+          echo "$HOME/gfortran-bin" >> "$GITHUB_PATH"
+
+      - name: Build
+        run: Freemol/tests/build_all.sh
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install freemol-mcp
+        run: pip install -e "./mcp[dev]"
+
+      - name: Run mcp tests
+        run: pytest mcp/tests

@@ -40,3 +40,11 @@ Freemol/others/**/*.timestamp
 Makefile.here
 CSMD.bufferInput
 *.dSYM
+
+# mcp/ (Python MCP server) build/dev artifacts
+mcp/.venv/
+mcp/.pytest_cache/
+mcp/build/
+mcp/src/*.egg-info/
+__pycache__/
+*.pyc
