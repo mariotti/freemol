@@ -33,14 +33,19 @@ that's worth calling out rather than losing in a pile of `real*8`:
   ch4sym2cart, XY4Coord and XY4PolySphere -- one constant, never a source
   of rounding error on its own.
 - **Evidence, not just intent.** `Freemol/tests/run_csmg_regression.sh`
-  compares CSMG's CSM value (printed to 11 decimal digits) against
-  reference output generated on macOS in 2016, on every CI run --
-  currently Linux with gfortran 12/13/14 and macOS with current Homebrew
-  gfortran. It matches to the last printed digit, across a decade,
-  two operating systems and three compiler versions. That's not a claim,
-  it's a passing test you can rerun yourself. (See
-  [Known issues](#known-issues) below for the places numerics *aren't*
-  solid yet -- being honest about those is part of the same discipline.)
+  compares CSMG's CSM value (printed to 11 decimal digits) against stored
+  reference output, on every CI run -- currently Linux with gfortran
+  12/13/14 and macOS with current Homebrew gfortran. 8 of the 59 covered
+  cases are reference output generated on macOS in 2016: those match to
+  the last printed digit across a decade, two operating systems and three
+  compiler versions. The other 51 (previously untested entirely) are a
+  self-generated baseline captured from this codebase's own current
+  output, so they only prove reproducibility going forward from here, not
+  across a decade -- still worth having, since 51 of 59 CSMG inputs had
+  zero regression coverage before. Either way, it's not a claim, it's a
+  passing test you can rerun yourself. (See [Known issues](#known-issues)
+  below for the places numerics *aren't* solid yet -- being honest about
+  those is part of the same discipline.)
 
 ## Copyright notice/Licences: Please read this
 Please note that some code lines might be a copy of other sources,
@@ -107,9 +112,10 @@ for how CI wires them together):
   configure (a regression test for a bash-ism that silently no-ops under
   `/bin/sh` on Ubuntu).
 - `run_csmg_regression.sh` -- replays every `data/CSMG/tests/*.mld` that has a
-  reference output under `data/CSMG/outs/osx/` through `bin/CSMG.exe`, and
-  compares CSM values (not optimizer intermediates, which are allowed to
-  differ across compilers) via `numdiff.py`.
+  reference output under `data/CSMG/outs/{osx,generated}/` (59 of 59
+  inputs, as of this writing) through `bin/CSMG.exe`, and compares CSM
+  values (not optimizer intermediates, which are allowed to differ across
+  compilers) via `numdiff.py`.
 - `run_smoke.sh` -- checks `fit1Dpol`, `ch4sym2cart`, `XY4PolySphere`,
   `XY4Coord` and `Frimol` against fixtures that have no reference output to
   regress against.

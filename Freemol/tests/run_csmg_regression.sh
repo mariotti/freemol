@@ -1,7 +1,19 @@
 #!/bin/bash
-# CSMG regression tests: replay every reference case under
-# data/CSMG/outs/osx/ and compare (via numdiff.py) against the input under
-# data/CSMG/tests/ with the same base name.
+# CSMG regression tests: replay every reference case under data/CSMG/outs/
+# and compare (via numdiff.py) against the input under data/CSMG/tests/
+# with the same base name.
+#
+# Two reference sets, both under data/CSMG/outs/:
+#   osx/       8 cases, generated on macOS in 2016 -- independent,
+#              cross-decade, cross-platform validation.
+#   generated/ the other 51 CSMG test inputs (out of 59 total), which had
+#              no reference output at all until this directory was added.
+#              These were captured from this codebase's own (correct,
+#              CI-verified) output, so they only catch *future*
+#              regressions from that point on -- they don't carry the
+#              same independent cross-platform/cross-decade weight as
+#              osx/. Still valuable: without them, 51 of 59 CSMG inputs
+#              had zero regression coverage.
 #
 # CSMG writes a CSMD.bufferInput scratch file into the cwd, so each case runs
 # in its own temp dir. stderr is captured separately and NOT compared: for
@@ -12,7 +24,7 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FREEMOL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BIN="$FREEMOL_DIR/bin/CSMG.exe"
-OUTS_DIR="$FREEMOL_DIR/data/CSMG/outs/osx"
+OUTS_DIRS=("$FREEMOL_DIR/data/CSMG/outs/osx" "$FREEMOL_DIR/data/CSMG/outs/generated")
 TESTS_DIR="$FREEMOL_DIR/data/CSMG/tests"
 
 if [[ ! -x "$BIN" ]]; then
@@ -23,6 +35,7 @@ fi
 total=0
 failed=0
 
+for OUTS_DIR in "${OUTS_DIRS[@]}"; do
 for ref in "$OUTS_DIR"/*.out; do
     name="$(basename "$ref" .out)"
     mld="$TESTS_DIR/$name.mld"
@@ -45,6 +58,7 @@ for ref in "$OUTS_DIR"/*.out; do
         failed=$((failed + 1))
     fi
     rm -rf "$workdir"
+done
 done
 
 echo "----"

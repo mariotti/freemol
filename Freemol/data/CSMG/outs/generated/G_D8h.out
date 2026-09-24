@@ -1,0 +1,749 @@
+# [csmmod_rdinput] messages reinitialized.
+# MESLOG:[csmmod_rdinput] messages reinitialized.
+# Input  file unit is: 5
+# Input  file name is:stdin
+# Output file unit is: 6
+# Output file name is:stdout
+# Error  file unit is: 6
+# Error  file name is:stderr
+# Log    file unit is: 6
+# Log    file name is:stdlog
+# MESLOG:[csm_rdinput] molecule_init called with debug.
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6    0.00000000D+00   0.00000000D+00   0.00000000D+00
+  h                2    1    0.00000000D+00   0.10000000D+01   0.10000000D+01
+  h                3    1    0.70711000D+00   0.70711000D+00   0.10000000D+01
+  h                4    1    0.10000000D+01   0.00000000D+00   0.10000000D+01
+  h                5    1    0.70711000D+00  -0.70711000D+00   0.10000000D+01
+  h                6    1    0.00000000D+00  -0.10000000D+01   0.10000000D+01
+  h                7    1   -0.70711000D+00  -0.70711000D+00   0.10000000D+01
+  h                8    1   -0.10000000D+01   0.00000000D+00   0.10000000D+01
+  h                9    1   -0.70711000D+00   0.70711000D+00   0.10000000D+01
+  c               10    6    0.00000000D+00   0.00000000D+00   0.20000000D+01
+# Molecule moved to the center of mass
+# Shift Vector is:        0.00000000       0.00000000       0.52917706
+# Inertia Tensor: (Before Diagonalization)
+# Up Diagonal Columnwise
+#    0.44804589D+01  -0.00000000D+00   0.44804589D+01  -0.00000000D+00  -0.00000000D+00   0.22402371D+01
+# Inertia Tensor: (Full Matrix)
+# 1,1 - 1,3           0.44804589D+01  -0.00000000D+00  -0.00000000D+00
+# 2,1 - 2,3          -0.00000000D+00   0.44804589D+01  -0.00000000D+00
+# 3,1 - 3,3          -0.00000000D+00  -0.00000000D+00   0.22402371D+01
+# Inertia Tensor
+# Inertia EigenValues:     0.22402371D+01   0.44804589D+01   0.44804589D+01
+# Eigen Vectors:
+# 1,1 - 1,3           0.00000000D+00   0.00000000D+00   0.10000000D+01
+# 2,1 - 2,3           0.00000000D+00   0.10000000D+01   0.00000000D+00
+# 3,1 - 3,3           0.10000000D+01   0.00000000D+00   0.00000000D+00
+# Molecule Rotated to match inertia axes
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.10000000D+01   0.00000000D+00   0.00000000D+00
+  h                2    1    0.00000000D+00   0.10000000D+01   0.00000000D+00
+  h                3    1    0.00000000D+00   0.70711000D+00   0.70711000D+00
+  h                4    1    0.00000000D+00   0.00000000D+00   0.10000000D+01
+  h                5    1    0.00000000D+00  -0.70711000D+00   0.70711000D+00
+  h                6    1    0.00000000D+00  -0.10000000D+01   0.00000000D+00
+  h                7    1    0.00000000D+00  -0.70711000D+00  -0.70711000D+00
+  h                8    1    0.00000000D+00   0.00000000D+00  -0.10000000D+01
+  h                9    1    0.00000000D+00   0.70711000D+00  -0.70711000D+00
+  c               10    6    0.10000000D+01   0.00000000D+00   0.00000000D+00
+# Initial Integrals follow ...
+# INT: Number of electrons from integrated RHO:     20.00000029592
+# INT: \int \rho \rho dr:      46.11751532095
+# INT: \int \rho \tilde{\rho} dr/ng:      42.06957609993
+# INT: \int \rho \tilde{\rho}m dr/ng:      40.91663821691
+#  DEBUG     \int rr  =     46.11751532095
+#  DEBUG     \int rr~ =     42.06957609993
+#  DEBUG     \int rr~ =     42.06957609993
+#  DEBUG     CSM value =      0.08777444303
+#  DEBUG     CSM value =      0.08777444303
+# Number of electrons =     20.00000029592
+# Initial rho^2 value =     46.11751532095
+#  Initial rrii value =     14.35749645657
+#  Initial rrij value =     31.76001886438
+#  Initial imj  value =     42.06957609993
+#  Initial impj value =     40.91663821691
+#  Initial CSM  value =      0.08777444303
+#  Initial CSM% value =      8.77744430254
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.10000000D+01   0.00000000D+00   0.00000000D+00
+  h                2    1    0.00000000D+00   0.10000000D+01   0.00000000D+00
+  h                3    1    0.00000000D+00   0.70711000D+00   0.70711000D+00
+  h                4    1    0.00000000D+00   0.00000000D+00   0.10000000D+01
+  h                5    1    0.00000000D+00  -0.70711000D+00   0.70711000D+00
+  h                6    1    0.00000000D+00  -0.10000000D+01   0.00000000D+00
+  h                7    1    0.00000000D+00  -0.70711000D+00  -0.70711000D+00
+  h                8    1    0.00000000D+00   0.00000000D+00  -0.10000000D+01
+  h                9    1    0.00000000D+00   0.70711000D+00  -0.70711000D+00
+  c               10    6    0.10000000D+01   0.00000000D+00   0.00000000D+00
+# Request Simplex: Run it with internal procedure. NOT IMPLEMENTED!
+# Request for Simplex: Initial Coordinates.
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.10000000D+01   0.00000000D+00   0.00000000D+00
+  h                2    1    0.00000000D+00   0.10000000D+01   0.00000000D+00
+  h                3    1    0.00000000D+00   0.70711000D+00   0.70711000D+00
+  h                4    1    0.00000000D+00   0.00000000D+00   0.10000000D+01
+  h                5    1    0.00000000D+00  -0.70711000D+00   0.70711000D+00
+  h                6    1    0.00000000D+00  -0.10000000D+01   0.00000000D+00
+  h                7    1    0.00000000D+00  -0.70711000D+00  -0.70711000D+00
+  h                8    1    0.00000000D+00   0.00000000D+00  -0.10000000D+01
+  h                9    1    0.00000000D+00   0.70711000D+00  -0.70711000D+00
+  c               10    6    0.10000000D+01   0.00000000D+00   0.00000000D+00
+# Minimization at step:     0 with Value:     0.0964Tol(Act/Req):0.2446E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# Minimization at step:     1 with Value:     0.0939Tol(Act/Req):0.1881E+00/0.1000E-04
+# With parameters(tra.):     0.7143E-02    0.1548E-01    0.1548E-01
+# With parameters(rot.):     0.1548E-01    0.1548E-01    0.1548E-01
+# Minimization at step:     2 with Value:     0.0920Tol(Act/Req):0.1629E+00/0.1000E-04
+# With parameters(tra.):     0.7738E-02    0.1677E-01    0.8433E-02
+# With parameters(rot.):     0.1677E-01    0.1677E-01    0.1677E-01
+# Minimization at step:     3 with Value:     0.0904Tol(Act/Req):0.7223E-01/0.1000E-04
+# With parameters(tra.):     0.8383E-02    0.9830E-02    0.9135E-02
+# With parameters(rot.):     0.1816E-01    0.1816E-01    0.1816E-01
+# Minimization at step:     4 with Value:     0.0897Tol(Act/Req):0.5593E-01/0.1000E-04
+# With parameters(tra.):    -0.2021E-02    0.1020E-01    0.9336E-02
+# With parameters(rot.):     0.2062E-01    0.2062E-01    0.2062E-01
+# Minimization at step:     5 with Value:     0.0892Tol(Act/Req):0.4813E-01/0.1000E-04
+# With parameters(tra.):    -0.3568E-02    0.1050E-01   -0.1004E-02
+# With parameters(rot.):     0.2352E-01    0.2352E-01    0.2352E-01
+# Minimization at step:     6 with Value:     0.0887Tol(Act/Req):0.2541E-01/0.1000E-04
+# With parameters(tra.):    -0.5589E-02    0.2605E-03   -0.2485E-02
+# With parameters(rot.):     0.2695E-01    0.2695E-01    0.2695E-01
+# Minimization at step:     7 with Value:     0.0886Tol(Act/Req):0.2094E-01/0.1000E-04
+# With parameters(tra.):    -0.7452E-02    0.3474E-03   -0.3313E-02
+# With parameters(rot.):     0.3594E-01    0.2604E-02    0.3594E-01
+# Minimization at step:     8 with Value:     0.0885Tol(Act/Req):0.1849E-01/0.1000E-04
+# With parameters(tra.):    -0.3607E-02   -0.2304E-02   -0.6575E-02
+# With parameters(rot.):     0.3854E-01   -0.3128E-02    0.3854E-01
+# Minimization at step:     9 with Value:     0.0883Tol(Act/Req):0.1590E-01/0.1000E-04
+# With parameters(tra.):    -0.2821E-02   -0.2546E-02   -0.6640E-02
+# With parameters(rot.):     0.3651E-01    0.2481E-02    0.3651E-01
+# Minimization at step:    10 with Value:     0.0881Tol(Act/Req):0.1367E-01/0.1000E-04
+# With parameters(tra.):    -0.1861E-02   -0.5954E-02   -0.2879E-02
+# With parameters(rot.):     0.3831E-01   -0.4227E-02    0.3831E-01
+# Minimization at step:    11 with Value:     0.0880Tol(Act/Req):0.5808E-02/0.1000E-04
+# With parameters(tra.):     0.8131E-04   -0.2390E-02   -0.2238E-02
+# With parameters(rot.):     0.3943E-01   -0.1374E-01    0.3943E-01
+# Minimization at step:    12 with Value:     0.0880Tol(Act/Req):0.5111E-02/0.1000E-04
+# With parameters(tra.):    -0.1252E-02   -0.6507E-03    0.1383E-02
+# With parameters(rot.):     0.3799E-01   -0.1346E-01    0.3799E-01
+# Minimization at step:    13 with Value:     0.0880Tol(Act/Req):0.4851E-02/0.1000E-04
+# With parameters(tra.):     0.8431E-03   -0.5041E-03    0.3928E-02
+# With parameters(rot.):     0.3443E-01   -0.7548E-02    0.3443E-01
+# Minimization at step:    14 with Value:     0.0880Tol(Act/Req):0.4655E-02/0.1000E-04
+# With parameters(tra.):     0.2875E-02   -0.2194E-02    0.1155E-02
+# With parameters(rot.):     0.3468E-01   -0.5864E-02    0.3468E-01
+# Minimization at step:    15 with Value:     0.0879Tol(Act/Req):0.4420E-02/0.1000E-04
+# With parameters(tra.):     0.2520E-02   -0.2372E-02    0.2882E-03
+# With parameters(rot.):     0.3559E-01   -0.7200E-02    0.3559E-01
+# Minimization at step:    16 with Value:     0.0879Tol(Act/Req):0.4296E-02/0.1000E-04
+# With parameters(tra.):     0.9080E-03   -0.1148E-02    0.2151E-02
+# With parameters(rot.):     0.3563E-01   -0.8798E-02    0.3563E-01
+# Minimization at step:    17 with Value:     0.0879Tol(Act/Req):0.3721E-02/0.1000E-04
+# With parameters(tra.):     0.1120E-02    0.1757E-02    0.1528E-02
+# With parameters(rot.):     0.3406E-01   -0.6586E-02    0.3406E-01
+# Minimization at step:    18 with Value:     0.0878Tol(Act/Req):0.1331E-02/0.1000E-04
+# With parameters(tra.):     0.4086E-03    0.1011E-02    0.2149E-02
+# With parameters(rot.):     0.3216E-01   -0.4126E-04    0.3216E-01
+# Minimization at step:    19 with Value:     0.0878Tol(Act/Req):0.1329E-02/0.1000E-04
+# With parameters(tra.):    -0.1004E-02    0.1784E-02    0.1034E-02
+# With parameters(rot.):     0.3284E-01   -0.3277E-03    0.3284E-01
+# Minimization at step:    20 with Value:     0.0878Tol(Act/Req):0.1244E-02/0.1000E-04
+# With parameters(tra.):    -0.8949E-03    0.1824E-02    0.6306E-03
+# With parameters(rot.):     0.3260E-01    0.6444E-03    0.3260E-01
+# Minimization at step:    21 with Value:     0.0878Tol(Act/Req):0.1139E-02/0.1000E-04
+# With parameters(tra.):     0.1921E-03    0.1255E-02    0.1366E-02
+# With parameters(rot.):     0.3203E-01    0.1102E-02    0.3203E-01
+# Minimization at step:    22 with Value:     0.0878Tol(Act/Req):0.7430E-03/0.1000E-04
+# With parameters(tra.):     0.7946E-04    0.7290E-03    0.1456E-02
+# With parameters(rot.):     0.3212E-01    0.1374E-02    0.3212E-01
+# Minimization at step:    23 with Value:     0.0878Tol(Act/Req):0.4009E-03/0.1000E-04
+# With parameters(tra.):     0.3529E-03    0.1031E-02    0.9724E-03
+# With parameters(rot.):     0.3306E-01   -0.1544E-02    0.3306E-01
+# Minimization at step:    24 with Value:     0.0878Tol(Act/Req):0.3597E-03/0.1000E-04
+# With parameters(tra.):     0.9876E-03    0.8480E-03    0.2793E-03
+# With parameters(rot.):     0.3274E-01   -0.3296E-03    0.3274E-01
+# Minimization at step:    25 with Value:     0.0878Tol(Act/Req):0.3562E-03/0.1000E-04
+# With parameters(tra.):     0.5281E-03    0.1092E-02   -0.5727E-03
+# With parameters(rot.):     0.3335E-01   -0.1112E-02    0.3335E-01
+# Minimization at step:    26 with Value:     0.0878Tol(Act/Req):0.3419E-03/0.1000E-04
+# With parameters(tra.):     0.3311E-03    0.1158E-02   -0.4705E-03
+# With parameters(rot.):     0.3349E-01   -0.1481E-02    0.3349E-01
+# Minimization at step:    27 with Value:     0.0878Tol(Act/Req):0.3208E-03/0.1000E-04
+# With parameters(tra.):     0.6265E-03    0.9916E-03    0.1941E-03
+# With parameters(rot.):     0.3306E-01   -0.9863E-03    0.3306E-01
+# Minimization at step:    28 with Value:     0.0878Tol(Act/Req):0.2291E-03/0.1000E-04
+# With parameters(tra.):     0.5835E-03    0.2700E-04   -0.4588E-04
+# With parameters(rot.):     0.3355E-01   -0.1229E-02    0.3355E-01
+# Minimization at step:    29 with Value:     0.0878Tol(Act/Req):0.1916E-03/0.1000E-04
+# With parameters(tra.):     0.5044E-03   -0.3752E-03   -0.5872E-04
+# With parameters(rot.):     0.3321E-01    0.3090E-03    0.3321E-01
+# Minimization at step:    30 with Value:     0.0878Tol(Act/Req):0.1160E-03/0.1000E-04
+# With parameters(tra.):     0.5086E-03   -0.1676E-03    0.2120E-06
+# With parameters(rot.):     0.3305E-01    0.4978E-03    0.3305E-01
+# Minimization at step:    31 with Value:     0.0878Tol(Act/Req):0.1127E-03/0.1000E-04
+# With parameters(tra.):     0.2575E-03   -0.3998E-03    0.2713E-03
+# With parameters(rot.):     0.3314E-01    0.4393E-03    0.3314E-01
+# Minimization at step:    32 with Value:     0.0878Tol(Act/Req):0.8140E-04/0.1000E-04
+# With parameters(tra.):     0.1775E-03   -0.4880E-03    0.1669E-03
+# With parameters(rot.):     0.3322E-01    0.4756E-03    0.3322E-01
+# Minimization at step:    33 with Value:     0.0878Tol(Act/Req):0.7056E-04/0.1000E-04
+# With parameters(tra.):     0.2367E-03   -0.6506E-03    0.2226E-03
+# With parameters(rot.):     0.1096E-01    0.6342E-03    0.4430E-01
+# Minimization at step:    34 with Value:     0.0878Tol(Act/Req):0.6954E-04/0.1000E-04
+# With parameters(tra.):     0.2002E-03   -0.4743E-03    0.3249E-03
+# With parameters(rot.):     0.3781E-02   -0.2828E-03    0.4823E-01
+# Minimization at step:    35 with Value:     0.0878Tol(Act/Req):0.5931E-04/0.1000E-04
+# With parameters(tra.):     0.1823E-03   -0.4189E-03    0.3195E-03
+# With parameters(rot.):     0.8747E-02   -0.3988E-03    0.4578E-01
+# Minimization at step:    36 with Value:     0.0878Tol(Act/Req):0.4215E-04/0.1000E-04
+# With parameters(tra.):     0.1070E-03   -0.1703E-03    0.4878E-03
+# With parameters(rot.):     0.2441E-02   -0.3397E-03    0.4874E-01
+# Minimization at step:    37 with Value:     0.0878Tol(Act/Req):0.3987E-04/0.1000E-04
+# With parameters(tra.):     0.1363E-03   -0.1125E-03    0.4606E-03
+# With parameters(rot.):    -0.1327E-03   -0.3949E-03    0.5002E-01
+# Minimization at step:    38 with Value:     0.0878Tol(Act/Req):0.3800E-04/0.1000E-04
+# With parameters(tra.):     0.1516E-03   -0.1682E-03    0.4035E-03
+# With parameters(rot.):     0.5745E-02    0.4847E-03    0.4669E-01
+# Minimization at step:    39 with Value:     0.0878Tol(Act/Req):0.3680E-04/0.1000E-04
+# With parameters(tra.):    -0.1705E-04   -0.2381E-03    0.2737E-03
+# With parameters(rot.):    -0.3257E-02    0.5604E-03    0.5134E-01
+# Minimization at step:    40 with Value:     0.0878Tol(Act/Req):0.2652E-04/0.1000E-04
+# With parameters(tra.):    -0.3492E-04   -0.2300E-03    0.2772E-03
+# With parameters(rot.):    -0.5476E-02    0.3469E-03    0.5256E-01
+# Minimization at step:    41 with Value:     0.0878Tol(Act/Req):0.2351E-04/0.1000E-04
+# With parameters(tra.):     0.5747E-05   -0.2118E-03    0.3099E-03
+# With parameters(rot.):    -0.3411E-02    0.3101E-03    0.5150E-01
+# Minimization at step:    42 with Value:     0.0878Tol(Act/Req):0.2095E-04/0.1000E-04
+# With parameters(tra.):    -0.8879E-04   -0.3209E-04    0.2959E-03
+# With parameters(rot.):     0.2469E-02    0.3144E-03    0.4852E-01
+# Minimization at step:    43 with Value:     0.0878Tol(Act/Req):0.1654E-04/0.1000E-04
+# With parameters(tra.):    -0.1001E-03   -0.1219E-03    0.1639E-03
+# With parameters(rot.):     0.5629E-02    0.4483E-03    0.4699E-01
+# Minimization at step:    44 with Value:     0.0878Tol(Act/Req):0.1596E-04/0.1000E-04
+# With parameters(tra.):    -0.1203E-03   -0.9348E-05    0.1068E-04
+# With parameters(rot.):     0.2403E-02    0.6191E-03    0.4855E-01
+# Minimization at step:    45 with Value:     0.0878Tol(Act/Req):0.1400E-04/0.1000E-04
+# With parameters(tra.):    -0.9926E-04   -0.5239E-04   -0.9595E-05
+# With parameters(rot.):     0.9273E-03    0.6434E-03    0.4930E-01
+# Minimization at step:    46 with Value:     0.0878Tol(Act/Req):0.1266E-04/0.1000E-04
+# With parameters(tra.):    -0.9246E-04   -0.8410E-04    0.2701E-04
+# With parameters(rot.):     0.1611E-02    0.6028E-03    0.4897E-01
+# Minimization at step:    47 with Value:     0.0878Tol(Act/Req):0.1027E-04/0.1000E-04
+# With parameters(tra.):    -0.1474E-03   -0.1924E-04   -0.4946E-04
+# With parameters(rot.):    -0.4658E-03    0.2609E-03    0.5021E-01
+# Minimization at step:    48 with Value:     0.0878Tol(Act/Req):0.9944E-05/0.1000E-04
+# With parameters(tra.):    -0.1171E-03    0.8124E-04   -0.1038E-03
+# With parameters(rot.):     0.4647E-02    0.1710E-03    0.4766E-01
+# CSM Simplex Values from input minimization.
+# Final Number of Simplex optim. Steps:    48
+# Final CSM Simplex Value is:      0.08777503737
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.99922060D+00   0.40715974D-01  -0.41969196D-03
+  h                2    1    0.39970641D-01   0.99971456D+00  -0.20501364D-01
+  h                3    1    0.28892417D-01   0.72123348D+00   0.69232026D+00
+  h                4    1    0.87692425D-03   0.20677453D-01   0.99928196D+00
+  h                5    1   -0.27664550D-01  -0.69157254D+00   0.72058063D+00
+  h                6    1   -0.40012624D-01  -0.99828579D+00   0.19464655D-01
+  h                7    1   -0.28934400D-01  -0.71980472D+00  -0.69335697D+00
+  h                8    1   -0.91890738D-03  -0.19248686D-01  -0.10003187D+01
+  h                9    1    0.27622567D-01   0.69300131D+00  -0.72161734D+00
+  c               10    6    0.99917862D+00  -0.39287207D-01  -0.61701657D-03
+# Coordinates rotated along X. New coordinates:
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.10000000D+01   0.16081226D-15  -0.61232340D-16
+  h                2    1    0.61232340D-16   0.61232340D-16  -0.10000000D+01
+  h                3    1    0.15700996D-15   0.70711000D+00  -0.70711000D+00
+  h                4    1    0.16081226D-15   0.10000000D+01   0.61232340D-16
+  h                5    1    0.70413961D-16   0.70711000D+00   0.70711000D+00
+  h                6    1   -0.61232340D-16  -0.61232340D-16   0.10000000D+01
+  h                7    1   -0.15700996D-15  -0.70711000D+00   0.70711000D+00
+  h                8    1   -0.16081226D-15  -0.10000000D+01  -0.61232340D-16
+  h                9    1   -0.70413961D-16  -0.70711000D+00  -0.70711000D+00
+  c               10    6    0.10000000D+01  -0.16081226D-15   0.61232340D-16
+# Minimization at step:     0 with Value:     0.0964Tol(Act/Req):0.2446E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# Minimization at step:     1 with Value:     0.0939Tol(Act/Req):0.1881E+00/0.1000E-04
+# With parameters(tra.):     0.7143E-02    0.1548E-01    0.1548E-01
+# With parameters(rot.):     0.1548E-01    0.1548E-01    0.1548E-01
+# Minimization at step:     2 with Value:     0.0920Tol(Act/Req):0.1629E+00/0.1000E-04
+# With parameters(tra.):     0.7738E-02    0.1677E-01    0.8433E-02
+# With parameters(rot.):     0.1677E-01    0.1677E-01    0.1677E-01
+# Minimization at step:     3 with Value:     0.0904Tol(Act/Req):0.7223E-01/0.1000E-04
+# With parameters(tra.):     0.8383E-02    0.9830E-02    0.9135E-02
+# With parameters(rot.):     0.1816E-01    0.1816E-01    0.1816E-01
+# Minimization at step:     4 with Value:     0.0897Tol(Act/Req):0.5593E-01/0.1000E-04
+# With parameters(tra.):    -0.2021E-02    0.1020E-01    0.9336E-02
+# With parameters(rot.):     0.2062E-01    0.2062E-01    0.2062E-01
+# Minimization at step:     5 with Value:     0.0892Tol(Act/Req):0.4813E-01/0.1000E-04
+# With parameters(tra.):    -0.3568E-02    0.1050E-01   -0.1004E-02
+# With parameters(rot.):     0.2352E-01    0.2352E-01    0.2352E-01
+# Minimization at step:     6 with Value:     0.0887Tol(Act/Req):0.2541E-01/0.1000E-04
+# With parameters(tra.):    -0.5589E-02    0.2605E-03   -0.2485E-02
+# With parameters(rot.):     0.2695E-01    0.2695E-01    0.2695E-01
+# Minimization at step:     7 with Value:     0.0886Tol(Act/Req):0.2094E-01/0.1000E-04
+# With parameters(tra.):    -0.7452E-02    0.3474E-03   -0.3313E-02
+# With parameters(rot.):     0.3594E-01    0.2604E-02    0.3594E-01
+# Minimization at step:     8 with Value:     0.0885Tol(Act/Req):0.1849E-01/0.1000E-04
+# With parameters(tra.):    -0.3607E-02   -0.2304E-02   -0.6575E-02
+# With parameters(rot.):     0.3854E-01   -0.3128E-02    0.3854E-01
+# Minimization at step:     9 with Value:     0.0883Tol(Act/Req):0.1590E-01/0.1000E-04
+# With parameters(tra.):    -0.2821E-02   -0.2546E-02   -0.6640E-02
+# With parameters(rot.):     0.3651E-01    0.2481E-02    0.3651E-01
+# Minimization at step:    10 with Value:     0.0881Tol(Act/Req):0.1367E-01/0.1000E-04
+# With parameters(tra.):    -0.1861E-02   -0.5954E-02   -0.2879E-02
+# With parameters(rot.):     0.3831E-01   -0.4227E-02    0.3831E-01
+# Minimization at step:    11 with Value:     0.0880Tol(Act/Req):0.5808E-02/0.1000E-04
+# With parameters(tra.):     0.8131E-04   -0.2390E-02   -0.2238E-02
+# With parameters(rot.):     0.3943E-01   -0.1374E-01    0.3943E-01
+# Minimization at step:    12 with Value:     0.0880Tol(Act/Req):0.5111E-02/0.1000E-04
+# With parameters(tra.):    -0.1252E-02   -0.6507E-03    0.1383E-02
+# With parameters(rot.):     0.3799E-01   -0.1346E-01    0.3799E-01
+# Minimization at step:    13 with Value:     0.0880Tol(Act/Req):0.4851E-02/0.1000E-04
+# With parameters(tra.):     0.8431E-03   -0.5041E-03    0.3928E-02
+# With parameters(rot.):     0.3443E-01   -0.7548E-02    0.3443E-01
+# Minimization at step:    14 with Value:     0.0880Tol(Act/Req):0.4655E-02/0.1000E-04
+# With parameters(tra.):     0.2875E-02   -0.2194E-02    0.1155E-02
+# With parameters(rot.):     0.3468E-01   -0.5864E-02    0.3468E-01
+# Minimization at step:    15 with Value:     0.0879Tol(Act/Req):0.4420E-02/0.1000E-04
+# With parameters(tra.):     0.2520E-02   -0.2372E-02    0.2882E-03
+# With parameters(rot.):     0.3559E-01   -0.7200E-02    0.3559E-01
+# Minimization at step:    16 with Value:     0.0879Tol(Act/Req):0.4296E-02/0.1000E-04
+# With parameters(tra.):     0.9080E-03   -0.1148E-02    0.2151E-02
+# With parameters(rot.):     0.3563E-01   -0.8798E-02    0.3563E-01
+# Minimization at step:    17 with Value:     0.0879Tol(Act/Req):0.3721E-02/0.1000E-04
+# With parameters(tra.):     0.1120E-02    0.1757E-02    0.1528E-02
+# With parameters(rot.):     0.3406E-01   -0.6586E-02    0.3406E-01
+# Minimization at step:    18 with Value:     0.0878Tol(Act/Req):0.1331E-02/0.1000E-04
+# With parameters(tra.):     0.4086E-03    0.1011E-02    0.2149E-02
+# With parameters(rot.):     0.3216E-01   -0.4126E-04    0.3216E-01
+# Minimization at step:    19 with Value:     0.0878Tol(Act/Req):0.1329E-02/0.1000E-04
+# With parameters(tra.):    -0.1004E-02    0.1784E-02    0.1034E-02
+# With parameters(rot.):     0.3284E-01   -0.3277E-03    0.3284E-01
+# Minimization at step:    20 with Value:     0.0878Tol(Act/Req):0.1244E-02/0.1000E-04
+# With parameters(tra.):    -0.8949E-03    0.1824E-02    0.6306E-03
+# With parameters(rot.):     0.3260E-01    0.6444E-03    0.3260E-01
+# Minimization at step:    21 with Value:     0.0878Tol(Act/Req):0.1139E-02/0.1000E-04
+# With parameters(tra.):     0.1921E-03    0.1255E-02    0.1366E-02
+# With parameters(rot.):     0.3203E-01    0.1102E-02    0.3203E-01
+# Minimization at step:    22 with Value:     0.0878Tol(Act/Req):0.7430E-03/0.1000E-04
+# With parameters(tra.):     0.7946E-04    0.7290E-03    0.1456E-02
+# With parameters(rot.):     0.3212E-01    0.1374E-02    0.3212E-01
+# Minimization at step:    23 with Value:     0.0878Tol(Act/Req):0.4009E-03/0.1000E-04
+# With parameters(tra.):     0.3529E-03    0.1031E-02    0.9724E-03
+# With parameters(rot.):     0.3306E-01   -0.1544E-02    0.3306E-01
+# Minimization at step:    24 with Value:     0.0878Tol(Act/Req):0.3597E-03/0.1000E-04
+# With parameters(tra.):     0.9876E-03    0.8480E-03    0.2793E-03
+# With parameters(rot.):     0.3274E-01   -0.3296E-03    0.3274E-01
+# Minimization at step:    25 with Value:     0.0878Tol(Act/Req):0.3562E-03/0.1000E-04
+# With parameters(tra.):     0.5281E-03    0.1092E-02   -0.5727E-03
+# With parameters(rot.):     0.3335E-01   -0.1112E-02    0.3335E-01
+# Minimization at step:    26 with Value:     0.0878Tol(Act/Req):0.3419E-03/0.1000E-04
+# With parameters(tra.):     0.3311E-03    0.1158E-02   -0.4705E-03
+# With parameters(rot.):     0.3349E-01   -0.1481E-02    0.3349E-01
+# Minimization at step:    27 with Value:     0.0878Tol(Act/Req):0.3208E-03/0.1000E-04
+# With parameters(tra.):     0.6265E-03    0.9916E-03    0.1941E-03
+# With parameters(rot.):     0.3306E-01   -0.9863E-03    0.3306E-01
+# Minimization at step:    28 with Value:     0.0878Tol(Act/Req):0.2291E-03/0.1000E-04
+# With parameters(tra.):     0.5835E-03    0.2700E-04   -0.4588E-04
+# With parameters(rot.):     0.3355E-01   -0.1229E-02    0.3355E-01
+# Minimization at step:    29 with Value:     0.0878Tol(Act/Req):0.1916E-03/0.1000E-04
+# With parameters(tra.):     0.5044E-03   -0.3752E-03   -0.5872E-04
+# With parameters(rot.):     0.3321E-01    0.3090E-03    0.3321E-01
+# Minimization at step:    30 with Value:     0.0878Tol(Act/Req):0.1160E-03/0.1000E-04
+# With parameters(tra.):     0.5086E-03   -0.1676E-03    0.2120E-06
+# With parameters(rot.):     0.3305E-01    0.4978E-03    0.3305E-01
+# Minimization at step:    31 with Value:     0.0878Tol(Act/Req):0.1127E-03/0.1000E-04
+# With parameters(tra.):     0.2575E-03   -0.3998E-03    0.2713E-03
+# With parameters(rot.):     0.3314E-01    0.4393E-03    0.3314E-01
+# Minimization at step:    32 with Value:     0.0878Tol(Act/Req):0.8140E-04/0.1000E-04
+# With parameters(tra.):     0.1775E-03   -0.4880E-03    0.1669E-03
+# With parameters(rot.):     0.3322E-01    0.4756E-03    0.3322E-01
+# Minimization at step:    33 with Value:     0.0878Tol(Act/Req):0.7056E-04/0.1000E-04
+# With parameters(tra.):     0.2367E-03   -0.6506E-03    0.2226E-03
+# With parameters(rot.):     0.1096E-01    0.6342E-03    0.4430E-01
+# Minimization at step:    34 with Value:     0.0878Tol(Act/Req):0.6954E-04/0.1000E-04
+# With parameters(tra.):     0.2002E-03   -0.4743E-03    0.3249E-03
+# With parameters(rot.):     0.3781E-02   -0.2828E-03    0.4823E-01
+# Minimization at step:    35 with Value:     0.0878Tol(Act/Req):0.5931E-04/0.1000E-04
+# With parameters(tra.):     0.1823E-03   -0.4189E-03    0.3195E-03
+# With parameters(rot.):     0.8747E-02   -0.3988E-03    0.4578E-01
+# Minimization at step:    36 with Value:     0.0878Tol(Act/Req):0.4215E-04/0.1000E-04
+# With parameters(tra.):     0.1070E-03   -0.1703E-03    0.4878E-03
+# With parameters(rot.):     0.2441E-02   -0.3397E-03    0.4874E-01
+# Minimization at step:    37 with Value:     0.0878Tol(Act/Req):0.3987E-04/0.1000E-04
+# With parameters(tra.):     0.1363E-03   -0.1125E-03    0.4606E-03
+# With parameters(rot.):    -0.1327E-03   -0.3949E-03    0.5002E-01
+# Minimization at step:    38 with Value:     0.0878Tol(Act/Req):0.3800E-04/0.1000E-04
+# With parameters(tra.):     0.1516E-03   -0.1682E-03    0.4035E-03
+# With parameters(rot.):     0.5745E-02    0.4847E-03    0.4669E-01
+# Minimization at step:    39 with Value:     0.0878Tol(Act/Req):0.3680E-04/0.1000E-04
+# With parameters(tra.):    -0.1705E-04   -0.2381E-03    0.2737E-03
+# With parameters(rot.):    -0.3257E-02    0.5604E-03    0.5134E-01
+# Minimization at step:    40 with Value:     0.0878Tol(Act/Req):0.2652E-04/0.1000E-04
+# With parameters(tra.):    -0.3492E-04   -0.2300E-03    0.2772E-03
+# With parameters(rot.):    -0.5476E-02    0.3469E-03    0.5256E-01
+# Minimization at step:    41 with Value:     0.0878Tol(Act/Req):0.2351E-04/0.1000E-04
+# With parameters(tra.):     0.5747E-05   -0.2118E-03    0.3099E-03
+# With parameters(rot.):    -0.3411E-02    0.3101E-03    0.5150E-01
+# Minimization at step:    42 with Value:     0.0878Tol(Act/Req):0.2095E-04/0.1000E-04
+# With parameters(tra.):    -0.8879E-04   -0.3209E-04    0.2959E-03
+# With parameters(rot.):     0.2469E-02    0.3144E-03    0.4852E-01
+# Minimization at step:    43 with Value:     0.0878Tol(Act/Req):0.1654E-04/0.1000E-04
+# With parameters(tra.):    -0.1001E-03   -0.1219E-03    0.1639E-03
+# With parameters(rot.):     0.5629E-02    0.4483E-03    0.4699E-01
+# Minimization at step:    44 with Value:     0.0878Tol(Act/Req):0.1596E-04/0.1000E-04
+# With parameters(tra.):    -0.1203E-03   -0.9348E-05    0.1068E-04
+# With parameters(rot.):     0.2403E-02    0.6191E-03    0.4855E-01
+# Minimization at step:    45 with Value:     0.0878Tol(Act/Req):0.1400E-04/0.1000E-04
+# With parameters(tra.):    -0.9926E-04   -0.5239E-04   -0.9595E-05
+# With parameters(rot.):     0.9273E-03    0.6434E-03    0.4930E-01
+# Minimization at step:    46 with Value:     0.0878Tol(Act/Req):0.1266E-04/0.1000E-04
+# With parameters(tra.):    -0.9246E-04   -0.8410E-04    0.2701E-04
+# With parameters(rot.):     0.1611E-02    0.6028E-03    0.4897E-01
+# Minimization at step:    47 with Value:     0.0878Tol(Act/Req):0.1027E-04/0.1000E-04
+# With parameters(tra.):    -0.1474E-03   -0.1924E-04   -0.4946E-04
+# With parameters(rot.):    -0.4658E-03    0.2609E-03    0.5021E-01
+# Minimization at step:    48 with Value:     0.0878Tol(Act/Req):0.9944E-05/0.1000E-04
+# With parameters(tra.):    -0.1171E-03    0.8124E-04   -0.1038E-03
+# With parameters(rot.):     0.4647E-02    0.1710E-03    0.4766E-01
+# CSM Values after x minimization.
+# Final Number of optim. Steps:    48
+#      Before min is:      0.08777444303
+# Final CSM Value is:      0.08777503737
+# Coordinates rotated along Y.
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.61232340D-16  -0.48271527D-32  -0.10000000D+01
+  h                2    1    0.12246468D-15   0.10000000D+01  -0.12325952D-31
+  h                3    1   -0.70711000D+00   0.70711000D+00   0.43298000D-16
+  h                4    1   -0.10000000D+01   0.12246468D-15   0.61232340D-16
+  h                5    1   -0.70711000D+00  -0.70711000D+00   0.43298000D-16
+  h                6    1   -0.12246468D-15  -0.10000000D+01   0.12325952D-31
+  h                7    1    0.70711000D+00  -0.70711000D+00  -0.43298000D-16
+  h                8    1    0.10000000D+01  -0.12246468D-15  -0.61232340D-16
+  h                9    1    0.70711000D+00   0.70711000D+00  -0.43298000D-16
+  c               10    6    0.61232340D-16   0.48271527D-32   0.10000000D+01
+# Minimization at step:     0 with Value:     0.0964Tol(Act/Req):0.2446E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# Minimization at step:     1 with Value:     0.0939Tol(Act/Req):0.1881E+00/0.1000E-04
+# With parameters(tra.):     0.7143E-02    0.1548E-01    0.1548E-01
+# With parameters(rot.):     0.1548E-01    0.1548E-01    0.1548E-01
+# Minimization at step:     2 with Value:     0.0920Tol(Act/Req):0.1629E+00/0.1000E-04
+# With parameters(tra.):     0.7738E-02    0.1677E-01    0.8433E-02
+# With parameters(rot.):     0.1677E-01    0.1677E-01    0.1677E-01
+# Minimization at step:     3 with Value:     0.0904Tol(Act/Req):0.7223E-01/0.1000E-04
+# With parameters(tra.):     0.8383E-02    0.9830E-02    0.9135E-02
+# With parameters(rot.):     0.1816E-01    0.1816E-01    0.1816E-01
+# Minimization at step:     4 with Value:     0.0897Tol(Act/Req):0.5593E-01/0.1000E-04
+# With parameters(tra.):    -0.2021E-02    0.1020E-01    0.9336E-02
+# With parameters(rot.):     0.2062E-01    0.2062E-01    0.2062E-01
+# Minimization at step:     5 with Value:     0.0892Tol(Act/Req):0.4813E-01/0.1000E-04
+# With parameters(tra.):    -0.3568E-02    0.1050E-01   -0.1004E-02
+# With parameters(rot.):     0.2352E-01    0.2352E-01    0.2352E-01
+# Minimization at step:     6 with Value:     0.0887Tol(Act/Req):0.2541E-01/0.1000E-04
+# With parameters(tra.):    -0.5589E-02    0.2605E-03   -0.2485E-02
+# With parameters(rot.):     0.2695E-01    0.2695E-01    0.2695E-01
+# Minimization at step:     7 with Value:     0.0886Tol(Act/Req):0.2094E-01/0.1000E-04
+# With parameters(tra.):    -0.7452E-02    0.3474E-03   -0.3313E-02
+# With parameters(rot.):     0.3594E-01    0.2604E-02    0.3594E-01
+# Minimization at step:     8 with Value:     0.0885Tol(Act/Req):0.1849E-01/0.1000E-04
+# With parameters(tra.):    -0.3607E-02   -0.2304E-02   -0.6575E-02
+# With parameters(rot.):     0.3854E-01   -0.3128E-02    0.3854E-01
+# Minimization at step:     9 with Value:     0.0883Tol(Act/Req):0.1590E-01/0.1000E-04
+# With parameters(tra.):    -0.2821E-02   -0.2546E-02   -0.6640E-02
+# With parameters(rot.):     0.3651E-01    0.2481E-02    0.3651E-01
+# Minimization at step:    10 with Value:     0.0881Tol(Act/Req):0.1367E-01/0.1000E-04
+# With parameters(tra.):    -0.1861E-02   -0.5954E-02   -0.2879E-02
+# With parameters(rot.):     0.3831E-01   -0.4227E-02    0.3831E-01
+# Minimization at step:    11 with Value:     0.0880Tol(Act/Req):0.5808E-02/0.1000E-04
+# With parameters(tra.):     0.8131E-04   -0.2390E-02   -0.2238E-02
+# With parameters(rot.):     0.3943E-01   -0.1374E-01    0.3943E-01
+# Minimization at step:    12 with Value:     0.0880Tol(Act/Req):0.5111E-02/0.1000E-04
+# With parameters(tra.):    -0.1252E-02   -0.6507E-03    0.1383E-02
+# With parameters(rot.):     0.3799E-01   -0.1346E-01    0.3799E-01
+# Minimization at step:    13 with Value:     0.0880Tol(Act/Req):0.4851E-02/0.1000E-04
+# With parameters(tra.):     0.8431E-03   -0.5041E-03    0.3928E-02
+# With parameters(rot.):     0.3443E-01   -0.7548E-02    0.3443E-01
+# Minimization at step:    14 with Value:     0.0880Tol(Act/Req):0.4655E-02/0.1000E-04
+# With parameters(tra.):     0.2875E-02   -0.2194E-02    0.1155E-02
+# With parameters(rot.):     0.3468E-01   -0.5864E-02    0.3468E-01
+# Minimization at step:    15 with Value:     0.0879Tol(Act/Req):0.4420E-02/0.1000E-04
+# With parameters(tra.):     0.2520E-02   -0.2372E-02    0.2882E-03
+# With parameters(rot.):     0.3559E-01   -0.7200E-02    0.3559E-01
+# Minimization at step:    16 with Value:     0.0879Tol(Act/Req):0.4296E-02/0.1000E-04
+# With parameters(tra.):     0.9080E-03   -0.1148E-02    0.2151E-02
+# With parameters(rot.):     0.3563E-01   -0.8798E-02    0.3563E-01
+# Minimization at step:    17 with Value:     0.0879Tol(Act/Req):0.3721E-02/0.1000E-04
+# With parameters(tra.):     0.1120E-02    0.1757E-02    0.1528E-02
+# With parameters(rot.):     0.3406E-01   -0.6586E-02    0.3406E-01
+# Minimization at step:    18 with Value:     0.0878Tol(Act/Req):0.1331E-02/0.1000E-04
+# With parameters(tra.):     0.4086E-03    0.1011E-02    0.2149E-02
+# With parameters(rot.):     0.3216E-01   -0.4126E-04    0.3216E-01
+# Minimization at step:    19 with Value:     0.0878Tol(Act/Req):0.1329E-02/0.1000E-04
+# With parameters(tra.):    -0.1004E-02    0.1784E-02    0.1034E-02
+# With parameters(rot.):     0.3284E-01   -0.3277E-03    0.3284E-01
+# Minimization at step:    20 with Value:     0.0878Tol(Act/Req):0.1244E-02/0.1000E-04
+# With parameters(tra.):    -0.8949E-03    0.1824E-02    0.6306E-03
+# With parameters(rot.):     0.3260E-01    0.6444E-03    0.3260E-01
+# Minimization at step:    21 with Value:     0.0878Tol(Act/Req):0.1139E-02/0.1000E-04
+# With parameters(tra.):     0.1921E-03    0.1255E-02    0.1366E-02
+# With parameters(rot.):     0.3203E-01    0.1102E-02    0.3203E-01
+# Minimization at step:    22 with Value:     0.0878Tol(Act/Req):0.7430E-03/0.1000E-04
+# With parameters(tra.):     0.7946E-04    0.7290E-03    0.1456E-02
+# With parameters(rot.):     0.3212E-01    0.1374E-02    0.3212E-01
+# Minimization at step:    23 with Value:     0.0878Tol(Act/Req):0.4009E-03/0.1000E-04
+# With parameters(tra.):     0.3529E-03    0.1031E-02    0.9724E-03
+# With parameters(rot.):     0.3306E-01   -0.1544E-02    0.3306E-01
+# Minimization at step:    24 with Value:     0.0878Tol(Act/Req):0.3597E-03/0.1000E-04
+# With parameters(tra.):     0.9876E-03    0.8480E-03    0.2793E-03
+# With parameters(rot.):     0.3274E-01   -0.3296E-03    0.3274E-01
+# Minimization at step:    25 with Value:     0.0878Tol(Act/Req):0.3562E-03/0.1000E-04
+# With parameters(tra.):     0.5281E-03    0.1092E-02   -0.5727E-03
+# With parameters(rot.):     0.3335E-01   -0.1112E-02    0.3335E-01
+# Minimization at step:    26 with Value:     0.0878Tol(Act/Req):0.3419E-03/0.1000E-04
+# With parameters(tra.):     0.3311E-03    0.1158E-02   -0.4705E-03
+# With parameters(rot.):     0.3349E-01   -0.1481E-02    0.3349E-01
+# Minimization at step:    27 with Value:     0.0878Tol(Act/Req):0.3208E-03/0.1000E-04
+# With parameters(tra.):     0.6265E-03    0.9916E-03    0.1941E-03
+# With parameters(rot.):     0.3306E-01   -0.9863E-03    0.3306E-01
+# Minimization at step:    28 with Value:     0.0878Tol(Act/Req):0.2291E-03/0.1000E-04
+# With parameters(tra.):     0.5835E-03    0.2700E-04   -0.4588E-04
+# With parameters(rot.):     0.3355E-01   -0.1229E-02    0.3355E-01
+# Minimization at step:    29 with Value:     0.0878Tol(Act/Req):0.1916E-03/0.1000E-04
+# With parameters(tra.):     0.5044E-03   -0.3752E-03   -0.5872E-04
+# With parameters(rot.):     0.3321E-01    0.3090E-03    0.3321E-01
+# Minimization at step:    30 with Value:     0.0878Tol(Act/Req):0.1160E-03/0.1000E-04
+# With parameters(tra.):     0.5086E-03   -0.1676E-03    0.2120E-06
+# With parameters(rot.):     0.3305E-01    0.4978E-03    0.3305E-01
+# Minimization at step:    31 with Value:     0.0878Tol(Act/Req):0.1127E-03/0.1000E-04
+# With parameters(tra.):     0.2575E-03   -0.3998E-03    0.2713E-03
+# With parameters(rot.):     0.3314E-01    0.4393E-03    0.3314E-01
+# Minimization at step:    32 with Value:     0.0878Tol(Act/Req):0.8140E-04/0.1000E-04
+# With parameters(tra.):     0.1775E-03   -0.4880E-03    0.1669E-03
+# With parameters(rot.):     0.3322E-01    0.4756E-03    0.3322E-01
+# Minimization at step:    33 with Value:     0.0878Tol(Act/Req):0.7056E-04/0.1000E-04
+# With parameters(tra.):     0.2367E-03   -0.6506E-03    0.2226E-03
+# With parameters(rot.):     0.1096E-01    0.6342E-03    0.4430E-01
+# Minimization at step:    34 with Value:     0.0878Tol(Act/Req):0.6954E-04/0.1000E-04
+# With parameters(tra.):     0.2002E-03   -0.4743E-03    0.3249E-03
+# With parameters(rot.):     0.3781E-02   -0.2828E-03    0.4823E-01
+# Minimization at step:    35 with Value:     0.0878Tol(Act/Req):0.5931E-04/0.1000E-04
+# With parameters(tra.):     0.1823E-03   -0.4189E-03    0.3195E-03
+# With parameters(rot.):     0.8747E-02   -0.3988E-03    0.4578E-01
+# Minimization at step:    36 with Value:     0.0878Tol(Act/Req):0.4215E-04/0.1000E-04
+# With parameters(tra.):     0.1070E-03   -0.1703E-03    0.4878E-03
+# With parameters(rot.):     0.2441E-02   -0.3397E-03    0.4874E-01
+# Minimization at step:    37 with Value:     0.0878Tol(Act/Req):0.3987E-04/0.1000E-04
+# With parameters(tra.):     0.1363E-03   -0.1125E-03    0.4606E-03
+# With parameters(rot.):    -0.1327E-03   -0.3949E-03    0.5002E-01
+# Minimization at step:    38 with Value:     0.0878Tol(Act/Req):0.3800E-04/0.1000E-04
+# With parameters(tra.):     0.1516E-03   -0.1682E-03    0.4035E-03
+# With parameters(rot.):     0.5745E-02    0.4847E-03    0.4669E-01
+# Minimization at step:    39 with Value:     0.0878Tol(Act/Req):0.3680E-04/0.1000E-04
+# With parameters(tra.):    -0.1705E-04   -0.2381E-03    0.2737E-03
+# With parameters(rot.):    -0.3257E-02    0.5604E-03    0.5134E-01
+# Minimization at step:    40 with Value:     0.0878Tol(Act/Req):0.2652E-04/0.1000E-04
+# With parameters(tra.):    -0.3492E-04   -0.2300E-03    0.2772E-03
+# With parameters(rot.):    -0.5476E-02    0.3469E-03    0.5256E-01
+# Minimization at step:    41 with Value:     0.0878Tol(Act/Req):0.2351E-04/0.1000E-04
+# With parameters(tra.):     0.5747E-05   -0.2118E-03    0.3099E-03
+# With parameters(rot.):    -0.3411E-02    0.3101E-03    0.5150E-01
+# Minimization at step:    42 with Value:     0.0878Tol(Act/Req):0.2095E-04/0.1000E-04
+# With parameters(tra.):    -0.8879E-04   -0.3209E-04    0.2959E-03
+# With parameters(rot.):     0.2469E-02    0.3144E-03    0.4852E-01
+# Minimization at step:    43 with Value:     0.0878Tol(Act/Req):0.1654E-04/0.1000E-04
+# With parameters(tra.):    -0.1001E-03   -0.1219E-03    0.1639E-03
+# With parameters(rot.):     0.5629E-02    0.4483E-03    0.4699E-01
+# Minimization at step:    44 with Value:     0.0878Tol(Act/Req):0.1596E-04/0.1000E-04
+# With parameters(tra.):    -0.1203E-03   -0.9348E-05    0.1068E-04
+# With parameters(rot.):     0.2403E-02    0.6191E-03    0.4855E-01
+# Minimization at step:    45 with Value:     0.0878Tol(Act/Req):0.1400E-04/0.1000E-04
+# With parameters(tra.):    -0.9926E-04   -0.5239E-04   -0.9595E-05
+# With parameters(rot.):     0.9273E-03    0.6434E-03    0.4930E-01
+# Minimization at step:    46 with Value:     0.0878Tol(Act/Req):0.1266E-04/0.1000E-04
+# With parameters(tra.):    -0.9246E-04   -0.8410E-04    0.2701E-04
+# With parameters(rot.):     0.1611E-02    0.6028E-03    0.4897E-01
+# Minimization at step:    47 with Value:     0.0878Tol(Act/Req):0.1027E-04/0.1000E-04
+# With parameters(tra.):    -0.1474E-03   -0.1924E-04   -0.4946E-04
+# With parameters(rot.):    -0.4658E-03    0.2609E-03    0.5021E-01
+# Minimization at step:    48 with Value:     0.0878Tol(Act/Req):0.9944E-05/0.1000E-04
+# With parameters(tra.):    -0.1171E-03    0.8124E-04   -0.1038E-03
+# With parameters(rot.):     0.4647E-02    0.1710E-03    0.4766E-01
+# CSM Values after y minimization.
+# Final Number of optim. Steps:    48
+#      Before min is:      0.00000000000
+# Final CSM Value is:      0.08777503737
+# Coordinates rotated along Z.
+[molecule] Nrec=  10 Format=nscxyz
+  c                1    6   -0.61232340D-16   0.10000000D+01   0.00000000D+00
+  h                2    1    0.10000000D+01   0.61232340D-16   0.00000000D+00
+  h                3    1    0.70711000D+00   0.43298000D-16   0.70711000D+00
+  h                4    1    0.00000000D+00   0.00000000D+00   0.10000000D+01
+  h                5    1   -0.70711000D+00  -0.43298000D-16   0.70711000D+00
+  h                6    1   -0.10000000D+01  -0.61232340D-16   0.00000000D+00
+  h                7    1   -0.70711000D+00  -0.43298000D-16  -0.70711000D+00
+  h                8    1    0.00000000D+00   0.00000000D+00  -0.10000000D+01
+  h                9    1    0.70711000D+00   0.43298000D-16  -0.70711000D+00
+  c               10    6    0.61232340D-16  -0.10000000D+01   0.00000000D+00
+# Minimization at step:     0 with Value:     0.0964Tol(Act/Req):0.2446E+00/0.1000E-04
+# With parameters(tra.):     0.1429E-01    0.1429E-01    0.1429E-01
+# With parameters(rot.):     0.1429E-01    0.1429E-01    0.1429E-01
+# Minimization at step:     1 with Value:     0.0939Tol(Act/Req):0.1881E+00/0.1000E-04
+# With parameters(tra.):     0.7143E-02    0.1548E-01    0.1548E-01
+# With parameters(rot.):     0.1548E-01    0.1548E-01    0.1548E-01
+# Minimization at step:     2 with Value:     0.0920Tol(Act/Req):0.1629E+00/0.1000E-04
+# With parameters(tra.):     0.7738E-02    0.1677E-01    0.8433E-02
+# With parameters(rot.):     0.1677E-01    0.1677E-01    0.1677E-01
+# Minimization at step:     3 with Value:     0.0904Tol(Act/Req):0.7223E-01/0.1000E-04
+# With parameters(tra.):     0.8383E-02    0.9830E-02    0.9135E-02
+# With parameters(rot.):     0.1816E-01    0.1816E-01    0.1816E-01
+# Minimization at step:     4 with Value:     0.0897Tol(Act/Req):0.5593E-01/0.1000E-04
+# With parameters(tra.):    -0.2021E-02    0.1020E-01    0.9336E-02
+# With parameters(rot.):     0.2062E-01    0.2062E-01    0.2062E-01
+# Minimization at step:     5 with Value:     0.0892Tol(Act/Req):0.4813E-01/0.1000E-04
+# With parameters(tra.):    -0.3568E-02    0.1050E-01   -0.1004E-02
+# With parameters(rot.):     0.2352E-01    0.2352E-01    0.2352E-01
+# Minimization at step:     6 with Value:     0.0887Tol(Act/Req):0.2541E-01/0.1000E-04
+# With parameters(tra.):    -0.5589E-02    0.2605E-03   -0.2485E-02
+# With parameters(rot.):     0.2695E-01    0.2695E-01    0.2695E-01
+# Minimization at step:     7 with Value:     0.0886Tol(Act/Req):0.2094E-01/0.1000E-04
+# With parameters(tra.):    -0.7452E-02    0.3474E-03   -0.3313E-02
+# With parameters(rot.):     0.3594E-01    0.2604E-02    0.3594E-01
+# Minimization at step:     8 with Value:     0.0885Tol(Act/Req):0.1849E-01/0.1000E-04
+# With parameters(tra.):    -0.3607E-02   -0.2304E-02   -0.6575E-02
+# With parameters(rot.):     0.3854E-01   -0.3128E-02    0.3854E-01
+# Minimization at step:     9 with Value:     0.0883Tol(Act/Req):0.1590E-01/0.1000E-04
+# With parameters(tra.):    -0.2821E-02   -0.2546E-02   -0.6640E-02
+# With parameters(rot.):     0.3651E-01    0.2481E-02    0.3651E-01
+# Minimization at step:    10 with Value:     0.0881Tol(Act/Req):0.1367E-01/0.1000E-04
+# With parameters(tra.):    -0.1861E-02   -0.5954E-02   -0.2879E-02
+# With parameters(rot.):     0.3831E-01   -0.4227E-02    0.3831E-01
+# Minimization at step:    11 with Value:     0.0880Tol(Act/Req):0.5808E-02/0.1000E-04
+# With parameters(tra.):     0.8131E-04   -0.2390E-02   -0.2238E-02
+# With parameters(rot.):     0.3943E-01   -0.1374E-01    0.3943E-01
+# Minimization at step:    12 with Value:     0.0880Tol(Act/Req):0.5111E-02/0.1000E-04
+# With parameters(tra.):    -0.1252E-02   -0.6507E-03    0.1383E-02
+# With parameters(rot.):     0.3799E-01   -0.1346E-01    0.3799E-01
+# Minimization at step:    13 with Value:     0.0880Tol(Act/Req):0.4851E-02/0.1000E-04
+# With parameters(tra.):     0.8431E-03   -0.5041E-03    0.3928E-02
+# With parameters(rot.):     0.3443E-01   -0.7548E-02    0.3443E-01
+# Minimization at step:    14 with Value:     0.0880Tol(Act/Req):0.4655E-02/0.1000E-04
+# With parameters(tra.):     0.2875E-02   -0.2194E-02    0.1155E-02
+# With parameters(rot.):     0.3468E-01   -0.5864E-02    0.3468E-01
+# Minimization at step:    15 with Value:     0.0879Tol(Act/Req):0.4420E-02/0.1000E-04
+# With parameters(tra.):     0.2520E-02   -0.2372E-02    0.2882E-03
+# With parameters(rot.):     0.3559E-01   -0.7200E-02    0.3559E-01
+# Minimization at step:    16 with Value:     0.0879Tol(Act/Req):0.4296E-02/0.1000E-04
+# With parameters(tra.):     0.9080E-03   -0.1148E-02    0.2151E-02
+# With parameters(rot.):     0.3563E-01   -0.8798E-02    0.3563E-01
+# Minimization at step:    17 with Value:     0.0879Tol(Act/Req):0.3721E-02/0.1000E-04
+# With parameters(tra.):     0.1120E-02    0.1757E-02    0.1528E-02
+# With parameters(rot.):     0.3406E-01   -0.6586E-02    0.3406E-01
+# Minimization at step:    18 with Value:     0.0878Tol(Act/Req):0.1331E-02/0.1000E-04
+# With parameters(tra.):     0.4086E-03    0.1011E-02    0.2149E-02
+# With parameters(rot.):     0.3216E-01   -0.4126E-04    0.3216E-01
+# Minimization at step:    19 with Value:     0.0878Tol(Act/Req):0.1329E-02/0.1000E-04
+# With parameters(tra.):    -0.1004E-02    0.1784E-02    0.1034E-02
+# With parameters(rot.):     0.3284E-01   -0.3277E-03    0.3284E-01
+# Minimization at step:    20 with Value:     0.0878Tol(Act/Req):0.1244E-02/0.1000E-04
+# With parameters(tra.):    -0.8949E-03    0.1824E-02    0.6306E-03
+# With parameters(rot.):     0.3260E-01    0.6444E-03    0.3260E-01
+# Minimization at step:    21 with Value:     0.0878Tol(Act/Req):0.1139E-02/0.1000E-04
+# With parameters(tra.):     0.1921E-03    0.1255E-02    0.1366E-02
+# With parameters(rot.):     0.3203E-01    0.1102E-02    0.3203E-01
+# Minimization at step:    22 with Value:     0.0878Tol(Act/Req):0.7430E-03/0.1000E-04
+# With parameters(tra.):     0.7946E-04    0.7290E-03    0.1456E-02
+# With parameters(rot.):     0.3212E-01    0.1374E-02    0.3212E-01
+# Minimization at step:    23 with Value:     0.0878Tol(Act/Req):0.4009E-03/0.1000E-04
+# With parameters(tra.):     0.3529E-03    0.1031E-02    0.9724E-03
+# With parameters(rot.):     0.3306E-01   -0.1544E-02    0.3306E-01
+# Minimization at step:    24 with Value:     0.0878Tol(Act/Req):0.3597E-03/0.1000E-04
+# With parameters(tra.):     0.9876E-03    0.8480E-03    0.2793E-03
+# With parameters(rot.):     0.3274E-01   -0.3296E-03    0.3274E-01
+# Minimization at step:    25 with Value:     0.0878Tol(Act/Req):0.3562E-03/0.1000E-04
+# With parameters(tra.):     0.5281E-03    0.1092E-02   -0.5727E-03
+# With parameters(rot.):     0.3335E-01   -0.1112E-02    0.3335E-01
+# Minimization at step:    26 with Value:     0.0878Tol(Act/Req):0.3419E-03/0.1000E-04
+# With parameters(tra.):     0.3311E-03    0.1158E-02   -0.4705E-03
+# With parameters(rot.):     0.3349E-01   -0.1481E-02    0.3349E-01
+# Minimization at step:    27 with Value:     0.0878Tol(Act/Req):0.3208E-03/0.1000E-04
+# With parameters(tra.):     0.6265E-03    0.9916E-03    0.1941E-03
+# With parameters(rot.):     0.3306E-01   -0.9863E-03    0.3306E-01
+# Minimization at step:    28 with Value:     0.0878Tol(Act/Req):0.2291E-03/0.1000E-04
+# With parameters(tra.):     0.5835E-03    0.2700E-04   -0.4588E-04
+# With parameters(rot.):     0.3355E-01   -0.1229E-02    0.3355E-01
+# Minimization at step:    29 with Value:     0.0878Tol(Act/Req):0.1916E-03/0.1000E-04
+# With parameters(tra.):     0.5044E-03   -0.3752E-03   -0.5872E-04
+# With parameters(rot.):     0.3321E-01    0.3090E-03    0.3321E-01
+# Minimization at step:    30 with Value:     0.0878Tol(Act/Req):0.1160E-03/0.1000E-04
+# With parameters(tra.):     0.5086E-03   -0.1676E-03    0.2120E-06
+# With parameters(rot.):     0.3305E-01    0.4978E-03    0.3305E-01
+# Minimization at step:    31 with Value:     0.0878Tol(Act/Req):0.1127E-03/0.1000E-04
+# With parameters(tra.):     0.2575E-03   -0.3998E-03    0.2713E-03
+# With parameters(rot.):     0.3314E-01    0.4393E-03    0.3314E-01
+# Minimization at step:    32 with Value:     0.0878Tol(Act/Req):0.8140E-04/0.1000E-04
+# With parameters(tra.):     0.1775E-03   -0.4880E-03    0.1669E-03
+# With parameters(rot.):     0.3322E-01    0.4756E-03    0.3322E-01
+# Minimization at step:    33 with Value:     0.0878Tol(Act/Req):0.7056E-04/0.1000E-04
+# With parameters(tra.):     0.2367E-03   -0.6506E-03    0.2226E-03
+# With parameters(rot.):     0.1096E-01    0.6342E-03    0.4430E-01
+# Minimization at step:    34 with Value:     0.0878Tol(Act/Req):0.6954E-04/0.1000E-04
+# With parameters(tra.):     0.2002E-03   -0.4743E-03    0.3249E-03
+# With parameters(rot.):     0.3781E-02   -0.2828E-03    0.4823E-01
+# Minimization at step:    35 with Value:     0.0878Tol(Act/Req):0.5931E-04/0.1000E-04
+# With parameters(tra.):     0.1823E-03   -0.4189E-03    0.3195E-03
+# With parameters(rot.):     0.8747E-02   -0.3988E-03    0.4578E-01
+# Minimization at step:    36 with Value:     0.0878Tol(Act/Req):0.4215E-04/0.1000E-04
+# With parameters(tra.):     0.1070E-03   -0.1703E-03    0.4878E-03
+# With parameters(rot.):     0.2441E-02   -0.3397E-03    0.4874E-01
+# Minimization at step:    37 with Value:     0.0878Tol(Act/Req):0.3987E-04/0.1000E-04
+# With parameters(tra.):     0.1363E-03   -0.1125E-03    0.4606E-03
+# With parameters(rot.):    -0.1327E-03   -0.3949E-03    0.5002E-01
+# Minimization at step:    38 with Value:     0.0878Tol(Act/Req):0.3800E-04/0.1000E-04
+# With parameters(tra.):     0.1516E-03   -0.1682E-03    0.4035E-03
+# With parameters(rot.):     0.5745E-02    0.4847E-03    0.4669E-01
+# Minimization at step:    39 with Value:     0.0878Tol(Act/Req):0.3680E-04/0.1000E-04
+# With parameters(tra.):    -0.1705E-04   -0.2381E-03    0.2737E-03
+# With parameters(rot.):    -0.3257E-02    0.5604E-03    0.5134E-01
+# Minimization at step:    40 with Value:     0.0878Tol(Act/Req):0.2652E-04/0.1000E-04
+# With parameters(tra.):    -0.3492E-04   -0.2300E-03    0.2772E-03
+# With parameters(rot.):    -0.5476E-02    0.3469E-03    0.5256E-01
+# Minimization at step:    41 with Value:     0.0878Tol(Act/Req):0.2351E-04/0.1000E-04
+# With parameters(tra.):     0.5747E-05   -0.2118E-03    0.3099E-03
+# With parameters(rot.):    -0.3411E-02    0.3101E-03    0.5150E-01
+# Minimization at step:    42 with Value:     0.0878Tol(Act/Req):0.2095E-04/0.1000E-04
+# With parameters(tra.):    -0.8879E-04   -0.3209E-04    0.2959E-03
+# With parameters(rot.):     0.2469E-02    0.3144E-03    0.4852E-01
+# Minimization at step:    43 with Value:     0.0878Tol(Act/Req):0.1654E-04/0.1000E-04
+# With parameters(tra.):    -0.1001E-03   -0.1219E-03    0.1639E-03
+# With parameters(rot.):     0.5629E-02    0.4483E-03    0.4699E-01
+# Minimization at step:    44 with Value:     0.0878Tol(Act/Req):0.1596E-04/0.1000E-04
+# With parameters(tra.):    -0.1203E-03   -0.9348E-05    0.1068E-04
+# With parameters(rot.):     0.2403E-02    0.6191E-03    0.4855E-01
+# Minimization at step:    45 with Value:     0.0878Tol(Act/Req):0.1400E-04/0.1000E-04
+# With parameters(tra.):    -0.9926E-04   -0.5239E-04   -0.9595E-05
+# With parameters(rot.):     0.9273E-03    0.6434E-03    0.4930E-01
+# Minimization at step:    46 with Value:     0.0878Tol(Act/Req):0.1266E-04/0.1000E-04
+# With parameters(tra.):    -0.9246E-04   -0.8410E-04    0.2701E-04
+# With parameters(rot.):     0.1611E-02    0.6028E-03    0.4897E-01
+# Minimization at step:    47 with Value:     0.0878Tol(Act/Req):0.1027E-04/0.1000E-04
+# With parameters(tra.):    -0.1474E-03   -0.1924E-04   -0.4946E-04
+# With parameters(rot.):    -0.4658E-03    0.2609E-03    0.5021E-01
+# Minimization at step:    48 with Value:     0.0878Tol(Act/Req):0.9944E-05/0.1000E-04
+# With parameters(tra.):    -0.1171E-03    0.8124E-04   -0.1038E-03
+# With parameters(rot.):     0.4647E-02    0.1710E-03    0.4766E-01
+# CSM Values after z minimization.
+# Final Number of optim. Steps:    48
+#      Before min is:      0.08777444303
+# Final CSM Simplex Value is:      0.08777503737
+# CSM Summary.
+#    Inizial CSM Value is:      0.08777444303
+#   After optimization is:      0.08777503737
+#          Along x axe is:      0.08777503737
+#          Along y axe is:      0.08777503737
+#          Along z axe is:      0.08777503737
+# The Lowest CSM Value is:      0.08777444303
+#    Obtained CSM in % is:      8.77744430254
