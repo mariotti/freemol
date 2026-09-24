@@ -88,7 +88,7 @@ cd "$FREEMOL_DIR"
 ./config/makeprograms programs > programs/Makefile
 # `make programs` alone doesn't reliably rebuild the MODFILES chain (the
 # legacy submake for one lib can leave another lib's .mod stale/missing),
-# so rebuild the full chain as build_all.sh does.
+# so rebuild the full library chain explicitly (skips helpdocs, unneeded here).
 make others includes utilities moduledata modules programs
 
 exe="$FREEMOL_DIR/bin/$PROG.exe"

@@ -64,11 +64,7 @@ We have indeed travisCI working for the compilation step: the code compiles.
 ## Build
     cd Freemol
     ./config/configure m_generic_linux gfortran $PWD   # macOS: m_generic_osx
-    make others includes utilities moduledata modules programs
-
-`make freemol` (the top-level target) currently fails at its last step,
-building helpdocs: `Freemol/help` has no Makefile. The command above builds
-everything that step depends on, i.e. all the libraries and programs.
+    make freemol
 
 `adfrom` is skipped by design: it needs the commercial ADF libraries, which
 aren't part of this repository.
