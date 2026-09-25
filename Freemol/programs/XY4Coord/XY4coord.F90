@@ -632,7 +632,7 @@ contains
     !
     ! H4 test
     if (chkdebug) call message_value(MESLOG,"[XY4C][CHECK] Gamma Sum for atom Y4:",acagam(7)+acagam(8)+acagam(10))
-    if ((acagam(2)+acagam(3)+acagam(12)).gt.(2.0_FREAL*LPI)) then
+    if ((acagam(7)+acagam(8)+acagam(10)).gt.(2.0_FREAL*LPI)) then
           call message(MESERRO,"[XY4C]: Gamma Sum bigger then 180 for Y atom 4:")
           call message_value(MESLOG,"[XY4C][CHECK] Gamma Sum for atom Y4:",acagam(7)+acagam(8)+acagam(10))
           do_checks=-1
