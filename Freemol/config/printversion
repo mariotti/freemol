@@ -52,9 +52,9 @@
 #
 progname="Freemol2000";
 authors="F.Mariotti, C.Daul";
-vernum="2026.09.26.01";
-vernumdist="2026.09.26.01";
-distnum="1.2.0";
+vernum="2026.09.26.02";
+vernumdist="2026.09.26.02";
+distnum="1.2.1";
 #
 verstring="$progname by $authors - Version: $vernumdist/$distnum";
 #
