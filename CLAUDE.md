@@ -45,26 +45,27 @@ rebuild from scratch rather than debugging further.
   ch4sym2cart's r/angle grouping of these 10 fields is NOT the same as
   XY4Coord's, despite identical field names/order).
 - XY4Coord: data/XY4Coord/tests/ch4_s1.inp, equilibrium.inp +
-  {s2x,s2y,s2z}_only.inp (pass) and {s2a,s2b,s4x}_only.inp (known-issue
-  regressions, see below).
+  {s2x,s2y,s2z}_only.inp (pass directly) and
+  {s2a,s2b,s4x,s4y,s4z}_only.inp (pass via the Sr redundancy solve, see
+  run_smoke.sh's xy4coord_redundancy_selfcheck).
 - XY4PolySphere: data/XY4PolySphere/tests/ch4_poly.inp, ch4_poly_random.inp
 - tools/CSMD/*.m are Octave (not MATLAB) scripts.
 
 ## Known issues (see README.md for the full evidence, PRECISION_NOTES.md
 for the numerical mechanism behind the do_checks() one and other
 compiler-noise findings from CI)
-- XY4Coord: every angular-type displacement (S2a, S2b, S4x, S4y, S4z, Sr)
-  fails one of two self-checks -- S2a/S2b fail get_cart's Cartesian
-  check (root cause traced to the H4 sign-disambiguation block, not
-  proven); S4x/S4y/S4z/Sr fail the earlier do_checks() Gamma Sum
-  validation (root cause proven: zero-tolerance boundary check on a
-  quantity that must equal exactly 2*pi, defeated by both float noise
-  and a real displacement-squared defect of the linear da() angle
-  formula -- fixing needs a deliberately-chosen tolerance, not
-  attempted). A related copy-paste bug (H4 test checking H2's formula)
-  was fixed without a test -- proven to have no effect on do_checks()'s
-  verdict for any reachable input, see README. Radial-type
-  displacements (S1, S2x, S2y, S2z) all pass.
+- XY4Coord: angular-type displacements (S2a, S2b, S4x, S4y, S4z) all pass
+  now -- were broken (eval_sr's redundancy solve used a cosine-based Sr
+  from an unavailable paper, while get_ra/get_symc use a
+  radian-displacement-based Sr), fixed by root-finding Sr directly
+  against do_checks()'s own Gamma-Sum closure condition instead
+  (XY4coord.F90, see PRECISION_NOTES.md section 3). Radial-type
+  displacements (S1, S2x, S2y, S2z) pass too, as before. `Sr` alone is
+  still expected to fail (geometrically impossible, not a bug -- raising
+  all six angles together violates the bond-vectors' Gram matrix
+  positive-semidefiniteness). A related copy-paste bug (H4 test checking
+  H2's formula) was fixed without a test -- proven to have no effect on
+  do_checks()'s verdict for any reachable input, see README.
 - ch4sym2cart's "Unchenged Coordina..." diagnostic lines are
   geometrically wrong (missing a degrees->radians conversion);
   diagnostic-only output, not fixed.

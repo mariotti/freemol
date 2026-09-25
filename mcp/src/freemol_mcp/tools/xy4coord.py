@@ -11,20 +11,26 @@ from ..citation import Citation
 from ..molecule import CH4_REFERENCE, Atom, format_molecule_section
 
 CITATION = Citation(
-    routine="get_ra + get_cart",
+    routine="get_ra + get_cart, plus eval_sr's redundancy solve when the "
+    "direct displacement needs it",
     file="Freemol/programs/XY4Coord/XY4coord.F90",
     line_start=244,
     line_end=273,
     note=(
-        "Self-check at XY4coord.F90:756-763. See README.md's Known "
-        "Issues: a pure angle displacement (s2a only, no bond-length "
-        "change) can still fail this self-check -- root cause traced "
-        "but not fixed. This tool surfaces that as an error rather than "
-        "returning a result the program itself flagged as wrong."
+        "Pure-angle displacements (s2a/s2b/s4x/s4y/s4z) leave a "
+        "second-order residual the direct Sr=0 input can't satisfy on "
+        "its own -- expected, see PRECISION_NOTES.md section 3. "
+        "XY4Coord's own redundancy solve (eval_sr(), "
+        "XY4coord.F90:1361-1417) finds the Sr that resolves it; this "
+        "tool falls back to that solution when the direct check fails, "
+        "and reports the Sr value it found. Raising Sr alone (with no "
+        "other displacement) is geometrically impossible and still "
+        "returns an error -- see README.md's Known issues."
     ),
 )
 
 _ROW_RE = re.compile(r"((?:\s+-?\d+\.\d+){10})")
+_SR_VALUE_RE = re.compile(r"Sr Value:\s*(-?\d+\.\d+)")
 
 
 def _row_after(marker: str, text: str) -> list[float]:
@@ -69,8 +75,12 @@ def xy4coord_apply_displacement(
     """Apply a symmetric-coordinate displacement to an XY4-type reference
     geometry and return the displaced Cartesian coordinates, via
     XY4Coord's get_ra/get_cart path with the requested Sr taken directly
-    (not the "Generate Redundancies" solution search that follows it in
-    the program -- that's not exposed by this tool).
+    when that's already self-consistent (the common case for radial
+    displacements), or via XY4Coord's own "Generate Redundancies" ->
+    eval_sr() solve when it isn't (pure-angle displacements leave a
+    second-order residual the direct Sr can't satisfy on its own -- see
+    the citation note). Either way, the response's "sr_used" field says
+    which Sr the returned geometry actually corresponds to.
 
     s1, s2x/s2y/s2z, s2a/s2b, s4x/s4y/s4z, sr: the 10
     [x-xy4-symmcoord] values in the program's own order (S1, S2x, S2y,
@@ -96,38 +106,54 @@ def xy4coord_apply_displacement(
             "citation": CITATION.as_dict(),
         }
 
-    # Only look at the part of stdout before "Generate Redundancies":
-    # errors after that point are about unphysical Sr branches, unrelated
-    # to whether *this* requested displacement is valid.
     stdout = result.stdout
+
+    # Fast path: the direct displacement (requested Sr taken as-is)
+    # already self-consistent -- the common case for radial (S1/S2x/S2y/
+    # S2z) displacements, and for Sr=0 with nothing else displaced.
     prefix = stdout.split("Generate Redundancies", 1)[0]
+    if "Check OK at Sr input value" in prefix:
+        return _parse_solution_block(prefix, requested_sr=sr, sr_found=sr)
 
-    if "Error in Cartesian routine" in prefix:
-        return {
-            "error": (
-                "XY4Coord's self-check failed for this displacement "
-                "(it printed 'Error in Cartesian routine' -- the "
-                "requested internal coordinates and the coordinates it "
-                "actually built from them didn't match within "
-                "tolerance). This can happen for pure-angle "
-                "displacements; see the citation note."
-            ),
-            "stdout": prefix,
-            "citation": CITATION.as_dict(),
-        }
-    if "Check OK at Sr input value" not in prefix:
-        return {
-            "error": "did not find 'Check OK at Sr input value' in output",
-            "stdout": prefix,
-            "citation": CITATION.as_dict(),
-        }
-
-    bonds_angles = _row_after(
-        "Displaced Coordinates from SymCoord: Bonds and Angles (GRAD).", prefix
-    )
-    cartesian = _parse_xyz_block(prefix)
+    # Fallback: the direct displacement leaves a second-order residual
+    # (expected for pure-angle displacements -- see the citation note).
+    # XY4Coord's own redundancy solve tries corrected Sr candidates
+    # after "Generate Redundancies", computed from s2a/s2b/s4x/s4y/s4z
+    # alone -- it does NOT know or care what Sr was originally
+    # requested, so if the caller asked for a specific nonzero Sr and
+    # this path is reached, the returned geometry may correspond to a
+    # different Sr than requested. _parse_solution_block flags that
+    # explicitly rather than silently substituting one displacement for
+    # another.
+    for block in stdout.split("# [XY4C] Checking Solution: ")[1:]:
+        if "Check OK at Sr solution" not in block:
+            continue
+        m = _SR_VALUE_RE.search(block)
+        sr_found = float(m.group(1)) if m else None
+        return _parse_solution_block(block, requested_sr=sr, sr_found=sr_found)
 
     return {
+        "error": (
+            "XY4Coord could not find a self-consistent geometry for this "
+            "displacement, either directly or via its Sr redundancy "
+            "solve. If this is a pure Sr displacement (raising all six "
+            "angles together, nothing else set), that's expected -- see "
+            "README.md's Known issues."
+        ),
+        "stdout": stdout,
+        "citation": CITATION.as_dict(),
+    }
+
+
+def _parse_solution_block(
+    text: str, requested_sr: float, sr_found: float | None
+) -> dict:
+    bonds_angles = _row_after(
+        "Displaced Coordinates from SymCoord: Bonds and Angles (GRAD).", text
+    )
+    cartesian = _parse_xyz_block(text)
+
+    result = {
         "bonds": bonds_angles[0:4],
         "angles_degrees": {
             "a12": bonds_angles[4],
@@ -138,5 +164,25 @@ def xy4coord_apply_displacement(
             "a34": bonds_angles[9],
         },
         "cartesian": cartesian,
+        "requested_sr": requested_sr,
+        "sr_used": sr_found,
         "citation": CITATION.as_dict(),
     }
+    # Only worth flagging if the caller explicitly asked for a nonzero Sr
+    # (the default, 0.0, just means "let the redundancy solve pick one" --
+    # that's the normal case for pure-angle displacements, not a mismatch
+    # worth a note).
+    if (
+        requested_sr != 0.0
+        and sr_found is not None
+        and abs(sr_found - requested_sr) > 1.0e-6
+    ):
+        result["note"] = (
+            f"The requested sr ({requested_sr!r}) did not give a "
+            "self-consistent geometry on its own; this result uses the "
+            f"Sr XY4Coord's own redundancy solve found instead "
+            f"({sr_found!r}), computed from s2a/s2b/s4x/s4y/s4z alone "
+            "-- it may not be what you expect if you specifically "
+            "wanted that Sr value applied."
+        )
+    return result

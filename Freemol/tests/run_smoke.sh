@@ -301,29 +301,32 @@ check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2x_only.inp"
 check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2y_only.inp"
 check xy4coord_selfcheck "$DATA/XY4Coord/tests/s2z_only.inp"
 
-# Known issue (see README): every Sda-group (angular) displacement fails
-# one of get_cart's Cartesian self-check ("Error in Cartesian routine",
-# S2a/S2b) or the earlier do_checks() Gamma Sum validation ("Check not
-# Passed at Sr input value", S4x/S4y/S4z/Sr) -- confirmed for all 6, not
-# just S2a as originally documented. These tests pin down that documented
-# behavior so a change (fix or regression) gets noticed, rather than
-# asserting nothing ever changes.
-xy4coord_known_issue() {
-    local fixture="$1" expect="$2"
-    local workdir prefix
+# Sda-group (angular) displacements: S2a, S2b, S4x, S4y, S4z all leave a
+# second-order residual the direct Sr=0 input can't satisfy on its own
+# (expected -- see PRECISION_NOTES.md section 3), so unlike the
+# self-checks above, these are *not* required to pass before "Generate
+# Redundancies"; they're required to pass via it, at the Sr eval_sr()
+# actually finds. (Sr alone, pushing all six angles the same direction,
+# stays a separate, expected-by-design failure -- no fixture for it here.)
+xy4coord_redundancy_selfcheck() {
+    local fixture="$1"
+    local workdir
     workdir="$(mktemp -d)"
     "$BIN/XY4coord.exe" -i "$fixture" -o "$workdir/out" > "$workdir/stdout" 2>&1
-    prefix="$(sed '/Generate Redundancies/q' "$workdir/stdout")"
+    local stdout
+    stdout="$(cat "$workdir/stdout")"
     rm -rf "$workdir"
-    if ! grep -q "$expect" <<< "$prefix"; then
-        echo "  expected '$expect' before Generate Redundancies, didn't find it"
+    if ! grep -q "Check OK at Sr solution" <<< "$stdout"; then
+        echo "  no 'Check OK at Sr solution' found (redundancy solve didn't find a valid Sr)"
         return 1
     fi
     return 0
 }
-check xy4coord_known_issue "$DATA/XY4Coord/tests/s2a_only.inp" "Error in Cartesian routine"
-check xy4coord_known_issue "$DATA/XY4Coord/tests/s2b_only.inp" "Error in Cartesian routine"
-check xy4coord_known_issue "$DATA/XY4Coord/tests/s4x_only.inp" "Check not Passed at Sr input value"
+check xy4coord_redundancy_selfcheck "$DATA/XY4Coord/tests/s2a_only.inp"
+check xy4coord_redundancy_selfcheck "$DATA/XY4Coord/tests/s2b_only.inp"
+check xy4coord_redundancy_selfcheck "$DATA/XY4Coord/tests/s4x_only.inp"
+check xy4coord_redundancy_selfcheck "$DATA/XY4Coord/tests/s4y_only.inp"
+check xy4coord_redundancy_selfcheck "$DATA/XY4Coord/tests/s4z_only.inp"
 
 # --- Frimol -----------------------------------------------------------
 check "$BIN/Frimol.exe"
