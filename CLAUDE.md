@@ -55,8 +55,14 @@ rebuild from scratch rather than debugging further.
   fails one of two self-checks -- S2a/S2b fail get_cart's Cartesian
   check (root cause traced to the H4 sign-disambiguation block, not
   proven); S4x/S4y/S4z/Sr fail the earlier do_checks() Gamma Sum
-  validation (not investigated). Radial-type displacements (S1, S2x,
-  S2y, S2z) all pass.
+  validation (root cause proven: zero-tolerance boundary check on a
+  quantity that must equal exactly 2*pi, defeated by both float noise
+  and a real displacement-squared defect of the linear da() angle
+  formula -- fixing needs a deliberately-chosen tolerance, not
+  attempted). A related copy-paste bug (H4 test checking H2's formula)
+  was fixed without a test -- proven to have no effect on do_checks()'s
+  verdict for any reachable input, see README. Radial-type
+  displacements (S1, S2x, S2y, S2z) all pass.
 - ch4sym2cart's "Unchenged Coordina..." diagnostic lines are
   geometrically wrong (missing a degrees->radians conversion);
   diagnostic-only output, not fixed.

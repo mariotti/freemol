@@ -147,14 +147,49 @@ for how CI wires them together):
     sym data."` warning at line 747), not a wholesale failure of the
     angle path.
   - `S4x`, `S4y`, `S4z`, `Sr` fail an *earlier* check, `do_checks()`'s
-    "Gamma Sum bigger than 180 for Y atom N" validation, before
-    `get_cart` (the routine above) is even reached -- a different bug in
-    a different routine, not yet investigated to the same depth.
+    "Gamma Sum bigger than 180 for Y atom N" validation
+    (`XY4coord.F90:611-639`), before `get_cart` is even reached. Root
+    cause now understood, evidence-backed: each Gamma Sum must equal
+    exactly 2*pi for a mathematically valid vertex closure, and the
+    check compares against `2.0*LPI` with **zero tolerance**. Two
+    compounding effects push real inputs past that exact boundary: (1)
+    a few ULPs of floating-point noise in the cos -> divide -> acos ->
+    sum chain, present even at equilibrium; (2) a genuine,
+    displacement-*squared* defect inherent to representing angle
+    changes with a **linear** symmetry-coordinate formula (`get_ra`'s
+    `da(1:6)`, `XY4coord.F90:390-395`) -- confirmed empirically:
+    excess-over-2*pi for a range of `S4x` values fits `~38*S4x^2`
+    degrees almost exactly (37.4-39.7 across a 30x range in `S4x`),
+    vanishing into the floating-point noise floor once `S4x` drops
+    below ~0.001. `S1/S2x/S2y/S2z` never trip this because their `da()`
+    contribution is always zero -- angles never move at all, so there's
+    no defect to accumulate. A real fix would need a deliberately-chosen
+    tolerance (a design decision -- how large a displacement should the
+    linear approximation still be trusted for -- not a one-line
+    correction), so it hasn't been attempted here.
 
-  Not fixed either way: the `S2a`/`S2b` root cause is plausible but not
+    Investigating this also found a real, separate bug: the "H4 test"
+    block used the identical condition already used for the "H2 test"
+    two blocks above (`acagam(2)+acagam(3)+acagam(12)` instead of
+    `acagam(7)+acagam(8)+acagam(10)`, a copy-paste typo -- the
+    accompanying debug message right next to it already used the
+    correct formula). Fixed. No test was added: an exhaustive search
+    (800,000+ sampled `Sda` combinations, wide and boundary-focused,
+    every single displacement dimension alone) found no input where
+    this specific bug changes `do_checks()`'s overall pass/fail verdict
+    -- for this symmetric reference geometry, Y2's and Y4's Gamma Sums
+    take different numeric values but always land on the same side of
+    the 2*pi boundary, so Y1/Y2/Y3 already independently catch anything
+    Y4 alone would have. Fixed anyway on correctness grounds (it matches
+    the debug message beside it and the pattern of the other three
+    blocks); flagging the missing test explicitly rather than skipping
+    it silently.
+
+  Not fixed: the `S2a`/`S2b` `get_cart` root cause is plausible but not
   proven, and the ~25-year-old trigonometric derivation in that block
   would need a real re-derivation to fix with confidence rather than a
-  guess; the `do_checks()` path hasn't been diagnosed at all yet.
+  guess; the `do_checks()` zero-tolerance issue needs a deliberate
+  tolerance choice, not attempted here.
 
 - **ch4sym2cart: the "Unchenged Coordina..." diagnostic lines for H3/H4
   are geometrically wrong** (H2-C-H3 comes out around 33 degrees instead
