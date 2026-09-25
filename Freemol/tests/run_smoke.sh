@@ -58,6 +58,29 @@ for f in fit_debug.inp fit_debug_02.inp; do
     rm -rf "$wd"
 done
 
+# fit1Dpol's -o is optional (must default to stdout). finput/foutput used
+# to be plain locals with no `save`, so an omitted -o left foutput holding
+# uninitialized stack garbage instead of reliably blank -- printed
+# straight to the terminal, then failed to open as a filename ("Cannot
+# Open Output File"). Run with only -i and check the fit still converges
+# on stdout, with no such error.
+fit1dpol_default_output() {
+    local stdout
+    stdout="$("$BIN/fit1Dpol.exe" -i "$DATA/fit1Dpol/examples/fit.inp" 2>&1)"
+    if grep -q "Cannot Open Output File" <<< "$stdout"; then
+        echo "  'Cannot Open Output File' with -o omitted (should default to stdout)"
+        return 1
+    fi
+    local f2
+    f2="$(awk '/^ Par: f2 /{v=$3} END{print v}' <<< "$stdout")"
+    if [[ -z "$f2" ]]; then
+        echo "  no final f2 value found on stdout"
+        return 1
+    fi
+    python3 -c "import sys; sys.exit(0 if abs(float('$f2') - 1.0) < 1e-4 else 1)"
+}
+check fit1dpol_default_output
+
 # --- ch4sym2cart ----------------------------------------------------------
 # CH4, r=1.09, symmetric stretch S1=0.08 -> every bond length +0.01 == 1.1000,
 # and the tetrahedral H-C-H angle (109.47 deg) is preserved.
