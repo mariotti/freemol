@@ -8,6 +8,7 @@ from __future__ import annotations
 from mcp.server.mcpserver import MCPServer
 
 from .tools.ch4sym2cart import ch4sym2cart_apply_displacement
+from .tools.sections import list_freemol_sections, read_freemol_section
 from .tools.xy4coord import xy4coord_apply_displacement
 from .tools.xy4polysphere import xy4polysphere_to_cartesian
 
@@ -15,15 +16,18 @@ mcp = MCPServer(
     "freemol",
     instructions=(
         "Coordinate-transformation tools wrapping freemol's Fortran "
-        "programs (built from Freemol/bin/*.exe). Every result includes "
-        "a citation pointing at the exact routine, file:lines, freemol "
-        "version and commit that produced it."
+        "programs (built from Freemol/bin/*.exe), plus generic readers "
+        "for freemol's shared sectioned input-file format. Every result "
+        "includes a citation pointing at the exact routine, file:lines, "
+        "freemol version and commit it corresponds to."
     ),
 )
 
 mcp.tool()(xy4polysphere_to_cartesian)
 mcp.tool()(xy4coord_apply_displacement)
 mcp.tool()(ch4sym2cart_apply_displacement)
+mcp.tool()(list_freemol_sections)
+mcp.tool()(read_freemol_section)
 
 
 def main() -> None:

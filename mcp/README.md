@@ -15,6 +15,16 @@ numerics in Python. It calls the same built binaries
 (`Freemol/bin/*.exe`) that `Freemol/tests/run_smoke.sh` regression-tests
 in CI.
 
+Two more tools, `list_freemol_sections` and `read_freemol_section`, give
+generic access to the `[section-name]` input-file format every program
+above reads (see the root README's
+["Sectioned input files"](../README.md#sectioned-input-files-an-old-ini-style-format-from-before-molden)
+section). These are a genuine exception to the "no numerics
+reimplemented" rule above -- there's no floating point involved, just
+text scanning, so they're a direct Python mirror of `osec_set`'s
+scanning convention rather than a subprocess call, and don't need
+freemol built at all.
+
 ## Build freemol first
 
 These tools need `Freemol/bin/{XY4PolySphere,XY4coord,ch4sym2cart}.exe`

@@ -71,11 +71,15 @@ compiler-noise findings from CI)
 
 ## mcp/ (Python MCP server, not Fortran)
 Wraps XY4PolySphere/XY4Coord/ch4sym2cart's built binaries as MCP tools
-(subprocess + parse output; no numerics reimplemented). The "don't change
-Fortran except to fix a bug" rule above doesn't apply here -- it's a
-separate Python package. Has its own tests (`mcp/tests/`, pytest) run in
-CI as the `mcp` job; needs `Freemol/bin/*.exe` built first. See
-`mcp/README.md`.
+(subprocess + parse output; no numerics reimplemented), plus
+list_freemol_sections/read_freemol_section: a pure-Python mirror of
+osec_set's [section-name] scanning convention (no binary involved --
+text scanning isn't numerics -- so these two work without Freemol/bin
+built). The "don't change Fortran except to fix a bug" rule above
+doesn't apply here -- it's a separate Python package. Has its own tests
+(`mcp/tests/`, pytest) run in CI as the `mcp` job; the three
+binary-wrapping tools need `Freemol/bin/*.exe` built first, the two
+section tools don't. See `mcp/README.md`.
 
 ## Versioning and releases
 Semver via git tags (`v1.1.1` is current). `Freemol/config/printversion`'s
