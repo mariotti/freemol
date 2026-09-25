@@ -128,21 +128,33 @@ for how CI wires them together):
 
 ## Known issues
 
-- **XY4Coord: pure angle displacement fails its own Cartesian self-check.**
-  With only `S2a` set (e.g. `0.0 0.0 0.0 0.0 0.03 0.0 0.0 0.0 0.0 0.0` in
-  `[x-xy4-symmcoord]`, no bond-length change), the self-check at
-  `XY4coord.F90:756-763` reports "Error in Cartesian routine". The
-  evidence points at one specific angle: of the 6 computed angles, 5
-  match the expected value exactly, and only `ryxy(6)` (the angle between
-  H3 and H4, i.e. atoms `mxyz(:,4)` and `mxyz(:,5)`) is off (~112.5 deg
-  computed vs ~110.5 deg expected). H4's angles to H1 and H2 are both
-  correct, which points specifically at the ad-hoc sign disambiguation
-  for H4's position (`XY4coord.F90:697-736`, the block that ends with the
-  code's own `"Assumed signed 'sin'. It can be inconsistent with input
-  sym data."` warning at line 747) rather than a wholesale failure of the
-  angle path. Not fixed: the root cause is plausible but not proven, and
-  the ~25-year-old trigonometric derivation in that block would need a
-  real re-derivation to fix with confidence rather than a guess.
+- **XY4Coord: every angular displacement fails its own self-checks.**
+  `[x-xy4-symmcoord]`'s 10 values split into two groups by what they
+  actually move: `S1, S2x, S2y, S2z` change bond lengths unevenly while
+  leaving all 6 angles at the tetrahedral 109.4712 (all four pass);
+  `S2a, S2b, S4x, S4y, S4z, Sr` leave all 4 bonds at the reference 1.0900
+  while perturbing angles -- and every one of those six currently fails,
+  confirmed individually for all six, not just `S2a` as originally found.
+  Two distinct failure paths:
+  - `S2a`, `S2b` fail the Cartesian self-check at `XY4coord.F90:756-763`
+    ("Error in Cartesian routine"). Both show the *same specific*
+    signature: of the 6 computed angles, 5 match exactly, and only
+    `ryxy(6)` (the angle between H3 and H4, atoms `mxyz(:,4)` and
+    `mxyz(:,5)`) is off. That repeatability across two different inputs
+    reinforces the same diagnosis: the ad-hoc sign disambiguation for
+    H4's position (`XY4coord.F90:697-736`, the block that ends with the
+    code's own `"Assumed signed 'sin'. It can be inconsistent with input
+    sym data."` warning at line 747), not a wholesale failure of the
+    angle path.
+  - `S4x`, `S4y`, `S4z`, `Sr` fail an *earlier* check, `do_checks()`'s
+    "Gamma Sum bigger than 180 for Y atom N" validation, before
+    `get_cart` (the routine above) is even reached -- a different bug in
+    a different routine, not yet investigated to the same depth.
+
+  Not fixed either way: the `S2a`/`S2b` root cause is plausible but not
+  proven, and the ~25-year-old trigonometric derivation in that block
+  would need a real re-derivation to fix with confidence rather than a
+  guess; the `do_checks()` path hasn't been diagnosed at all yet.
 
 - **ch4sym2cart: the "Unchenged Coordina..." diagnostic lines for H3/H4
   are geometrically wrong** (H2-C-H3 comes out around 33 degrees instead

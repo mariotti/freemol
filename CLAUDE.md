@@ -40,15 +40,23 @@ rebuild from scratch rather than debugging further.
   self-generated baseline, only proves reproducibility going forward,
   see run_csmg_regression.sh's header comment).
 - fit1Dpol: data/fit1Dpol/examples/*.inp
-- ch4sym2cart: data/ch4sym2cart/tests/ch4_s1.inp
-- XY4Coord: data/XY4Coord/tests/ch4_s1.inp, equilibrium.inp
+- ch4sym2cart: data/ch4sym2cart/tests/ch4_s1.inp + {s2x,s2y,s2z,s2a,s2b,
+  s4x,s4y,s4z,sr}_only.inp (one displacement dimension each -- note
+  ch4sym2cart's r/angle grouping of these 10 fields is NOT the same as
+  XY4Coord's, despite identical field names/order).
+- XY4Coord: data/XY4Coord/tests/ch4_s1.inp, equilibrium.inp +
+  {s2x,s2y,s2z}_only.inp (pass) and {s2a,s2b,s4x}_only.inp (known-issue
+  regressions, see below).
 - XY4PolySphere: data/XY4PolySphere/tests/ch4_poly.inp, ch4_poly_random.inp
 - tools/CSMD/*.m are Octave (not MATLAB) scripts.
 
 ## Known issues (see README.md for the full evidence)
-- XY4Coord fails its own Cartesian self-check for a pure angle
-  displacement (S2a only, no bond-length change); root cause traced to
-  the H4 sign-disambiguation block but not proven, so not fixed.
+- XY4Coord: every angular-type displacement (S2a, S2b, S4x, S4y, S4z, Sr)
+  fails one of two self-checks -- S2a/S2b fail get_cart's Cartesian
+  check (root cause traced to the H4 sign-disambiguation block, not
+  proven); S4x/S4y/S4z/Sr fail the earlier do_checks() Gamma Sum
+  validation (not investigated). Radial-type displacements (S1, S2x,
+  S2y, S2z) all pass.
 - ch4sym2cart's "Unchenged Coordina..." diagnostic lines are
   geometrically wrong (missing a degrees->radians conversion);
   diagnostic-only output, not fixed.
