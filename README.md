@@ -270,7 +270,13 @@ routine, file:lines, freemol version, and a GitHub permalink pinned to the
 commit that ran) so results trace back to the original Fortran. Currently
 wraps `XY4PolySphere` (polyspherical -> Cartesian), `XY4Coord` and
 `ch4sym2cart` (symmetric displacement -> Cartesian); `fit1Dpol` and `CSMG`
-aren't wrapped yet. See [`mcp/README.md`](mcp/README.md) to build and run
+aren't wrapped yet. Two further tools, `list_freemol_sections` and
+`read_freemol_section`, give generic access to the
+[sectioned input format](#sectioned-input-files-an-old-ini-style-format-from-before-molden)
+itself rather than any one program -- these are a Python mirror of
+`osec_set`'s scanning convention (there's no numerics in listing/reading
+section text, so no binary is involved, and they work without freemol
+even being built). See [`mcp/README.md`](mcp/README.md) to build and run
 it.
 
 ### Example prompts
@@ -317,6 +323,12 @@ written down:
   Calls `xy4coord_apply_displacement` again; this is the documented Known
   Issue above, and the tool returns a clear error explaining the
   self-check failed, rather than silently returning wrong coordinates.
+
+- *"What sections does `Freemol/data/CSMG/tests/G_C1.mld` have, and what's
+  in the symmetry-operations one?"*
+  Calls `list_freemol_sections` (finds `molecule`, `x-csmg-cgauss`,
+  `x-csmg-symop`) then `read_freemol_section` on `x-csmg-symop`; no need
+  to know CSMG's own format in advance, or for freemol to even be built.
 
 ## Adding a program
 
