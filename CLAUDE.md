@@ -50,7 +50,9 @@ rebuild from scratch rather than debugging further.
 - XY4PolySphere: data/XY4PolySphere/tests/ch4_poly.inp, ch4_poly_random.inp
 - tools/CSMD/*.m are Octave (not MATLAB) scripts.
 
-## Known issues (see README.md for the full evidence)
+## Known issues (see README.md for the full evidence, PRECISION_NOTES.md
+for the numerical mechanism behind the do_checks() one and other
+compiler-noise findings from CI)
 - XY4Coord: every angular-type displacement (S2a, S2b, S4x, S4y, S4z, Sr)
   fails one of two self-checks -- S2a/S2b fail get_cart's Cartesian
   check (root cause traced to the H4 sign-disambiguation block, not
@@ -76,7 +78,7 @@ CI as the `mcp` job; needs `Freemol/bin/*.exe` built first. See
 `mcp/README.md`.
 
 ## Versioning and releases
-Semver via git tags (`v1.0.0` is current). `Freemol/config/printversion`'s
+Semver via git tags (`v1.1.0` is current). `Freemol/config/printversion`'s
 `distnum` (and `vernum`/`vernumdist`) should be bumped to match before
 tagging a new release. Pushing a `v*.*.*` tag (or a manual
 `workflow_dispatch`) runs `.github/workflows/release.yml`, publishing

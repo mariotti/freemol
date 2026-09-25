@@ -45,7 +45,9 @@ that's worth calling out rather than losing in a pile of `real*8`:
   zero regression coverage before. Either way, it's not a claim, it's a
   passing test you can rerun yourself. (See [Known issues](#known-issues)
   below for the places numerics *aren't* solid yet -- being honest about
-  those is part of the same discipline.)
+  those is part of the same discipline. [PRECISION_NOTES.md](PRECISION_NOTES.md)
+  goes deeper: real compiler-noise findings from CI and the numerical
+  mechanism behind the do_checks() issue below.)
 
 ## Copyright notice/Licences: Please read this
 Please note that some code lines might be a copy of other sources,
@@ -166,7 +168,9 @@ for how CI wires them together):
     no defect to accumulate. A real fix would need a deliberately-chosen
     tolerance (a design decision -- how large a displacement should the
     linear approximation still be trusted for -- not a one-line
-    correction), so it hasn't been attempted here.
+    correction), so it hasn't been attempted here. See
+    [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-do_checks-a-zero-tolerance-check-on-a-value-that-must-be-exact-undermined-by-a-real-quadratic-defect)
+    for the full numerical write-up.
 
     Investigating this also found a real, separate bug: the "H4 test"
     block used the identical condition already used for the "H2 test"
