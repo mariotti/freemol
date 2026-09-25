@@ -83,7 +83,7 @@ binary-wrapping tools need `Freemol/bin/*.exe` built first, the two
 section tools don't. See `mcp/README.md`.
 
 ## Versioning and releases
-Semver via git tags (`v1.1.1` is current). `Freemol/config/printversion`'s
+Semver via git tags (`v1.2.0` is current). `Freemol/config/printversion`'s
 `distnum` (and `vernum`/`vernumdist`) should be bumped to match before
 tagging a new release. Pushing a `v*.*.*` tag (or a manual
 `workflow_dispatch`) runs `.github/workflows/release.yml`, publishing
