@@ -401,6 +401,20 @@ contains
     ! Some defaults
     f1dp_iunin=5
     f1dp_iunout=6
+    ! finput/foutput are plain locals (no `save`), so unlike the other
+    ! programs' equivalent variables they are NOT reliably blank at
+    ! entry -- pcmd_getio only writes to them if -i/-o is actually given
+    ! (intent(inout)), so an omitted flag left them holding whatever
+    ! garbage was already on the stack, printed straight to the terminal
+    ! by the debug messages below. Blank-initialize them explicitly
+    ! (below); the "is this blank -> default to stdin/stdout" checks
+    ! further down use len_trim(), not scan(...," ").eq.0, precisely so
+    ! this blank initialization is what they actually detect -- scanning
+    ! an all-blank string for a blank character finds one immediately
+    ! (position 1), so the original scan-based check would never have
+    ! recognized a properly blank-initialized, omitted filename either.
+    finput = ' '
+    foutput = ' '
     !
     ! Use the command line facility
     !------------------------------
@@ -422,7 +436,7 @@ contains
     ! We open the input and output files
     !-----------------------------------
     finput = trim(finput)
-    if(scan(finput," ").eq.0) then
+    if(len_trim(finput).eq.0) then
        f1dp_iunin = 5
        finput = "stdin"
     else
@@ -442,7 +456,7 @@ contains
     end if
     !
     foutput = trim(foutput)
-    if(scan(foutput," ").eq.0) then
+    if(len_trim(foutput).eq.0) then
        f1dp_iunout = 6
        foutput = "stdout"
     else
