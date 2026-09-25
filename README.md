@@ -59,11 +59,17 @@ This is old code, but precision was taken seriously from the start, and
 that's worth calling out rather than losing in a pile of `real*8`:
 
 - **Kind-parametrised types.** `Freemol/includes/vartypes.F90` defines
-  `FREAL = kind(1.0d0)`, and every real literal in the codebase is written
-  `..._FREAL` rather than a bare double. Changing precision is a one-line
-  decision, not a search-and-replace across the source. (`SREAL` and
-  `BREAL` are defined alongside `FREAL` for future differentiation --
-  today all three happen to resolve to the same double precision.)
+  `FREAL = kind(1.0d0)`, used consistently as `..._FREAL` throughout the
+  framework and the main programs, so changing precision there is a
+  one-line decision, not a search-and-replace. (`SREAL` and `BREAL` are
+  defined alongside `FREAL` for future differentiation -- today all
+  three happen to resolve to the same double precision.) Double
+  precision holds throughout the codebase, but not every file goes
+  through `FREAL` to get there: ~230 bare `d0`-style literals remain,
+  mostly in `programs/adfrom` (which does `use vartypes` but still
+  writes raw `d0`) and in the vendored NSWC quartic solver
+  (`programs/XY4Coord/qtcrtmods.F90`, which defines its own `dp` kind via
+  `SELECTED_REAL_KIND(15, 60)` rather than using `FREAL` at all).
 - **Machine-aware tolerances.** `F_EPS = 10 * EPSILON(1.0_FREAL)` (and
   `S_EPS`, `B_EPS` likewise) instead of a hardcoded epsilon -- the
   tolerance always tracks whatever `FREAL` actually is on the build
@@ -171,47 +177,62 @@ for how CI wires them together):
 
 ## Known issues
 
-- **XY4Coord: every angular displacement fails its own self-checks.**
+- **XY4Coord: angular displacements leave a residual the redundancy
+  solver can't correct, because it solves for the wrong coordinate.**
   `[x-xy4-symmcoord]`'s 10 values split into two groups by what they
   actually move: `S1, S2x, S2y, S2z` change bond lengths unevenly while
   leaving all 6 angles at the tetrahedral 109.4712 (all four pass);
-  `S2a, S2b, S4x, S4y, S4z, Sr` leave all 4 bonds at the reference 1.0900
-  while perturbing angles -- and every one of those six currently fails,
-  confirmed individually for all six, not just `S2a` as originally found.
-  Two distinct failure paths:
+  `S2a, S2b, S4x, S4y, S4z` leave all 4 bonds at the reference 1.0900
+  while perturbing angles -- and every one of those five currently fails
+  its own self-check. (`Sr` is a separate case, covered on its own
+  below -- it's expected to fail, not a bug.) Two distinct failure paths
+  for the other five:
   - `S2a`, `S2b` fail the Cartesian self-check at `XY4coord.F90:756-763`
     ("Error in Cartesian routine"). Both show the *same specific*
     signature: of the 6 computed angles, 5 match exactly, and only
     `ryxy(6)` (the angle between H3 and H4, atoms `mxyz(:,4)` and
-    `mxyz(:,5)`) is off. That repeatability across two different inputs
-    reinforces the same diagnosis: the ad-hoc sign disambiguation for
-    H4's position (`XY4coord.F90:697-736`, the block that ends with the
-    code's own `"Assumed signed 'sin'. It can be inconsistent with input
-    sym data."` warning at line 747), not a wholesale failure of the
-    angle path.
-  - `S4x`, `S4y`, `S4z`, `Sr` fail an *earlier* check, `do_checks()`'s
+    `mxyz(:,5)`) is off.
+  - `S4x`, `S4y`, `S4z` fail an *earlier* check, `do_checks()`'s
     "Gamma Sum bigger than 180 for Y atom N" validation
-    (`XY4coord.F90:611-639`), before `get_cart` is even reached. Root
-    cause now understood, evidence-backed: each Gamma Sum must equal
-    exactly 2*pi for a mathematically valid vertex closure, and the
-    check compares against `2.0*LPI` with **zero tolerance**. Two
-    compounding effects push real inputs past that exact boundary: (1)
-    a few ULPs of floating-point noise in the cos -> divide -> acos ->
-    sum chain, present even at equilibrium; (2) a genuine,
-    displacement-*squared* defect inherent to representing angle
-    changes with a **linear** symmetry-coordinate formula (`get_ra`'s
-    `da(1:6)`, `XY4coord.F90:390-395`) -- confirmed empirically:
-    excess-over-2*pi for a range of `S4x` values fits `~38*S4x^2`
-    degrees almost exactly (37.4-39.7 across a 30x range in `S4x`),
-    vanishing into the floating-point noise floor once `S4x` drops
-    below ~0.001. `S1/S2x/S2y/S2z` never trip this because their `da()`
-    contribution is always zero -- angles never move at all, so there's
-    no defect to accumulate. A real fix would need a deliberately-chosen
-    tolerance (a design decision -- how large a displacement should the
-    linear approximation still be trusted for -- not a one-line
-    correction), so it hasn't been attempted here. See
-    [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-do_checks-a-zero-tolerance-check-on-a-value-that-must-be-exact-undermined-by-a-real-quadratic-defect)
-    for the full numerical write-up.
+    (`XY4coord.F90:611-639`), before `get_cart` is even reached.
+
+  Root cause, now properly diagnosed (an earlier version of this entry
+  attributed it to a zero-tolerance boundary check and recommended a
+  tolerance fix -- wrong on both counts, found while trying to actually
+  apply that fix; see
+  [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-a-redundancy-solver-that-solves-for-the-wrong-sr)
+  for the full numerical write-up): angle displacements are parametrised
+  through `get_ra`'s `da(1:6)` (`XY4coord.F90:390-395`), a **linear**
+  symmetry-coordinate formula, which by construction leaves a
+  second-order (displacement-squared) residual -- expected, not a
+  defect, and exactly what XY4Coord's redundant coordinate `Sr` exists to
+  absorb via "Generate Redundancies" -> `eval_sr()`
+  (`XY4coord.F90:1361-1417`), which solves a quartic (`qtcrt`,
+  coefficients "from JCP 118 (2003) 6260 - Wang, Carrington") for `Sr`
+  and retries the displacement with each root. The solver just solves for
+  a *different* `Sr` than the rest of the program does: verified at
+  equilibrium, `Sr = 0` is exactly correct (`Check OK at Sr input value:
+  0`), yet the quartic's own constant term is `1`, not `0`, so `Sr = 0`
+  is never among its roots -- what *is* a root, to `1e-15`, is
+  `sum(cos(109.4712 deg))/sqrt(6)` for the six equilibrium bond angles.
+  `eval_sr`'s `Sr` is a symmetric combination of angle *cosines* (the
+  cited paper's own coordinate); `get_ra`/`get_symc`'s `Sr` (`Sda(6)`,
+  `XY4coord.F90:812`) is a symmetric combination of *radian angle
+  displacements*. Two different quantities share one variable, and a
+  root from one definition gets assigned straight into the other
+  (`XY4coord.F90:295`). For `s2a_only` (`S2a = 0.03`), the
+  Cartesian-reconstructed H3-C-H4 angle at `Sr = 0` is `1.9629` rad
+  against the `1.9280` rad requested -- 2 degrees off, a real geometric
+  inconsistency, not floating-point noise, so **loosening the tolerance
+  is not the fix**: it would just accept structures that don't match the
+  requested displacement. The fix is reconciling `eval_sr`'s coordinate
+  definition with `get_ra`/`get_symc`'s, against the cited paper -- a
+  real re-derivation, not attempted here. (The `S2a`/`S2b` `get_cart`
+  self-check failure is consistent with this same cause -- their
+  requested angle set is only realizable with a nonzero `Sr` correction
+  the solver can't supply; the ad-hoc H4 sign-disambiguation block,
+  `XY4coord.F90:697-736`, stays a plausible *secondary* contributor, not
+  the diagnosis.)
 
     Investigating this also found a real, separate bug: the "H4 test"
     block used the identical condition already used for the "H2 test"
@@ -230,11 +251,24 @@ for how CI wires them together):
     blocks); flagging the missing test explicitly rather than skipping
     it silently.
 
-  Not fixed: the `S2a`/`S2b` `get_cart` root cause is plausible but not
-  proven, and the ~25-year-old trigonometric derivation in that block
-  would need a real re-derivation to fix with confidence rather than a
-  guess; the `do_checks()` zero-tolerance issue needs a deliberate
-  tolerance choice, not attempted here.
+  Not fixed: the `S2a`/`S2b` `get_cart` root cause and the
+  `eval_sr`/`get_ra` coordinate mismatch are both diagnosed but not
+  fixed -- reconciling `eval_sr` against the cited paper needs a real
+  re-derivation, not a one-line correction.
+
+  **`Sr` alone is a different, expected failure -- not a bug.** Raising
+  all six X-C-X angles together (`Sr`'s own totally-symmetric direction)
+  is geometrically impossible for four fixed-length bonds from one
+  center, independent of the solver issue above: the four bond-direction
+  unit vectors' Gram matrix stays positive-semidefinite only while their
+  common pairwise cosine stays >= -1/3 (the tetrahedral value); pushing
+  it more negative -- exactly what widening every angle does -- has no
+  real solution. Confirmed directly: `Sr = 0.03` alone overshoots
+  `do_checks()`'s `2*pi` Gamma Sum closure by about 5.2 degrees, and the
+  excess scales *linearly* in `Sr`, not quadratically the way `S4x`'s
+  does -- a first-order-forbidden direction, categorically different from
+  the second-order residual the other five displacements leave for the
+  (broken) redundancy solver to absorb.
 
 - **ch4sym2cart: the "Unchenged Coordina..." diagnostic lines for H3/H4
   are geometrically wrong** (H2-C-H3 comes out around 33 degrees instead

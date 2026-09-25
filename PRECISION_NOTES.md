@@ -69,50 +69,109 @@ tool that falls back to exact-string matching on unparseable tokens will
 silently stop being tolerant for exactly that token, with no error, just
 occasional platform-dependent failures.
 
-## 3. XY4Coord `do_checks()`: a zero-tolerance check on a value that must be exact, undermined by a real quadratic defect
+## 3. XY4Coord: a redundancy solver that solves for the wrong Sr
 
-The deepest root-cause investigation in this codebase so far. Full
-narrative and the file:line references are in README's Known issues
-entry; this is the numerical mechanism.
+The deepest root-cause investigation in this codebase so far, and one
+that needed correcting once already: an earlier version of this section
+diagnosed the angular-displacement known issue (README's Known issues)
+as a "zero-tolerance boundary check defeated by a linear
+symmetry-coordinate defect," and recommended a tolerance change as the
+fix. That was wrong on both counts -- found by trying to actually apply
+the fix it suggested. This is the corrected mechanism, reverified against
+the built binary and the actual source.
 
-`do_checks()` (`Freemol/programs/XY4Coord/XY4coord.F90:611-639`) checks
-that four per-vertex "Gamma Sum" values each equal `2*LPI` (2*pi) --
-a geometric closure identity that is true by construction for a valid
-tetrahedral vertex. The check is `.gt.(2.0_FREAL*LPI)`: **zero tolerance**,
-not even one ULP. Two effects independently push a real computed value
-past that exact boundary:
+### The quadratic residual is expected, not a defect
 
-1. **Floating-point noise**, present even at equilibrium (zero
-   displacement): the cos -> divide -> acos -> sum chain that builds each
-   Gamma Sum accumulates a few ULPs of rounding error before comparing
-   against the boundary.
-2. **A genuine displacement-squared defect**, independent of noise: angle
-   displacements are parametrised through `get_ra`'s `da(1:6)`
-   (`XY4coord.F90:390-395`), a **linear** symmetry-coordinate formula. A
-   linear approximation to an inherently nonlinear (angular) quantity has
-   error that grows with the *square* of the displacement, not the
-   displacement itself. Measured directly: the excess of a Gamma Sum over
-   `2*pi`, as a function of the `S4x` displacement, fits `~38 * S4x^2`
-   degrees closely (37.4-39.7 across a 30x range of `S4x` values from
-   0.03 down to 0.001), and only drops into the floating-point noise floor
-   of effect (1) below `S4x ~= 0.001`.
+`XY4Coord`'s angle displacements (`S2a, S2b, S4x, S4y, S4z`) are
+parametrised through `get_ra`'s `da(1:6)` (`XY4coord.F90:390-395`), a
+**linear** symmetry-coordinate formula. Any linear parametrisation of an
+inherently nonlinear (angular) quantity leaves a second-order residual --
+that's standard, not a bug, and it's exactly what a redundant coordinate
+is *for*. XY4Coord has one: after computing a displacement, it calls
+`get_symc` -> `eval_sr` (`XY4coord.F90:786-828`, `1361-1417`), which
+solves a quartic (`qtcrt`, coefficients "from JCP 118 (2003) 6260 -
+Wang, Carrington") for the redundant coordinate `Sr` (`Sda(6)`), then
+retries the displacement with each root substituted in. That machinery
+exists precisely to absorb the second-order inconsistency a linear angle
+parametrisation produces -- the `~38 * S4x^2` degrees of excess-over-
+`2*pi` in `do_checks()` this section used to call a "defect" (still
+correctly measured: 37.4-39.7 across a 30x range of `S4x`, vanishing into
+floating-point noise below `S4x ~= 0.001`) is exactly the residual that
+solver is supposed to correct.
 
-Radial displacements (`S1, S2x, S2y, S2z`) never trigger this at all --
-their contribution to `da()` is structurally zero, so angles never move
-and there's nothing for the quadratic defect to act on. This is why the
-known-issue split in README is exactly radial-vs-angular, not
-case-by-case.
+### The solver doesn't work, because it solves for a different Sr
 
-A real fix needs a deliberately chosen tolerance (how large a displacement
-should the linear approximation still be trusted for is a design
-decision, not a one-line correction), so none has been attempted.
+Verified directly (`bin/XY4coord.exe -i data/XY4Coord/tests/
+equilibrium.inp`): at equilibrium every requested displacement is zero,
+`Sr = 0` is exactly correct (the main run prints `Check OK at Sr input
+value: 0`) -- and yet `eval_sr`'s own quartic is not zero at `Sr = 0`.
+With all `Sda(1:5) = 0` it collapses to
+`A(x) = -x^4/12 + (2*sqrt(6)/9)*x^3 - x^2 + 1`, and `A(0) = 1`: `Sr = 0`
+is never a root. The roots the program actually prints are `-0.8165` and
+`2.4495` (a numerical triple root). Both have a clean closed form,
+checked in Python against the real coefficients in `eval_sr`
+(`XY4coord.F90:1389-1410`):
+- `-0.8165 = sum(cos(109.4712 deg))/sqrt(6)` for the six *equilibrium*
+  bond angles -- confirmed to solve `A(x) = 0` to `1e-15`.
+- `2.4495 = sqrt(6)`, the degenerate case where every pairwise angle has
+  collapsed to 0 (every cosine = 1).
+
+That is: `eval_sr`'s `Sr` is a symmetric combination of angle *cosines*
+-- the Wang-Carrington paper's own coordinate, matching its citation --
+while `get_ra`/`get_symc`'s `Sr` (`Sda(6)`, `XY4coord.F90:812`) is a
+symmetric combination of *radian angle displacements from equilibrium*.
+Two different physical quantities share one variable name and array slot,
+and a root computed under the cosine definition gets assigned straight
+into the radian-displacement one (`XY4coord.F90:295`,
+`Sda(6)=ZSda(isZ)`) -- so the root the program actually needs is never
+among the candidates it tries. `get_symc`'s own last line agrees this was
+never finished: `call message(MESERRO,"TODO: perform an internal check!
+redundant should be consistent!")`.
+
+Consequence, confirmed for every angular fixture that has an XY4Coord
+input (`s2a_only`, `s2b_only`, `s4x_only`): none of the roots `eval_sr`
+returns pass the self-check either. For `s2a_only` (`S2a = 0.03`), the
+Cartesian-reconstructed H3-C-H4 angle at `Sr = 0` is `1.9629` rad against
+the `1.9280` rad requested -- `0.035` rad (2 degrees) off. That's a real
+geometric inconsistency, not floating-point noise (which would show up at
+the `1e-8`-`1e-10` scale), so **loosening `do_checks()`'s tolerance is
+not the fix** -- it would just accept structures that don't actually
+match the requested displacement. The fix is reconciling `eval_sr`'s
+coordinate definition with `get_ra`/`get_symc`'s, against the cited
+paper -- a real re-derivation, not attempted here.
+
+(The `S2a`/`S2b` `get_cart` self-check failure -- "Error in Cartesian
+routine," only `ryxy(6)` off, previously diagnosed as an H4
+sign-disambiguation bug on its own -- is consistent with this same root
+cause: at `Sr = 0`, the requested angle set for those inputs is only
+realizable with a nonzero `Sr` correction the solver can't supply. The
+sign-disambiguation block (`XY4coord.F90:697-736`) stays a plausible
+*secondary* contributor, not the diagnosis.)
+
+### `Sr` alone is a different, expected failure -- not a bug
+
+Raising all six X-C-X angles together (`Sr`'s own totally-symmetric
+direction, tested directly: all `Sda = 0` except `Sr = 0.03`) is
+geometrically impossible for four fixed-length bonds from one center,
+independent of any solver bug: the four bond-direction unit vectors'
+Gram matrix (`(1-c)*I + c*J` for common pairwise cosine `c`) stays
+positive-semidefinite only for `c >= -1/3`, the tetrahedral value itself
+-- pushing `c` more negative, exactly what widening every angle does, has
+no real solution for *any* nonzero `Sr` in that direction. This shows up
+sharply in `do_checks()`'s own numbers: `Sr = 0.03` overshoots the
+`2*pi` Gamma Sum closure by about 5.2 degrees, and the excess scales
+*linearly* in `Sr` (checked at `0.0001`, `0.001`, `0.03`) rather than
+quadratically the way `S4x`'s does -- confirming a first-order-forbidden
+direction, categorically different from the second-order residual
+`S2a/S2b/S4x/S4y/S4z` leave for the (broken) redundancy solver to absorb.
+`Sr` failing on its own is expected by design, not a known issue.
 
 ### A related but separate bug, found along the way
 
 While tracing this, the "H4 test" block turned out to reuse the "H2
 test"'s condition verbatim (`acagam(2)+acagam(3)+acagam(12)` where it
 should have been `acagam(7)+acagam(8)+acagam(10)`) -- an ordinary
-copy-paste typo, not a precision issue, fixed in commit `6f75ef8`. Worth
+copy-paste typo, not a precision issue, fixed in commit `0a0f687`. Worth
 recording here anyway because of how it was verified safe to fix without
 a regression test: an exhaustive search over 800,000+ sampled `Sda`
 combinations (wide-range and boundary-focused, every displacement
@@ -139,7 +198,10 @@ the commit message, not an oversight.
   (sums to exactly `2*pi`, etc.) needs a deliberately-chosen tolerance,
   never zero.** Zero tolerance doesn't mean "exact" in floating point; it
   means "will eventually fail on some legitimate input" (Section 3).
-- **A linear approximation to a nonlinear quantity has error that grows
-  with displacement squared**, not linearly -- "the displacement is small"
-  is not by itself a reason to expect a downstream zero-tolerance check to
-  pass (Section 3).
+- **An expected second-order effect may point to a missing/broken
+  compensation step rather than a precision defect.** A linear
+  coordinate parametrisation leaving a quadratic-in-displacement residual
+  is normal, not a flaw; the question worth asking first is whether the
+  codebase already has a mechanism meant to absorb that residual (here,
+  XY4Coord's `eval_sr` redundancy solver) before reaching for a tolerance
+  change (Section 3).
