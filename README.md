@@ -384,7 +384,17 @@ vibrational/normal-mode or potential-energy-surface calculation moves
 along -- checking its own result against the requested displacement
 before generating the redundant `Sr` solutions. See
 [Known issues](#known-issues) for the displacement paths that aren't
-fully correct yet.
+fully correct yet. Example input (moving `S1` by 0.08, all other
+displacements zero):
+
+    [molecule] nrec=5 format=nscxyz
+    c  1 6 0.0 0.0 0.0
+    h  2 1  0.62931179  0.62931179  0.62931179
+    h  3 1  0.62931179 -0.62931179 -0.62931179
+    h  4 1 -0.62931179  0.62931179 -0.62931179
+    h  5 1 -0.62931179 -0.62931179  0.62931179
+    [x-xy4-symmcoord]
+    0.08 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
 ### XY4PolySphere
 The polyspherical-coordinate counterpart to XY4Coord: converts a
@@ -396,7 +406,17 @@ Cartesian or simple internal coordinates), so this and XY4Coord cover the
 same molecules through two different coordinate conventions rather than
 one replacing the other. Can also sample a Metpot4 potential over ranges
 of those coordinates (`x-xy4-genrandom`), with `-R <seed>` for a
-reproducible sampling run.
+reproducible sampling run. Example input (the reference/equilibrium
+geometry -- 4 equal bonds, all six angles at the tetrahedral 109.4712):
+
+    [molecule] nrec=5 format=nscxyz
+    c  1 6 0.0 0.0 0.0
+    h  2 1  0.62931179  0.62931179  0.62931179
+    h  3 1  0.62931179 -0.62931179 -0.62931179
+    h  4 1 -0.62931179  0.62931179 -0.62931179
+    h  5 1 -0.62931179 -0.62931179  0.62931179
+    [x-xy4-polyspherical]
+    1.10 1.10 1.10 1.10 109.4712 109.4712 109.4712 60.0 60.0
 
 ### ch4sym2cart
 Converts symmetric-coordinate displacements to Cartesian, specifically for
@@ -404,7 +424,18 @@ CH4 (methane)-like molecules -- an earlier, CH4-only counterpart to
 XY4Coord's more general XY4 treatment. Despite sharing the same field
 names and order, its radial/angular grouping of those fields is *not* the
 same as XY4Coord's (see [Known issues](#known-issues)), so inputs aren't
-interchangeable between the two.
+interchangeable between the two. Example input (same displacement as the
+XY4Coord example above -- note it moves a *different* geometric feature
+here, per that known convention mismatch):
+
+    [molecule] nrec=5 format=nscxyz
+    c  1 6 0.0 0.0 0.0
+    h  2 1  0.62931179  0.62931179  0.62931179
+    h  3 1  0.62931179 -0.62931179 -0.62931179
+    h  4 1 -0.62931179  0.62931179 -0.62931179
+    h  5 1 -0.62931179 -0.62931179  0.62931179
+    [x-ch4-symmcoord]
+    0.08 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
 ### fit1Dpol
 Fits data in 1 dimension using Minuit, with a polynomial setup built in
@@ -413,7 +444,20 @@ potential-energy curve to a polynomial. Works with multi-column ASCII
 files, and can script which data to fit with ranged commands like copy,
 add, sub, shift, scale, etc. Bundles its own copy of Minuit
 (`fit1Dpol_minuit.F90`), not the shared one under Libraries below -- see
-Libraries/Modules for why.
+Libraries/Modules for why. Example input (fitting `y = x^2` with a
+degree-2 polynomial):
+
+    [x-fit1dpol-data] numrec=5 numcol=2
+    1.0  1.0
+    2.0  4.0
+    3.0  9.0
+    4.0 16.0
+    5.0 25.0
+    [x-fit1dpol-pars] numpars=3 funct=polynom eps=1.0D-14
+    #name idx start_value init_step  Fixed
+    f0    1   0.1         0.01         N
+    f1    2   0.0         0.0001       Y
+    f2    3   2.2         0.001        N
 
 ### Freemol
 Just a placeholder at present (`Frimol.exe` prints "Not Yet Read" and
