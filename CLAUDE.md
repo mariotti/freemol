@@ -78,7 +78,7 @@ CI as the `mcp` job; needs `Freemol/bin/*.exe` built first. See
 `mcp/README.md`.
 
 ## Versioning and releases
-Semver via git tags (`v1.1.0` is current). `Freemol/config/printversion`'s
+Semver via git tags (`v1.1.1` is current). `Freemol/config/printversion`'s
 `distnum` (and `vernum`/`vernumdist`) should be bumped to match before
 tagging a new release. Pushing a `v*.*.*` tag (or a manual
 `workflow_dispatch`) runs `.github/workflows/release.yml`, publishing
