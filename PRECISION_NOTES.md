@@ -69,7 +69,7 @@ tool that falls back to exact-string matching on unparseable tokens will
 silently stop being tolerant for exactly that token, with no error, just
 occasional platform-dependent failures.
 
-## 3. XY4Coord: a redundancy solver that solves for the wrong Sr
+## 3. XY4Coord: a redundancy solver that solved for the wrong Sr (fixed)
 
 The deepest root-cause investigation in this codebase so far, and one
 that needed correcting once already: an earlier version of this section
@@ -136,17 +136,67 @@ the `1.9280` rad requested -- `0.035` rad (2 degrees) off. That's a real
 geometric inconsistency, not floating-point noise (which would show up at
 the `1e-8`-`1e-10` scale), so **loosening `do_checks()`'s tolerance is
 not the fix** -- it would just accept structures that don't actually
-match the requested displacement. The fix is reconciling `eval_sr`'s
-coordinate definition with `get_ra`/`get_symc`'s, against the cited
-paper -- a real re-derivation, not attempted here.
+match the requested displacement.
 
-(The `S2a`/`S2b` `get_cart` self-check failure -- "Error in Cartesian
-routine," only `ryxy(6)` off, previously diagnosed as an H4
-sign-disambiguation bug on its own -- is consistent with this same root
-cause: at `Sr = 0`, the requested angle set for those inputs is only
-realizable with a nonzero `Sr` correction the solver can't supply. The
-sign-disambiguation block (`XY4coord.F90:697-736`) stays a plausible
-*secondary* contributor, not the diagnosis.)
+The `S2a`/`S2b` `get_cart` self-check failure ("Error in Cartesian
+routine," only `ryxy(6)` off) turned out to be a symptom of the same
+bug, not a separate one: once `Sr` is found correctly (below), `get_cart`
+reconstructs every angle correctly too, for all five angular
+displacements, with no changes to `get_cart` or the H4 sign-
+disambiguation block (`XY4coord.F90:697-736`) at all. The sign-
+disambiguation code was never actually broken -- it was just being asked
+to place H4 from an angle set that, at `Sr = 0`, is genuinely
+inconsistent (the exact residual this whole section is about), so of
+course it couldn't.
+
+### Fixed: root-find the closure condition directly, no paper needed
+
+`wang-carrington-2003.pdf` was not available in this repo (checked: not
+present anywhere in the tree, never committed, not excluded). Rather than
+transcribe the paper's coordinate definitions blind, the fix drops the
+quartic and `eval_sr`'s cosine-based `Sr` entirely, and root-finds `Sr`
+directly against `do_checks()`'s own already-correct closure condition:
+for the given `Sda(1:5)`, `get_ra`'s formula makes every displaced angle
+an affine function of `Sr` (every `da(i)` shares the same `+Sr/sqrt(6)`
+term), so the worst of the four Gamma-Sum-minus-`2*pi` values
+(`XY4coord.F90:577-589,610-639`, the exact formula `do_checks()` itself
+checks) is a well-defined scalar function of one variable. `eval_sr`
+(`XY4coord.F90`) now scans outward from `Sr=0` for a sign change in that
+function, then bisects to convergence (200 iterations), and returns the
+one physical root -- the value continuously connected to `Sr=0` at
+equilibrium, where it's exactly correct. A new local function,
+`xy4c_gamma_excess`, computes the closure residual for a trial `Sr`
+using local arrays only (doesn't touch the module's own `da`/`va`, which
+`get_ra` recomputes properly once a winning `Sr` is chosen downstream);
+`qtcrt` and the Wang-Carrington quartic coefficients are gone from this
+call site (`qtcrtmods.F90` itself is untouched -- nothing else in the
+repo calls `qtcrt`, confirmed before removing the call).
+
+Verified end to end against the real binary, not just the derivation:
+running `equilibrium.inp`, `s2a_only.inp`, `s2b_only.inp`, `s4x_only.inp`
+and two new fixtures (`s4y_only.inp`, `s4z_only.inp`, none existed
+before) *unmodified* -- `Sr=0` in the input, exactly as a user would
+write it -- all now print `Check OK at Sr solution` after "Generate
+Redundancies," and the resulting Cartesian coordinates reproduce every
+requested bond/angle displacement (cross-checked independently in
+Python from the printed `[x-xyz]` block, not just trusted from the
+program's own report). Wired into
+`Freemol/tests/run_smoke.sh` (`xy4coord_redundancy_selfcheck`) as a real
+regression test, replacing the fixtures' previous `xy4coord_known_issue`
+entries.
+
+One thing found while validating that's worth recording on its own: an
+*independent* Python reimplementation of this exact closure formula
+(`Freemol/tests/validate_xy4coord_redundancy.py`, written before touching
+Fortran, to check the approach without guessing) disagrees with the
+Fortran's own internal root by a few ULPs for the `S4x`/`S4y`/`S4z`
+cases -- both computations are "right" to `1e-15`, they just don't
+agree on which side of that noise floor they land on. That's enough to
+flip `do_checks()`'s zero-tolerance boundary when the Python-computed
+value is round-tripped through a text input file, even though the real,
+in-memory Fortran value (never touching text I/O) passes cleanly. The
+script's own docstring documents this so it isn't mistaken for a
+regression later.
 
 ### `Sr` alone is a different, expected failure -- not a bug
 
@@ -205,3 +255,12 @@ the commit message, not an oversight.
   codebase already has a mechanism meant to absorb that residual (here,
   XY4Coord's `eval_sr` redundancy solver) before reaching for a tolerance
   change (Section 3).
+- **Two independent implementations of the identical formula can
+  legitimately round to values a few ULPs apart, each individually
+  "correct."** Validating a fix in Python before writing it in Fortran
+  is still the right discipline, but don't expect bit-identical
+  agreement at a zero-tolerance boundary -- test the real, deployed code
+  path end to end (Section 3: a Python-computed root, round-tripped
+  through a text input file, disagreed with Fortran's own in-memory
+  root by enough to flip a zero-tolerance check that the real code
+  path passed cleanly).

@@ -1362,54 +1362,159 @@ contains
 !H-----------------------------------------------------------------------------
 !H
 !
-  subroutine eval_sr()
-    USE constants_NSWC
+  function xy4c_gamma_excess(sr) result(excess)
+!H-----------------------------------------------------------------------------
+!H function xy4c_gamma_excess(sr)
+!H-----------------------------------------------------------------------------
+!H
+!H For the given trial Sr (Sda(6)) and the current Sda(1:5), computes the
+!H six displaced angles via get_ra's own da(1:6) formula
+!H (XY4coord.F90:390-395) and returns the worst (max) of do_checks's four
+!H per-atom Gamma-Sum-minus-2*pi values (XY4coord.F90:577-589,610-639).
+!H This is zero, by construction, exactly when the resulting geometry
+!H closes into a physically valid XY4 vertex -- the closure condition
+!H eval_sr() root-finds on below. Local arrays only: does not touch the
+!H module's own da/va/agam/acagam, which get_ra recomputes properly once
+!H a winning Sr is chosen downstream.
+!H-----------------------------------------------------------------------------
+!
     IMPLICIT NONE
-
+    real(FREAL), intent(in) :: sr
+    real(FREAL) :: excess
+    real(FREAL), dimension(6) :: lda, lva
+    real(FREAL), dimension(12) :: lagam
+    real(FREAL), dimension(12) :: lacagam
+    real(FREAL) :: g1, g2, g3, g4
     !
-    real(FREAL), dimension(0:4) :: A
+    lda(1)= sr/fr6 + Sda(1)/fr3 - Sda(5)/fr2
+    lda(2)= sr/fr6 - Sda(1)/fr3 + Sda(2)/fr2 - Sda(3)/fr2
+    lda(3)= sr/fr6 - Sda(1)/fr3 - Sda(2)/fr2 - Sda(4)/fr2
+    lda(4)= sr/fr6 - Sda(1)/fr3 - Sda(2)/fr2 + Sda(4)/fr2
+    lda(5)= sr/fr6 - Sda(1)/fr3 + Sda(2)/fr2 + Sda(3)/fr2
+    lda(6)= sr/fr6 + Sda(1)/fr3 + Sda(5)/fr2
+    lva(1:6) = yxy(1:6) + lda(1:6)
     !
-    INTERFACE
-       SUBROUTINE qtcrt (b, z)
-         USE constants_NSWC
-         IMPLICIT NONE
-         REAL (dp), INTENT(IN)     :: b(:)
-         COMPLEX (dp), INTENT(OUT) :: z(:)
-       END SUBROUTINE qtcrt
-    END INTERFACE
+    lagam(1) =(cos(lva(1))-(cos(lva(2))*cos(lva(4))))/(sin(lva(2))*sin(lva(4)))
+    lagam(2) =(cos(lva(2))-(cos(lva(1))*cos(lva(4))))/(sin(lva(1))*sin(lva(4)))
+    lagam(3) =(cos(lva(3))-(cos(lva(1))*cos(lva(5))))/(sin(lva(1))*sin(lva(5)))
+    lagam(4) =(cos(lva(4))-(cos(lva(1))*cos(lva(2))))/(sin(lva(1))*sin(lva(2)))
+    lagam(5) =(cos(lva(5))-(cos(lva(1))*cos(lva(3))))/(sin(lva(1))*sin(lva(3)))
+    lagam(6) =(cos(lva(6))-(cos(lva(2))*cos(lva(3))))/(sin(lva(2))*sin(lva(3)))
+    lagam(7) =(cos(lva(1))-(cos(lva(3))*cos(lva(5))))/(sin(lva(3))*sin(lva(5)))
+    lagam(8) =(cos(lva(2))-(cos(lva(3))*cos(lva(6))))/(sin(lva(3))*sin(lva(6)))
+    lagam(9) =(cos(lva(3))-(cos(lva(2))*cos(lva(6))))/(sin(lva(2))*sin(lva(6)))
+    lagam(10)=(cos(lva(4))-(cos(lva(5))*cos(lva(6))))/(sin(lva(5))*sin(lva(6)))
+    lagam(11)=(cos(lva(5))-(cos(lva(4))*cos(lva(6))))/(sin(lva(4))*sin(lva(6)))
+    lagam(12)=(cos(lva(6))-(cos(lva(4))*cos(lva(5))))/(sin(lva(4))*sin(lva(5)))
+    !
+    ! Clamp before acos: a trial Sr far from the root can push a ratio
+    ! a hair outside [-1,1] on rounding alone.
+    lagam(:) = max(-1.0_FREAL,min(1.0_FREAL,lagam(:)))
+    lacagam(:) = acos(lagam(:))
+    !
+    g1 = lacagam(4) +lacagam(5) +lacagam(6)  - 2.0_FREAL*LPI
+    g2 = lacagam(2) +lacagam(3) +lacagam(12) - 2.0_FREAL*LPI
+    g3 = lacagam(1) +lacagam(9) +lacagam(11) - 2.0_FREAL*LPI
+    g4 = lacagam(7) +lacagam(8) +lacagam(10) - 2.0_FREAL*LPI
+    !
+    excess = max(g1,g2,g3,g4)
+    !
+  end function xy4c_gamma_excess
+!
+!H
+!H-----------------------------------------------------------------------------
+!H-----------------------------------------------------------------------------
+!H subroutine eval_sr()
+!H-----------------------------------------------------------------------------
+!H
+!
+  subroutine eval_sr()
+    IMPLICIT NONE
+    !
+    real(FREAL) :: sr_lo, sr_hi, sr_mid, sr_step, sr_scan
+    real(FREAL) :: f_lo, f_hi, f_mid
+    integer(FINT) :: iscan, ibisect
+    logical :: found_bracket
 !
 !H
 !H-----------------------------------------------------------------------------
 !H
-!H This routine 
+!H Finds the redundant coordinate Sr (Sda(6)) that makes the six angle
+!H displacements requested via Sda(1:5) close into a physically valid
+!H XY4 vertex geometry, by root-finding xy4c_gamma_excess() (above) for
+!H the zero nearest Sr=0 -- the value continuously connected to the
+!H undisplaced/equilibrium geometry, where Sr=0 is exactly correct.
 !H
+!H An earlier version of this routine solved a quartic ("A coefficients
+!H from JCP 118 (2003) 6260 - Wang, Carrington", via qtcrt) instead. That
+!H quartic solves for a *cosine-based* Sr -- the Wang-Carrington paper's
+!H own coordinate -- while get_ra/get_symc use a *radian-displacement-
+!H based* Sr: two different quantities sharing one variable, so the
+!H physical root (Sr=0 at equilibrium) was never among the quartic's
+!H roots (it evaluates to 1 there, not 0). See PRECISION_NOTES.md
+!H section 3 for the full diagnosis and how this replacement was
+!H validated against the built binary before being written here.
 !H-----------------------------------------------------------------------------
-!H
 !
-    ! A coefficients from JCP 118 (2003) 6260 - Wang, Carrington
-    A(4)= -1.0_FREAL/12.0_FREAL
-
-    A(3)=  (2.0_FREAL*sqrt(6.0_FREAL))/9.0_FREAL
-
-    A(2)= -1.0_FREAL+ 0.5_FREAL * (Sda(1)*Sda(1)+Sda(2)*Sda(2)) + (1.0_FREAL/6.0_FREAL)*(Sda(3)*Sda(3)+Sda(4)*Sda(4)+Sda(5)*Sda(5))
-
-    A(1)=      - (sqrt(6.0_FREAL)/3.0_FREAL)*Sda(2)*(Sda(3)*Sda(3)-Sda(4)*Sda(4))
-    A(1)= A(1) + (sqrt(2.0_FREAL)/3.0_FREAL)*Sda(1)*(Sda(3)*Sda(3)+Sda(4)*Sda(4)-2.0_FREAL*Sda(5)*Sda(5))
-    A(1)= A(1) + (sqrt(2.0_FREAL)/3.0_FREAL)*Sda(1)*(Sda(1)*Sda(1)-3.0_FREAL*Sda(2)*Sda(2))
-    A(1)= A(1) - (sqrt(6.0_FREAL)/3.0_FREAL)*(Sda(1)*Sda(1)+Sda(2)*Sda(2))
-
-    A(0)=        0.25_FREAL * (Sda(3)*Sda(3)+Sda(4)*Sda(4)+Sda(5)*Sda(5))
-    A(0)= A(0) - 0.5_FREAL * (Sda(3)*Sda(3)*Sda(4)*Sda(4)+Sda(4)*Sda(4)*Sda(5)*Sda(5)+Sda(5)*Sda(5)*Sda(3)*Sda(3))
-    A(0)= A(0) - (1.0_FREAL/6.0_FREAL) * (Sda(1)*Sda(1)-3.0_FREAL*Sda(2)*Sda(2)) * Sda(5)*Sda(5)
-    A(0)= A(0) + (1.0_FREAL/3.0_FREAL) * Sda(1)*Sda(1)*(Sda(3)*Sda(3)+Sda(4)*Sda(4))
-    A(0)= A(0) + (1.0_FREAL/sqrt(3.0_FREAL)) * Sda(1)*Sda(2)*(Sda(3)*Sda(3)-Sda(4)*Sda(4))
-    A(0)= A(0) + 2.0_FREAL*sqrt(2.0_FREAL)*Sda(3)*Sda(4)*Sda(5)
-    A(0)= A(0) + (2.0_FREAL/(3.0_FREAL*sqrt(3.0_FREAL))) * Sda(1) * (Sda(1)*Sda(1)-3.0_FREAL*Sda(2)*Sda(2))
-    A(0)= A(0) - (Sda(3)*Sda(3)+Sda(4)*Sda(4)+Sda(5)*Sda(5))
-    A(0)= A(0) - (Sda(1)*Sda(1)+Sda(2)*Sda(2))
-    A(0)= A(0) + 1
+    found_bracket = .false.
+    sr_step = 0.00025_FREAL
+    f_lo = xy4c_gamma_excess(0.0_FREAL)
+    if (abs(f_lo).lt.1.0E-13_FREAL) then
+       sr_lo = 0.0_FREAL
+       sr_hi = 0.0_FREAL
+       found_bracket = .true.
+    else
+       do iscan=1,4000
+          sr_scan = real(iscan,KIND=FREAL)*sr_step
+          f_hi = xy4c_gamma_excess(sr_scan)
+          if ((f_lo*f_hi).lt.0.0_FREAL) then
+             sr_lo = sr_scan-sr_step
+             sr_hi = sr_scan
+             found_bracket = .true.
+             exit
+          end if
+          f_hi = xy4c_gamma_excess(-sr_scan)
+          if ((f_lo*f_hi).lt.0.0_FREAL) then
+             sr_lo = -sr_scan
+             sr_hi = -sr_scan+sr_step
+             found_bracket = .true.
+             exit
+          end if
+       end do
+    end if
     !
-    call qtcrt(A, ZSda)
+    if (.not.found_bracket) then
+       call message(MESERRO,"[XY4C][eval_sr] No Sr bracket found near Sr=0.")
+       iZ = 0
+       ZSda(:) = cmplx(0.0_FREAL,1.0E30_FREAL,KIND=FREAL)
+       ZOSda(:) = ZSda(:)
+       return
+    end if
+    !
+    if (sr_lo.eq.sr_hi) then
+       sr_mid = sr_lo
+    else
+       f_lo = xy4c_gamma_excess(sr_lo)
+       do ibisect=1,200
+          sr_mid = 0.5_FREAL*(sr_lo+sr_hi)
+          f_mid = xy4c_gamma_excess(sr_mid)
+          if ((f_lo*f_mid).le.0.0_FREAL) then
+             sr_hi = sr_mid
+          else
+             sr_lo = sr_mid
+             f_lo = f_mid
+          end if
+       end do
+       sr_mid = 0.5_FREAL*(sr_lo+sr_hi)
+    end if
+    !
+    ! Only one physical root: fill the other three slots with a large
+    ! imaginary part so get_reZ() (unchanged) filters them out, exactly
+    ! as it already does for the old quartic's spurious/complex roots.
+    ZSda(1) = cmplx(sr_mid, 0.0_FREAL, KIND=FREAL)
+    ZSda(2) = cmplx(0.0_FREAL, 1.0E30_FREAL, KIND=FREAL)
+    ZSda(3) = cmplx(0.0_FREAL, 1.0E30_FREAL, KIND=FREAL)
+    ZSda(4) = cmplx(0.0_FREAL, 1.0E30_FREAL, KIND=FREAL)
     ZOSda(:)=ZSda(:)
     !
 !

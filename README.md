@@ -177,98 +177,61 @@ for how CI wires them together):
 
 ## Known issues
 
-- **XY4Coord: angular displacements leave a residual the redundancy
-  solver can't correct, because it solves for the wrong coordinate.**
+- **XY4Coord's `Sr` redundancy solve was broken; fixed.**
   `[x-xy4-symmcoord]`'s 10 values split into two groups by what they
   actually move: `S1, S2x, S2y, S2z` change bond lengths unevenly while
   leaving all 6 angles at the tetrahedral 109.4712 (all four pass);
   `S2a, S2b, S4x, S4y, S4z` leave all 4 bonds at the reference 1.0900
-  while perturbing angles -- and every one of those five currently fails
-  its own self-check. (`Sr` is a separate case, covered on its own
-  below -- it's expected to fail, not a bug.) Two distinct failure paths
-  for the other five:
-  - `S2a`, `S2b` fail the Cartesian self-check at `XY4coord.F90:756-763`
-    ("Error in Cartesian routine"). Both show the *same specific*
-    signature: of the 6 computed angles, 5 match exactly, and only
-    `ryxy(6)` (the angle between H3 and H4, atoms `mxyz(:,4)` and
-    `mxyz(:,5)`) is off.
-  - `S4x`, `S4y`, `S4z` fail an *earlier* check, `do_checks()`'s
-    "Gamma Sum bigger than 180 for Y atom N" validation
-    (`XY4coord.F90:611-639`), before `get_cart` is even reached.
+  while perturbing angles. Every linear angle displacement leaves a
+  second-order residual (expected, not a defect -- see
+  [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-a-redundancy-solver-that-solved-for-the-wrong-sr-fixed)
+  for the full numerical write-up), which XY4Coord's redundant
+  coordinate `Sr` exists to absorb via "Generate Redundancies" ->
+  `eval_sr()`. That solver used to fail: it solved a quartic (from a
+  paper not present in this repo, `wang-carrington-2003.pdf`) for a
+  *cosine-based* `Sr`, while the rest of the program (`get_ra`/`get_symc`)
+  uses a *radian-displacement-based* `Sr` -- two different quantities
+  sharing one variable, so the physical root (`Sr=0` at equilibrium) was
+  never found, and every one of the five angular displacements above
+  failed its own self-check.
 
-  Root cause, now properly diagnosed (an earlier version of this entry
-  attributed it to a zero-tolerance boundary check and recommended a
-  tolerance fix -- wrong on both counts, found while trying to actually
-  apply that fix; see
-  [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-a-redundancy-solver-that-solves-for-the-wrong-sr)
-  for the full numerical write-up): angle displacements are parametrised
-  through `get_ra`'s `da(1:6)` (`XY4coord.F90:390-395`), a **linear**
-  symmetry-coordinate formula, which by construction leaves a
-  second-order (displacement-squared) residual -- expected, not a
-  defect, and exactly what XY4Coord's redundant coordinate `Sr` exists to
-  absorb via "Generate Redundancies" -> `eval_sr()`
-  (`XY4coord.F90:1361-1417`), which solves a quartic (`qtcrt`,
-  coefficients "from JCP 118 (2003) 6260 - Wang, Carrington") for `Sr`
-  and retries the displacement with each root. The solver just solves for
-  a *different* `Sr` than the rest of the program does: verified at
-  equilibrium, `Sr = 0` is exactly correct (`Check OK at Sr input value:
-  0`), yet the quartic's own constant term is `1`, not `0`, so `Sr = 0`
-  is never among its roots -- what *is* a root, to `1e-15`, is
-  `sum(cos(109.4712 deg))/sqrt(6)` for the six equilibrium bond angles.
-  `eval_sr`'s `Sr` is a symmetric combination of angle *cosines* (the
-  cited paper's own coordinate); `get_ra`/`get_symc`'s `Sr` (`Sda(6)`,
-  `XY4coord.F90:812`) is a symmetric combination of *radian angle
-  displacements*. Two different quantities share one variable, and a
-  root from one definition gets assigned straight into the other
-  (`XY4coord.F90:295`). For `s2a_only` (`S2a = 0.03`), the
-  Cartesian-reconstructed H3-C-H4 angle at `Sr = 0` is `1.9629` rad
-  against the `1.9280` rad requested -- 2 degrees off, a real geometric
-  inconsistency, not floating-point noise, so **loosening the tolerance
-  is not the fix**: it would just accept structures that don't match the
-  requested displacement. The fix is reconciling `eval_sr`'s coordinate
-  definition with `get_ra`/`get_symc`'s, against the cited paper -- a
-  real re-derivation, not attempted here. (The `S2a`/`S2b` `get_cart`
-  self-check failure is consistent with this same cause -- their
-  requested angle set is only realizable with a nonzero `Sr` correction
-  the solver can't supply; the ad-hoc H4 sign-disambiguation block,
-  `XY4coord.F90:697-736`, stays a plausible *secondary* contributor, not
-  the diagnosis.)
+  Fixed without the paper: `eval_sr` (`XY4coord.F90`) now root-finds `Sr`
+  directly against `do_checks()`'s own already-correct closure condition
+  (each of its four Gamma-Sum checks, `XY4coord.F90:577-589,610-639`,
+  equal to `2*pi` exactly at a valid geometry) via bisection from `Sr=0`,
+  instead of the old quartic/`qtcrt` call. Verified end to end against
+  the real binary: `equilibrium`, `s2a_only`, `s2b_only`, `s4x_only` and
+  two new fixtures (`s4y_only`, `s4z_only`, added since none existed
+  before) all now print `Check OK at Sr solution` unmodified, and the
+  resulting Cartesian coordinates reproduce every requested bond/angle
+  displacement, cross-checked independently in Python. Wired into
+  `Freemol/tests/run_smoke.sh` as a real regression test
+  (`xy4coord_redundancy_selfcheck`), replacing the previous
+  `xy4coord_known_issue` entries for these fixtures.
 
-    Investigating this also found a real, separate bug: the "H4 test"
-    block used the identical condition already used for the "H2 test"
-    two blocks above (`acagam(2)+acagam(3)+acagam(12)` instead of
-    `acagam(7)+acagam(8)+acagam(10)`, a copy-paste typo -- the
-    accompanying debug message right next to it already used the
-    correct formula). Fixed. No test was added: an exhaustive search
-    (800,000+ sampled `Sda` combinations, wide and boundary-focused,
-    every single displacement dimension alone) found no input where
-    this specific bug changes `do_checks()`'s overall pass/fail verdict
-    -- for this symmetric reference geometry, Y2's and Y4's Gamma Sums
-    take different numeric values but always land on the same side of
-    the 2*pi boundary, so Y1/Y2/Y3 already independently catch anything
-    Y4 alone would have. Fixed anyway on correctness grounds (it matches
-    the debug message beside it and the pattern of the other three
-    blocks); flagging the missing test explicitly rather than skipping
-    it silently.
+  Investigating the original bug also found a real, separate one: the
+  "H4 test" block in `do_checks()` used the identical condition already
+  used for the "H2 test" two blocks above (`acagam(2)+acagam(3)+acagam(12)`
+  instead of `acagam(7)+acagam(8)+acagam(10)`, a copy-paste typo -- the
+  accompanying debug message right next to it already used the correct
+  formula). Fixed in an earlier PR. No test was added for it: an
+  exhaustive search (800,000+ sampled `Sda` combinations) found no input
+  where it changes `do_checks()`'s overall pass/fail verdict, for this
+  symmetric reference geometry.
 
-  Not fixed: the `S2a`/`S2b` `get_cart` root cause and the
-  `eval_sr`/`get_ra` coordinate mismatch are both diagnosed but not
-  fixed -- reconciling `eval_sr` against the cited paper needs a real
-  re-derivation, not a one-line correction.
-
-  **`Sr` alone is a different, expected failure -- not a bug.** Raising
-  all six X-C-X angles together (`Sr`'s own totally-symmetric direction)
-  is geometrically impossible for four fixed-length bonds from one
-  center, independent of the solver issue above: the four bond-direction
-  unit vectors' Gram matrix stays positive-semidefinite only while their
+  **`Sr` alone is a different, expected failure -- not a bug, unaffected
+  by the fix above.** Raising all six X-C-X angles together (`Sr`'s own
+  totally-symmetric direction) is geometrically impossible for four
+  fixed-length bonds from one center: the four bond-direction unit
+  vectors' Gram matrix stays positive-semidefinite only while their
   common pairwise cosine stays >= -1/3 (the tetrahedral value); pushing
   it more negative -- exactly what widening every angle does -- has no
   real solution. Confirmed directly: `Sr = 0.03` alone overshoots
   `do_checks()`'s `2*pi` Gamma Sum closure by about 5.2 degrees, and the
   excess scales *linearly* in `Sr`, not quadratically the way `S4x`'s
   does -- a first-order-forbidden direction, categorically different from
-  the second-order residual the other five displacements leave for the
-  (broken) redundancy solver to absorb.
+  the second-order residual `eval_sr`'s redundancy solve now correctly
+  absorbs for the other five displacements.
 
 - **ch4sym2cart: the "Unchenged Coordina..." diagnostic lines for H3/H4
   are geometrically wrong** (H2-C-H3 comes out around 33 degrees instead
@@ -354,9 +317,12 @@ written down:
 
 - *"Now try a pure angle displacement, S2a=0.03, on XY4Coord instead of a
   bond stretch -- does that work?"*
-  Calls `xy4coord_apply_displacement` again; this is the documented Known
-  Issue above, and the tool returns a clear error explaining the
-  self-check failed, rather than silently returning wrong coordinates.
+  Calls `xy4coord_apply_displacement` again; the direct displacement
+  alone doesn't close (a second-order residual -- see
+  [PRECISION_NOTES.md](PRECISION_NOTES.md#3-xy4coord-a-redundancy-solver-that-solved-for-the-wrong-sr-fixed)),
+  so the tool falls back to XY4Coord's own `Sr` redundancy solve and
+  returns the geometry it finds, with `sr_used` reporting which `Sr`
+  that actually was.
 
 - *"What sections does `Freemol/data/CSMG/tests/G_C1.mld` have, and what's
   in the symmetry-operations one?"*
@@ -470,9 +436,9 @@ Converts symmetry-adapted internal displacement coordinates (`S1`,
 vibrational/normal-mode or potential-energy-surface calculation moves
 along -- checking its own result against the requested displacement
 before generating the redundant `Sr` solutions. See
-[Known issues](#known-issues) for the displacement paths that aren't
-fully correct yet. Example input (moving `S1` by 0.08, all other
-displacements zero):
+[Known issues](#known-issues) for the one displacement direction that's
+expected to fail by design (raising `Sr` alone). Example input (moving
+`S1` by 0.08, all other displacements zero):
 
     [molecule] nrec=5 format=nscxyz
     c  1 6 0.0 0.0 0.0
