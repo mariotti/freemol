@@ -2,6 +2,55 @@
 
 [![CI](https://github.com/mariotti/freemol/actions/workflows/ci.yml/badge.svg)](https://github.com/mariotti/freemol/actions/workflows/ci.yml)
 
+**A Fortran 90 chemistry toolkit from 2003, brought back to life in 2026 --
+and a working case study in keeping scientific code reproducible.**
+
+freemol began in 2003 as a small framework plus a handful of tools:
+continuous symmetry measures for molecules (CSMG), coordinate
+transformations for XY4 molecules such as methane, and a Minuit-based
+fitter. The code as it stood before the refresh is preserved in the
+[`Legacy-2016`](https://github.com/mariotti/freemol/tree/Legacy-2016) tag.
+This repository keeps it building, tested, and honest about what it can
+and cannot do.
+
+## Why it is still worth a look
+
+**It reproduces, and CI proves it.** CSMG results match reference
+outputs generated on macOS in 2016 to the last printed digit -- today, on
+Linux with gfortran 12, 13 and 14 and on current macOS. The comparison
+runs on every commit. Eight of these references are independent,
+decade-old outputs; the remaining 51 test cases have a baseline captured
+from the current code, guarding against future regressions.
+
+**It shows what rescuing legacy scientific code really involves.** The
+refresh went from zero tests to CI coverage of every program, and in the
+process found bugs that had been sitting in the code for years: a tool
+that crashed on every input, a self-check that rejected valid
+geometries, a copy-paste error in a geometric validation, and a build
+target broken since 2015. Not everything is fixed -- open issues are
+documented with their evidence, including one root cause we first got
+wrong.
+
+**It treats numerics as evidence, not intent.** Double precision
+throughout via kind parameters, with platform-dependent noise,
+tolerances and numerical findings written up in
+[PRECISION_NOTES.md](PRECISION_NOTES.md).
+
+## What it is not
+
+freemol is not a current production tool. For new work on continuous
+symmetry measures, actively developed libraries such as
+[cosymlib](https://cosymlib.readthedocs.io) are the better starting point.
+The XY4 coordinate tools serve a narrow vibrational-spectroscopy niche;
+see [Known issues](#known-issues) for what's still open.
+
+## Start here
+
+- [Build and test](#build-and-test) -- build everything and run the full test suite
+- [Known issues](#known-issues) -- what doesn't work yet, and why
+- [PRECISION_NOTES.md](PRECISION_NOTES.md) -- what testing taught us about floating point
+- [`Legacy-2016`](https://github.com/mariotti/freemol/tree/Legacy-2016) -- the original, untouched
+
 A Fortran 90 toolkit for molecular geometry and symmetry: computing the
 Continuous Symmetry Measure (CSM) of a set of weighted points, converting
 between Cartesian and internal/polyspherical coordinates for XY4-type
