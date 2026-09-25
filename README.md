@@ -377,38 +377,56 @@ come from `tools/CSMD`'s `genGTOcoeff` -- see Tools below;
 `check_csmd_tools.sh` regenerates exactly the values used here.
 
 ### XY4Coord
-Converts symmetry-adapted internal displacement coordinates (`S1`, `S2x/y/z`,
-`S2a/b`, `S4x/y/z`, `Sr`) to Cartesian for XY4-type (methane-like)
-molecules, checking its own result against the requested displacement
+Converts symmetry-adapted internal displacement coordinates (`S1`,
+`S2x/y/z`, `S2a/b`, `S4x/y/z`, `Sr`) to Cartesian for XY4-type
+(methane-like, tetrahedral AB4) molecules -- the kind of displacement a
+vibrational/normal-mode or potential-energy-surface calculation moves
+along -- checking its own result against the requested displacement
 before generating the redundant `Sr` solutions. See
-[Known issues](#known-issues) for the one displacement path that isn't
+[Known issues](#known-issues) for the displacement paths that aren't
 fully correct yet.
 
 ### XY4PolySphere
 The polyspherical-coordinate counterpart to XY4Coord: converts a
 polyspherical description (4 bond lengths, 3 polar and 2 azimuthal
-angles) to Cartesian, and can also sample a Metpot4 potential over
-ranges of those coordinates (`x-xy4-genrandom`), with `-R <seed>` for a
+angles) to Cartesian for the same XY4 molecule family. Polyspherical
+coordinates are the representation quantum-dynamics calculations tend to
+prefer (their kinetic energy operator separates more cleanly than in
+Cartesian or simple internal coordinates), so this and XY4Coord cover the
+same molecules through two different coordinate conventions rather than
+one replacing the other. Can also sample a Metpot4 potential over ranges
+of those coordinates (`x-xy4-genrandom`), with `-R <seed>` for a
 reproducible sampling run.
 
 ### ch4sym2cart
 Converts symmetric-coordinate displacements to Cartesian, specifically for
-CH4 (methane)-like molecules.
+CH4 (methane)-like molecules -- an earlier, CH4-only counterpart to
+XY4Coord's more general XY4 treatment. Despite sharing the same field
+names and order, its radial/angular grouping of those fields is *not* the
+same as XY4Coord's (see [Known issues](#known-issues)), so inputs aren't
+interchangeable between the two.
 
 ### fit1Dpol
 Fits data in 1 dimension using Minuit, with a polynomial setup built in
-(add your own function for anything else). Works with multi-column ASCII
+(add your own function for anything else) -- e.g. fitting a scanned
+potential-energy curve to a polynomial. Works with multi-column ASCII
 files, and can script which data to fit with ranged commands like copy,
-add, sub, shift, scale, etc.
+add, sub, shift, scale, etc. Bundles its own copy of Minuit
+(`fit1Dpol_minuit.F90`), not the shared one under Libraries below -- see
+Libraries/Modules for why.
 
 ### Freemol
 Just a placeholder at present (`Frimol.exe` prints "Not Yet Read" and
-exits).
+exits) -- no framework demo program has been built out here yet. Still
+useful as-is: `run_smoke.sh` builds and runs it on every CI run as a
+minimal end-to-end check that the build plumbing itself works,
+independent of any real program logic.
 
 ### adfrom
-Works with ADF (Amsterdam Density Functional). Needs the commercial ADF
-libraries, which aren't part of this repository, so it isn't built by
-`make freemol` (see Build above).
+Reads ADF (Amsterdam Density Functional)'s binary `Tape21` output and
+produces an ASCII-readable format. Needs the commercial ADF libraries,
+which aren't part of this repository, so it isn't built by `make freemol`
+(see Build above).
 
 ## Framework
 
@@ -426,33 +444,59 @@ libraries, which aren't part of this repository, so it isn't built by
   e.g. `manuals/CSMD`).
 
 ## Libraries
-These libraries and tools are used by the programs above. For a working
-example of their usage, check the programs; to link against them, check
-the generated Makefiles.
+These libraries and tools are used by the programs above. Each item below
+has a short line showing its shape; for a fuller working example, check
+the programs (particularly "Adding a program" above), and check the
+generated Makefiles for how to link against them.
 
 ### Includes
 - **linetools**: format-free input (adapted from CCL's FREEREAD, see
-  Licences above)
-- **messages**: a logging facility
-- **pcmdline**: command-line handling
-- **strtools**: string manipulation routines
+  Licences above). E.g. `call line_read(line, iwrd, rwrd, swrd, niwrd,
+  nrwrd, nswrd, form)` splits one free-form input line into typed
+  integer/real/string words.
+- **messages**: a logging facility. E.g. `call message_value(MESWARN,
+  'current too low:', current)`.
+- **pcmdline**: command-line handling. E.g. `call pcmd_getio(nargs,
+  cargs, finput, foutput)` pulls `-i`/`-o` filenames out of argv (see
+  "Adding a program" above).
+- **strtools**: string manipulation routines. E.g. `call
+  str_upcase(string)`.
 - **vartypes**: kind-parametrised variable types (see "Careful, portable,
-  reproducible double precision" above)
-- **chemconst**: constants defined at different precisions
+  reproducible double precision" above). E.g. `real(FREAL) :: x`.
+- **chemconst**: constants defined at different precisions. E.g.
+  `real(FREAL), parameter :: bohr_to_angstrom = cc_au2ang`.
 
 ### Utils
-- **mathtools**: a few simple, common matrix tools
-- **qnumbers**: a small tool for quantum numbers
+- **mathtools**: a few simple, common matrix tools. E.g. `call
+  mathtools_masscenter(xyz, we, rvec)` returns the (optionally
+  weighted) center of a set of Cartesian points.
+- **qnumbers**: a small tool for quantum numbers. E.g. `call qn_ms(m,
+  msign, idmn)` fills the `m`/sign(`m`) pairs for angular momentum
+  `idmn`.
 
 ### Modules
-- **baseio**: a file manager
-- **extio**: extensions to baseio for easy file manipulation
-- **osec / sections**: a tool to work with sectioned files, molden-format-like
-- **minuit**: a multidimensional minimization tool
+- **baseio**: a file manager. E.g. `irc = baseio_open(iunin, finput,
+  stat='OLD')` (see "Adding a program" above).
+- **extio**: extensions to baseio for easy file manipulation. E.g. `irc =
+  extio_open(lefh, file, status, frmt, acc)` opens a file and returns a
+  typed `extfile` handle -- see the module's own commented-out
+  `extio_openefh` helper for the intended wrapping pattern.
+- **osec / sections**: a tool to work with sectioned files,
+  molden-format-like. `osec` is the friendly layer every program actually
+  uses (`irc = osec_set(iunin, 'molecule', params)`, see "Adding a
+  program" above); `sections` (`sections_init`, `section_openfile`,
+  `section_next`) is the lower-level reader it's built on.
+- **minuit**: a multidimensional minimization tool, a CERN-derived
+  F77-to-F90 port. Nothing currently links against this shared copy --
+  CSMG and fit1Dpol each bundle their own local copy instead
+  (`csm_minuit.F90`, `fit1Dpol_minuit.F90`), same historical-code
+  lineage, just not wired up as a shared dependency.
 
 ### Moduledata
 - **molecule**: a molden-based structure and tools to store molecule data
-  and read it in "free" format
+  and read it in "free" format. E.g. `irc = molecule_init(); call
+  molecule_read(iunin, params); call molecule_print(iunbin)` (see
+  "Adding a program" above).
 
 ### Tools
 - **CSMD** (`tools/CSMD`, Octave): supporting tools for CSMG, notably
