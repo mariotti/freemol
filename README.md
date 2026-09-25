@@ -5,12 +5,53 @@
 A Fortran 90 toolkit for molecular geometry and symmetry: computing the
 Continuous Symmetry Measure (CSM) of a set of weighted points, converting
 between Cartesian and internal/polyspherical coordinates for XY4-type
-(methane-like) molecules, and fitting 1D data with Minuit. Started in 2003
+(methane-like) molecules, and fitting 1D data with Minuit -- all driven
+by a shared, sectioned INI-style input format that predates molden's own
+(see [Sectioned input files](#sectioned-input-files-an-old-ini-style-format-from-before-molden)
+below). Started in 2003
 (as "Freemol2000"), moved through CVS in 2009 and onto GitHub in 2015 --
 the [`Legacy-2016`](https://github.com/mariotti/freemol/tree/Legacy-2016) tag marks that untouched
 historical state. Since 2026 it also has a CI-verified build and tagged
 releases; see [Build and test](#build-and-test) and
 [Releases](#releases) below.
+
+## Sectioned input files: an old INI-style format, from before molden
+
+Every program above reads the same underlying file convention: a plain
+ASCII file made of `[section-name] inline params` header lines, each
+followed by whatever data that section expects, read in free format --
+not fixed columns -- until the next `[...]` header or end of file. It
+reads like a Windows-style `.ini` file with data attached to each
+section rather than just `key=value` pairs. `[molecule] nrec=5
+format=nscxyz`, `[x-xy4-symmcoord]`, `[x-csmg-cgauss]` in the examples
+throughout this README are all this same syntax -- just different
+section names, understood by different programs.
+
+The convention is older than it looks: it predates molden's now-familiar
+`[Atoms]`/`[GTO]`-style section format, and molden and the chemistry
+file formats that followed its lead effectively inherited the idea from
+tools like this one, not the other way around. The code still carries
+that family resemblance -- `molecule.F90` has a whole "MOLDEN format
+compatibility" branch for writing the same geometry block as an
+`[Atoms]` section instead of freemol's own `[molecule]`, right next to
+the routine that writes freemol's native form.
+
+Mechanically (`osec_set`, `modules/osec.F90`): given a section name, scan
+forward from the file's current read position for a line starting with
+`[`; if the name up to the closing `]` matches (case-insensitively),
+stop there and hand back whatever trails the `]` on that same line as
+the section's own inline parameters (e.g. `nrec=5 format=nscxyz`). The
+caller then reads that section's data lines itself with `linetools`, in
+free format -- mixed integers/reals/strings on one line, adapted from
+CCL's FREEREAD (see Includes below). Nothing about the format enforces
+a fixed row shape per section, which is why one input file can carry a
+`[molecule]` block of per-atom xyz rows next to an `[x-csmg-symop]`
+block of symmetry-operation rows without either reader knowing anything
+about the other's row shape ahead of time.
+
+See [Adding a program](#adding-a-program) below for reading a section
+from new Fortran code, and [Libraries](#libraries) below (`osec`,
+`linetools`) for the modules involved.
 
 ## Careful, portable, reproducible double precision
 
@@ -525,11 +566,14 @@ generated Makefiles for how to link against them.
   extio_open(lefh, file, status, frmt, acc)` opens a file and returns a
   typed `extfile` handle -- see the module's own commented-out
   `extio_openefh` helper for the intended wrapping pattern.
-- **osec / sections**: a tool to work with sectioned files,
-  molden-format-like. `osec` is the friendly layer every program actually
-  uses (`irc = osec_set(iunin, 'molecule', params)`, see "Adding a
-  program" above); `sections` (`sections_init`, `section_openfile`,
-  `section_next`) is the lower-level reader it's built on.
+- **osec / sections**: a tool to work with sectioned files, INI-style /
+  molden-lineage (see [Sectioned input files](#sectioned-input-files-an-old-ini-style-format-from-before-molden)
+  above). `osec` is the layer every program actually uses (`irc =
+  osec_set(iunin, 'molecule', params)`, see "Adding a program" above),
+  built directly on `linetools`/`strtools`, not on `sections`. `sections`
+  (`sections_init`, `section_openfile`, `section_next`) is a separate,
+  higher-level file-open API for the same idea that was never finished --
+  `section_openfile` currently always returns "not implemented".
 - **minuit**: a multidimensional minimization tool, a CERN-derived
   F77-to-F90 port. Nothing currently links against this shared copy --
   CSMG and fit1Dpol each bundle their own local copy instead
