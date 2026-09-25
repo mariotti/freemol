@@ -201,6 +201,10 @@ All the rest should be considered within the latest GPL.
 `adfrom` is skipped by design: it needs the commercial ADF libraries, which
 aren't part of this repository.
 
+Run any built program with `-i`/`-o` for its input/output files, e.g.
+`bin/CSMG.exe -i input.txt -o output.txt` (see [Programs](#programs) below
+for each program's input format and example inputs).
+
 ### Test scripts
 All in `Freemol/tests/`, runnable after a build (see `.github/workflows/ci.yml`
 for how CI wires them together):
