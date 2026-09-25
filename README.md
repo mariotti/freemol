@@ -1,3 +1,31 @@
+# Celebrating 20 years of compilation and results!
+
+This code "unchaged" compiles, run, and execute at the given numerical precision since 20+ years!
+
+At present only on Mac and Linux.
+
+No changes. The CI runs on some systems.
+
+Actually the new things are (All done with AI):
+
+ - added a full ci with deployment of binaries. I only tested that they run on mac.
+ - For the sake of the new era, my AI (on request) created an MCP, if you feel like you need it ;)
+ - more tests, these where needed
+
+One note on the process to this latest version.
+
+I used Claude code to do the updates, most of them from the beginning.
+Later I used Claude Chat, so not with my folder access, pointing
+to the public repo: https://github.com/mariotti/freemol
+and asking for a review.
+
+They actually did not agree.
+
+So the process was to feed claude chat comments to claude code.
+
+
+See you in 5 years!
+
 # freemol
 
 [![CI](https://github.com/mariotti/freemol/actions/workflows/ci.yml/badge.svg)](https://github.com/mariotti/freemol/actions/workflows/ci.yml)
